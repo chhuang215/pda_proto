@@ -21,9 +21,13 @@
 </head>
 
 <body>
-  <div id="topcontrol">
-    <div id="boxno">箱號: <input type="text"></input> </div>
-    <div id="filter"><button>未上車</button><button>已上車</button><button>錯箱</button></div>
+  <div id="topcontrol" >
+    <div id="boxno" style="margin-bottom: 5px;">箱號: <input type="text" id="txtBoxno"></input> </div>
+    <div id="filter">
+      <button id="btnFilterN" class="btn">未上車</button>
+      <button id="btnFilterY" class="btn">已上車</button>
+      <button id="btnFilterE" class="btn">錯箱</button>
+    </div>
   </div>
 
   <div id="boxnolist">
@@ -41,10 +45,10 @@
     </table>
   </div>
   <div id="bottomcontrol">
-    <button>結束</button>
-    <button>上一步</button>
-    <button>重讀</button>
-    <button>下一批</button>
+    <button id="btnExit" class="btn">結束</button>
+    <button id="btnPrev" class="btn">上一步</button>
+    <button id="btnRe" class="btn">重讀</button>
+    <button id="btnNext" class="btn">下一批</button>
   </div>
 
 
