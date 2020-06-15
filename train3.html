@@ -24,9 +24,9 @@
   <div id="topcontrol" >
     <div id="boxno" style="margin-bottom: 5px;">箱號: <input type="text" id="txtBoxno"></input> </div>
     <div id="filter">
-      <button id="btnFilterN" class="btn">未上車</button>
-      <button id="btnFilterY" class="btn">已上車</button>
-      <button id="btnFilterE" class="btn">錯箱</button>
+      <button id="btnFilterN" class="btn">未上車 <!--(<span id="countN"></span>)--></button>
+      <button id="btnFilterY" class="btn">已上車 <!--(<span id="countY"></span>)--></button>
+      <button id="btnFilterE" class="btn">錯箱 <!--(<span id="countE"></span>)--></button>
     </div>
   </div>
 
@@ -34,21 +34,16 @@
     <table id="tableData">
       <thead>
         <tr>
-          <td>CHK</td>
           <td>箱號</td>
+          <td>門市</td>
         </tr>
       </thead>
-      <tbody>
-
-
-      </tbody>
+      <tbody></tbody>
     </table>
   </div>
   <div id="bottomcontrol">
     <button id="btnExit" class="btn">結束</button>
-    <button id="btnPrev" class="btn">上一步</button>
-    <button id="btnRe" class="btn">重讀</button>
-    <button id="btnNext" class="btn">下一批</button>
+    <button id="btnFetch" class="btn">重讀</button>
   </div>
 
 

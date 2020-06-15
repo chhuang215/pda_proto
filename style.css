@@ -13,13 +13,17 @@ text-align: left;
 padding:3px;
 }
 
-tr:nth-child(even) {
-background-color: #dddddd;
+tr {
+    background-color: #eeeeee;
 }
 
+/* tr:nth-child(even) {
+background-color: #dddddd;
+} */
+/* 
 td:nth-child(even){
     width:100%
-}
+} */
 
 .btn {
 	/* box-shadow:inset 0px 1px 0px 0px #9acc85; */
@@ -84,8 +88,8 @@ td:nth-child(even){
     position:fixed;
     top:5.2rem;
     bottom:3.5rem;
-    left:1rem;
-    right:1rem;
+    left:.7rem;
+    right:.7rem;
 }
 
 #bottomcontrol{
