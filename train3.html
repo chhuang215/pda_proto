@@ -1,5 +1,7 @@
 <!doctype html>
- <html> <!--<![endif]-->
+<html>
+<!--<![endif]-->
+
 <head>
   <meta charset="utf-8">
 
@@ -8,12 +10,9 @@
   <title></title>
   <meta name="description" content="">
   <meta name="author" content="">
-
   <!-- Mobile viewport optimized: j.mp/bplateviewport -->
   <meta name="viewport" content="width=device-width,initial-scale=1">
-
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
-
   <!-- CSS: implied media=all -->
   <link rel="stylesheet" href="style.css">
   <!-- end CSS-->
@@ -21,47 +20,57 @@
 </head>
 
 <body>
-  <div id="topcontrol" >
-    <div id="boxno" style="margin-bottom: 5px;">箱號: <input onblur="this.focus()" type="text" id="txtBoxno" tabindex="0" autofocus></input> </div>
-    <div id="filter">
-      <button id="btnFilterN" class="btn"  tabindex="-1">未上車 (<span id="countN" class="counter"></span>)</button>
-      <button id="btnFilterY" class="btn " tabindex="-1">已上車 (<span id="countY" class="counter"></span>)</button>
-      <button id="btnFilterE" class="btn" tabindex="-1">錯箱 (<span id="countE" class="counter"></span>)</button>
+  <div id="train3">
+    <div v-cloak>
+      <div id="topcontrol">
+        <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span><input v-on:keyup.13="updateChk" onblur="this.focus()"
+            type="text" id="txtBoxno" tabindex="0" autofocus></input> </div>
+        <div id="filter">
+          <button id="btnFilterN" v-on:click="chk_active='N'" class="btn" :class="{active: chk_active=='N'}" tabindex="-1">未上車 (<span
+              class="counter">{{countN}}</span>)</button>
+          <button id="btnFilterY" v-on:click="chk_active='Y'" class="btn" :class="{active: chk_active=='Y'}" tabindex="-1">已上車 (<span
+              class="counter">{{countY}}</span>)</button>
+          <button id="btnFilterE" v-on:click="chk_active='E'" class="btn" :class="{active: chk_active=='E'}" tabindex="-1">錯箱 (<span
+              class="counter">{{countE}}</span>)</button>
+        </div>
+      </div>
+
+      <div id="boxnolist">
+        <table id="tableData">
+          <thead>
+            <tr>
+              <td></td>
+              <td>箱號</td>
+              <td>門市</td>
+            </tr>
+          </thead>
+          <tbody id="tbodyData">
+            <tr v-for="(trainBox, index) in trainBoxList" :class="['chk_'+ trainBox.CHK , ((chk_active == trainBox.CHK) ? '' : 'hidden')]">
+              <td>{{index+1}}</td>
+              <td>{{trainBox.BOX_NO}}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="bottomcontrol">
+        <button id="btnExit" v-on:click="clearData" class="btn" tabindex="-1">結束</button>
+        <button id="btnFetch" v-on:click="refetch" class="btn" tabindex="-1">重讀</button>
+      </div>
     </div>
   </div>
-
-  <div id="boxnolist">
-    <table id="tableData">
-      <thead>
-        <tr>
-          <td>箱號</td>
-          <td>門市</td>
-        </tr>
-      </thead>
-      <tbody id="tbodyData"></tbody>
-    </table>
-  </div>
-  <div id="bottomcontrol">
-    <button id="btnExit" class="btn" tabindex="-1">結束</button>
-    <button id="btnFetch" class="btn" tabindex="-1">重讀</button>
-  </div>
-
-
   <!-- JavaScript at the bottom for fast page loading -->
-
-  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-  <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> -->
-  <!-- <script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.2.min.js"><\/script>')</script> -->
-  <!-- <script src="vue.js"></script> -->
+  <script src="vue.min.js"></script>
   <script src="script.js"></script>
   <!-- Change UA-XXXXX-X to be your site's ID -->
-  <script>
+  <!-- <script>
     // window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']];
     // Modernizr.load({
     //   load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
     // });
-  </script>
-  
-  
+  </script> -->
+
+
 </body>
+
 </html>
