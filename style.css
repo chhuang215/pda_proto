@@ -36,27 +36,32 @@ td:nth-child(even){
 	font-family:Arial;
 	font-size:13px;
 	font-weight:bold;
-	padding:.64rem 17px;
-	text-decoration:none;
+    /* padding:.6rem .55rem; */
+    padding: .6rem .4rem;
+    text-decoration:none;
+    width:30%;
 }
 
-.btn:active {
+.btn:active , .active{
 	position:relative;
-	top:1px;
+	top:1.5px;
 }
 
 .btnGreen {
-	box-shadow:inset 0px 1px 0px 0px #9acc85;
-	background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%);
+	/* box-shadow:inset 0px 1px 0px 0px #9acc85; */
+	/* background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%); */
 	background-color:#74ad5a;
 	border:1px solid #3b6e22;
-	color:#ffffff;
 }
-.btnGreen:hover {
+/* .btnGreen:hover {
 	background:linear-gradient(to bottom, #68a54b 5%, #74ad5a 100%);
 	background-color:#68a54b;
-}
+} */
 
+
+.hidden{
+    display:none;
+}
 
 #txtBoxno {
     padding: 2px;

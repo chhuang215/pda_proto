@@ -1,128 +1,124 @@
-
-
-
 document.addEventListener("DOMContentLoaded", function(){
-    //var _lsTotal=0,_xLen,_x;for(_x in localStorage){ if(!localStorage.hasOwnProperty(_x)){continue;} _xLen= ((localStorage[_x].length + _x.length)* 2);_lsTotal+=_xLen; console.log(_x.substr(0,50)+" = "+ (_xLen/1024).toFixed(2)+" KB")};console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");
+    //let _lsTotal=0,_xLen,_x;for(_x in localStorage){ if(!localStorage.hasOwnProperty(_x)){continue;} _xLen= ((localStorage[_x].length + _x.length)* 2);_lsTotal+=_xLen; console.log(_x.substr(0,50)+" = "+ (_xLen/1024).toFixed(2)+" KB")};console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");
     
-    fetchData();
-
+    //Get API from here
     function fetchData(){
-        var locStorage = window.localStorage;
-        var t = document.getElementById("tableData").getElementsByTagName("tbody")[0];
+        let locStorage = window.localStorage;
+        
         if (locStorage.length <= 0){
-            for (var i = 0 ; i < 100; i ++){
-                locStorage.setItem("BoxNo"+i,"N" );
+            for (let i = 0 ; i < 150; i ++){
+                locStorage.setItem("boxno"+i,"N" );
             }
         }
-
-        for (var  i = 0 ; i < locStorage.length ; i ++){
-            var key = locStorage.key(i);
-            var tr = t.insertRow();
-            tr.id=key;
-            var td1  = tr.insertCell(0);
-            var td2  = tr.insertCell(1);
-    
-            var chk = locStorage.getItem(key);
-    
-            switch (chk){
-                case "Y":
-                    tr.className = "chk chk_Y"
-                    break;
-                case "N":
-                    tr.className = "chk chk_N";
-                    break;
-                case "E":
-                    tr.className = "chk chk_E";
-                    break;
-            }
-    
-            //td1.appendChild(document.createTextNode(chk));
-            td1.appendChild(document.createTextNode(key));
-        }
-        filterTableByChk('N');
+        displayData();
     }
 
+    //Iterate localStorage data onto table element
+    function displayData(){
+        let t = document.getElementById("tableData").getElementsByTagName("tbody")[0];
+        let locStorage = window.localStorage;
+        for (let  i = 0 ; i < locStorage.length ; i ++){
+            let key = locStorage.key(i);
+            let tr = t.insertRow();
+            tr.id=key;
+            
+            let td  = tr.insertCell(0);
+            tr.insertCell();
+            let chk = locStorage.getItem(key);
+            tr.className = "chk chk_"+chk;
+            td.innerHTML = key;
+        }
+    }
 
-    // function refreshCount(){
-    //     var locStorage = window.localStorage;
-
-    //     document.getElementById("countN");
-    //     document.getElementById("countY");
-    //     document.getElementById("countE");
-    // }
+    function refreshCount(){
+        let t = document.getElementById("tableData");
+        document.getElementById("countN").innerHTML = t.querySelectorAll(".chk_N").length ;
+        document.getElementById("countY").innerHTML = t.querySelectorAll(".chk_Y").length;
+        document.getElementById("countE").innerHTML = t.querySelectorAll(".chk_E").length;
+    }
 
     function clearTable(){
-        var table = document.getElementById("tableData").getElementsByTagName("tbody")[0];
-        table.innerHTML = "";
+        document.getElementById("tbodyData").innerHTML = "";
     }
 
-    function filterTableByChk(chk){
-        var allChk = document.getElementsByClassName('chk');
-        for (var c of allChk){
-            c.style.display =  (c.classList.contains("chk_" + chk) ) ? null : 'none';
+    function displayTableByChk(btnClicked, chk){
+
+        let activeBtns = document.getElementsByClassName("active");
+        for (let ab of activeBtns) {ab.classList.remove("active")};
+
+        btnClicked.classList.add("active");
+
+        let allChk = document.getElementsByClassName('chk');
+        for (let c of allChk){
+            let clist = c.classList;
+            if (clist.contains("chk_" + chk) ){
+                clist.remove("hidden");
+            }
+            else clist.add("hidden");
         }
     }
 
     // --------------btn input event------------------
-    var btnFilterN = document.getElementById("btnFilterN");
-    var btnFilterY =  document.getElementById("btnFilterY");
-    var btnFilterE =  document.getElementById("btnFilterE");
-    btnFilterN.onclick = function(e){filterTableByChk("N")};
-    btnFilterY.onclick = function(e){filterTableByChk("Y")};
-    btnFilterE.onclick = function(e){filterTableByChk("E")};
+    let btnFilterN = document.getElementById("btnFilterN");
+    let btnFilterY =  document.getElementById("btnFilterY");
+    let btnFilterE =  document.getElementById("btnFilterE");
+    btnFilterN.onclick = function(e){
+        displayTableByChk(e.target, "N")
+    };
+    btnFilterY.onclick = function(e){
+        displayTableByChk(e.target, "Y")
+    };
+    btnFilterE.onclick = function(e){
+        displayTableByChk(e.target, "E")
+    };
 
-    var btnExit = document.getElementById("btnExit");
+    let btnExit = document.getElementById("btnExit");
     btnExit.onclick = function(e){
         clearTable();
         window.localStorage.clear();    
+        refreshCount();
     };
 
-    var btnFetch = document.getElementById("btnFetch");
+    let btnFetch = document.getElementById("btnFetch");
     btnFetch.onclick = function(e){
         window.localStorage.clear();
         clearTable();
         fetchData();
+        refreshCount();
+        document.getElementById("btnFilterN").click();
     };
 
     // ----------------Txt input event----------------
-    var txtInput = document.getElementById("txtBoxno");
+    let txtInput = document.getElementById("txtBoxno");
     txtInput.addEventListener("keyup", function(e) {
      // Number 13 is the "Enter" key on the keyboard
         if (e.keyCode === 13) {
             // Cancel the default action
             e.preventDefault();
-            
-            var locStorage = window.localStorage;
-            var boxno = e.target.value.trim();
-
-            if (!boxno.trim()){
+            let boxno = e.target.value.trim();
+            if (!boxno){
                 return;
             }
-            var chk = locStorage.getItem(boxno);
-            var chk_status = "E";
-            if (chk == "N"){
-                chk_status = "Y";
-            }
-            else if (chk == "Y"){
-                chk_status = "N";
-            }
-            else if (!chk){
-                var table = document.getElementById("tableData").getElementsByTagName("tbody")[0];
-                var tr = table.insertRow();
+            let locStorage = window.localStorage;
+            let tr = document.getElementById(boxno);
+            if (!tr){
+                tr = document.getElementById("tbodyData").insertRow();
                 tr.id=boxno;
+                let td = tr.insertCell();
                 tr.insertCell();
-                var td2  = tr.insertCell();
-                td2.appendChild(document.createTextNode(boxno));
+                td.innerHTML = boxno;
             }
-            var tr =  document.getElementById(boxno);
-            tr.style.display = tr.style.display != 'none' ?  'none' : null;
-            tr.removeAttribute("class");
-            tr.className = "chk chk_" + chk_status;
-            // var td = tr.cells[0];
-            // td.innerHTML = chk_status;
+            let chk = locStorage.getItem(boxno);
+            let chk_status = chk == "N" ? "Y" : chk == "Y" ? "N" : "E";
+            tr.className = document.getElementById("btnFilter" + chk_status).classList.contains("active") ? "chk chk_" + chk_status : "hidden chk chk_" + chk_status;
             locStorage.setItem(boxno, chk_status);
             e.target.value = "";
             e.target.focus();
+            refreshCount();
         }
     });
+    // INIT operation
+    fetchData();
+    refreshCount();
+    document.getElementById("btnFilterN").click();
 });

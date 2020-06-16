@@ -22,11 +22,11 @@
 
 <body>
   <div id="topcontrol" >
-    <div id="boxno" style="margin-bottom: 5px;">箱號: <input type="text" id="txtBoxno"></input> </div>
+    <div id="boxno" style="margin-bottom: 5px;">箱號: <input onblur="this.focus()" type="text" id="txtBoxno" tabindex="0" autofocus></input> </div>
     <div id="filter">
-      <button id="btnFilterN" class="btn">未上車 <!--(<span id="countN"></span>)--></button>
-      <button id="btnFilterY" class="btn">已上車 <!--(<span id="countY"></span>)--></button>
-      <button id="btnFilterE" class="btn">錯箱 <!--(<span id="countE"></span>)--></button>
+      <button id="btnFilterN" class="btn"  tabindex="-1">未上車 (<span id="countN" class="counter"></span>)</button>
+      <button id="btnFilterY" class="btn " tabindex="-1">已上車 (<span id="countY" class="counter"></span>)</button>
+      <button id="btnFilterE" class="btn" tabindex="-1">錯箱 (<span id="countE" class="counter"></span>)</button>
     </div>
   </div>
 
@@ -38,12 +38,12 @@
           <td>門市</td>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="tbodyData"></tbody>
     </table>
   </div>
   <div id="bottomcontrol">
-    <button id="btnExit" class="btn">結束</button>
-    <button id="btnFetch" class="btn">重讀</button>
+    <button id="btnExit" class="btn" tabindex="-1">結束</button>
+    <button id="btnFetch" class="btn" tabindex="-1">重讀</button>
   </div>
 
 
@@ -52,7 +52,7 @@
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
   <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> -->
   <!-- <script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.2.min.js"><\/script>')</script> -->
-
+  <!-- <script src="vue.js"></script> -->
   <script src="script.js"></script>
   <!-- Change UA-XXXXX-X to be your site's ID -->
   <script>
