@@ -22,17 +22,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 //Get API from here
                 let locStorage = window.localStorage;
                 if (locStorage.length <= 0) {
-                    for (let i = 0; i < 150; i++) {
-                        let aData = {};
-                        aData["BOX_NO"] = "boxno" + i;
-                        aData["CHK"] = "N";
-                        aData["BRANCH_ID"] = "";
+                    for (let i = 0; i < 200; i++) {
+                        let aData = {
+                            BOX_NO: "boxno" + i,
+                            CHK: "N", 
+                            BRANCH_ID: ""
+                        };
                         this.trainBoxList.push(aData);
+                        locStorage.setItem("boxno" + i, JSON.stringify(aData))
                     }
-                    locStorage.setItem("trainBoxList", JSON.stringify(this.trainBoxList));
                 }
                 else {
-                    this.trainBoxList = JSON.parse(locStorage.getItem("trainBoxList"));
+                    for (let i = 0; i < locStorage.length; i++){
+                        let boxData = locStorage.getItem(locStorage.key(i))
+                        this.trainBoxList.push(JSON.parse(boxData));
+                    }
                 }
             },
             updateChk: function (e) {
@@ -46,16 +50,20 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 if (tbIndex >= 0) {
-                    this.trainBoxList[tbIndex].CHK = this.trainBoxList[tbIndex].CHK == "Y" ? "N" : "Y";
+                    if (this.trainBoxList[tbIndex].CHK != "E"){
+                        this.trainBoxList[tbIndex].CHK = this.trainBoxList[tbIndex].CHK == "Y" ? "N" : "Y";
+                        window.localStorage.setItem(boxno, JSON.stringify(this.trainBoxList[tbIndex]));
+                    }
                 }
                 else {
-                    this.trainBoxList.push({
+                    let newData = {
                         BOX_NO: boxno,
                         CHK: "E",
                         BRANCH_ID: ""
-                    });
+                    }
+                    this.trainBoxList.push(newData);
+                    window.localStorage.setItem(boxno, JSON.stringify(newData));
                 }
-                window.localStorage.setItem("trainBoxList", JSON.stringify(this.trainBoxList));
                 txtBox.focus();
                 txtBox.value = "";
             }
