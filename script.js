@@ -132,9 +132,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     for (let i = 0; i < mockBoxNo.length; i++) {
                         let boxno = mockBoxNo[i]
                         let aData = {
-                            BOX_NO: boxno,
+                            BoxNo: boxno,
                             CHK: "N",
-                            BRANCH_ID: "",
+                            StoreNo: "",
                         };
                         this.lstBoxData.push(aData);
                         locStorage.setItem(boxno, JSON.stringify(aData))
@@ -154,34 +154,49 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
                 let tbIndex = this.lstBoxData.findIndex(function (tb) {
-                    return tb.BOX_NO == boxno
+                    return tb.BoxNo == boxno
                 });
 
                 if (tbIndex >= 0) {
-                    if (this.lstBoxData[tbIndex].CHK != "E") {
-                        this.lstBoxData[tbIndex].CHK = this.lstBoxData[tbIndex].CHK == "Y" ? "N" : "Y";
-                        window.localStorage.setItem(boxno, JSON.stringify(this.lstBoxData[tbIndex]));
+                    let boxListResult = this.lstBoxData[tbIndex];
+                    if (boxListResult.CHK != "E") {
+                        
+                        let flag = boxListResult.CHK == "Y" ? "N" : "Y"
+
+                        let trainBoxParam = {
+                            ShpStore: this.shpStore,
+                            StoreNo: this.storeNo,
+                            CarNo: this.carNo,
+                            WorkNo: this.workNo,
+                            BoxNo: boxListResult.BoxNo,
+                            Flag: flag
+                        }
+
+                        console.log(trainBoxParam);
+
+                        boxListResult.CHK = flag;
+                        window.localStorage.setItem(boxno, JSON.stringify(boxListResult));
                     }
                 }
                 else {
                     let newData = {
-                        BOX_NO: boxno,
+                        BoxNo: boxno,
                         CHK: "E",
-                        BRANCH_ID: ""
+                        StoreNo: ""
                     }
                     this.lstBoxData.push(newData);
                     window.localStorage.setItem(boxno, JSON.stringify(newData));
                 }
                 txtBox.focus();
-                txtBox.value = "";
+                //txtBox.value = "";
             },
-            outReport: function(){
+            outReport: function(e){
                 let loadedDate = new Date();
                 let outReportParam = {
                     WorkNo: this.workNo,
-                    MacNo: this.MacNo,
-                    StoreNo: this.StoreNo,
-                    CarNo: this.CarNo,
+                    MacNo: this.macNo,
+                    StoreNo: this.storeNo,
+                    CarNo: this.carNo,
                     OutDate: "" + loadedDate.getFullYear() + ("0" + (loadedDate.getMonth() + 1)).slice(-2) + ("0" + loadedDate.getDate()).slice(-2)
                 }
                 console.log(outReportParam);

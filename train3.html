@@ -22,8 +22,8 @@
 <body>
   <div id="train3">
     <div v-cloak>
-      <div id="topcontrol">
-        <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span><input v-on:keyup.13="updateChk" onblur="this.focus()"
+      <div id="topcontrol"> <!--onblur="this.focus()"-->
+        <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span><input v-on:keyup.13="updateChk"  
             type="text" id="txtBoxno" tabindex="0" autofocus></input> </div>
         <div id="filter">
           <button id="btnFilterN" v-on:click="chk_active='N'" class="btn" :class="{active: chk_active=='N'}" tabindex="-1">未上車 (<span
@@ -47,7 +47,7 @@
           <tbody id="tbodyData">
             <tr v-for="(boxListResult, index) in lstBoxData" :class="['chk_'+ boxListResult.CHK , ((chk_active == boxListResult.CHK) ? '' : 'hidden')]">
               <td>{{index+1}}</td>
-              <td>{{boxListResult.BOX_NO}}</td>
+              <td>{{boxListResult.BoxNo}}</td>
               <td></td>
             </tr>
           </tbody>
