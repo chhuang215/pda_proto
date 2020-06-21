@@ -105,18 +105,23 @@ document.addEventListener("DOMContentLoaded", function () {
     var vueApp = new Vue({
         el: '#train3',
         data: {
-            trainBoxList: [],
+            workNo:"",
+            macNo:"",
+            carNo:"",
+            storeNo:"",
+            shpStore:"",     
+            lstBoxData: [],
             chk_active: "N",
         },
         computed: {
             countN: function () {
-                return this.trainBoxList.filter(function (tb) { return tb.CHK == "N" }).length
+                return this.lstBoxData.filter(function (tb) { return tb.CHK == "N" }).length
             },
             countY: function () {
-                return this.trainBoxList.filter(function (tb) { return tb.CHK == "Y" }).length
+                return this.lstBoxData.filter(function (tb) { return tb.CHK == "Y" }).length
             },
             countE: function () {
-                return this.trainBoxList.filter(function (tb) { return tb.CHK == "E" }).length
+                return this.lstBoxData.filter(function (tb) { return tb.CHK == "E" }).length
             }
         },
         methods: {
@@ -129,16 +134,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         let aData = {
                             BOX_NO: boxno,
                             CHK: "N",
-                            BRANCH_ID: ""
+                            BRANCH_ID: "",
                         };
-                        this.trainBoxList.push(aData);
+                        this.lstBoxData.push(aData);
                         locStorage.setItem(boxno, JSON.stringify(aData))
                     }
                 }
                 else {
                     for (let i = 0; i < locStorage.length; i++) {
                         let boxData = locStorage.getItem(locStorage.key(i))
-                        this.trainBoxList.push(JSON.parse(boxData));
+                        this.lstBoxData.push(JSON.parse(boxData));
                     }
                 }
             },
@@ -148,14 +153,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (!boxno) {
                     return;
                 }
-                let tbIndex = this.trainBoxList.findIndex(function (tb) {
+                let tbIndex = this.lstBoxData.findIndex(function (tb) {
                     return tb.BOX_NO == boxno
                 });
 
                 if (tbIndex >= 0) {
-                    if (this.trainBoxList[tbIndex].CHK != "E") {
-                        this.trainBoxList[tbIndex].CHK = this.trainBoxList[tbIndex].CHK == "Y" ? "N" : "Y";
-                        window.localStorage.setItem(boxno, JSON.stringify(this.trainBoxList[tbIndex]));
+                    if (this.lstBoxData[tbIndex].CHK != "E") {
+                        this.lstBoxData[tbIndex].CHK = this.lstBoxData[tbIndex].CHK == "Y" ? "N" : "Y";
+                        window.localStorage.setItem(boxno, JSON.stringify(this.lstBoxData[tbIndex]));
                     }
                 }
                 else {
@@ -164,15 +169,26 @@ document.addEventListener("DOMContentLoaded", function () {
                         CHK: "E",
                         BRANCH_ID: ""
                     }
-                    this.trainBoxList.push(newData);
+                    this.lstBoxData.push(newData);
                     window.localStorage.setItem(boxno, JSON.stringify(newData));
                 }
                 txtBox.focus();
                 txtBox.value = "";
+            },
+            outReport: function(){
+                let loadedDate = new Date();
+                let outReportParam = {
+                    WorkNo: this.workNo,
+                    MacNo: this.MacNo,
+                    StoreNo: this.StoreNo,
+                    CarNo: this.CarNo,
+                    OutDate: "" + loadedDate.getFullYear() + ("0" + (loadedDate.getMonth() + 1)).slice(-2) + ("0" + loadedDate.getDate()).slice(-2)
+                }
+                console.log(outReportParam);
             }
             ,
             clearTable: function () {
-                this.trainBoxList = [];
+                this.lstBoxData = [];
             },
             clearData: function () {
                 this.clearTable();

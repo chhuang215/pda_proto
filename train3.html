@@ -45,16 +45,16 @@
             </tr>
           </thead>
           <tbody id="tbodyData">
-            <tr v-for="(trainBox, index) in trainBoxList" :class="['chk_'+ trainBox.CHK , ((chk_active == trainBox.CHK) ? '' : 'hidden')]">
+            <tr v-for="(boxListResult, index) in lstBoxData" :class="['chk_'+ boxListResult.CHK , ((chk_active == boxListResult.CHK) ? '' : 'hidden')]">
               <td>{{index+1}}</td>
-              <td>{{trainBox.BOX_NO}}</td>
+              <td>{{boxListResult.BOX_NO}}</td>
               <td></td>
             </tr>
           </tbody>
         </table>
       </div>
       <div id="bottomcontrol">
-        <button id="btnExit" v-on:click="clearData" class="btn" tabindex="-1">結束</button>
+        <button id="btnExit" v-on:click="outReport" class="btn" tabindex="-1">結束</button>
         <button id="btnFetch" v-on:click="refetch" class="btn" tabindex="-1">重讀</button>
       </div>
     </div>
