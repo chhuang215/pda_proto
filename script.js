@@ -138,12 +138,10 @@ document.addEventListener("DOMContentLoaded", function () {
                             if(data.Result == 1){console.log("success")};
 
                             let returnList = data.ReturnList;
-                            self.lstBoxData = [...returnList.BoxData];
-
-                            for (let i = 0; i < lstBoxData.length; i++) {
+                            self.lstBoxData = returnList.BoxData.slice();
+                            for (let i = 0; i < self.lstBoxData.length; i++) {
                                 locStorage.setItem(self.lstBoxData[i].BoxNo, JSON.stringify(self.lstBoxData[i]))
                             }
-
                         })
                         .catch(function (error) {
                             console.log(error);
@@ -151,16 +149,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         .then(function () {
                             // always executed
                         });  
-                    // for (let i = 0; i < mockBoxNo.length; i++) {
-                    //     let boxno = mockBoxNo[i]
-                    //     let aData = {
-                    //         BoxNo: boxno,
-                    //         CHK: "N",
-                    //         StoreNo: "",
-                    //     };
-                    //     this.lstBoxData.push(aData);
-                    //     locStorage.setItem(boxno, JSON.stringify(aData))
-                    // }
                 }
                 else {
                     for (let i = 0; i < locStorage.length; i++) {
