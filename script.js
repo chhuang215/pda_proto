@@ -128,17 +128,39 @@ document.addEventListener("DOMContentLoaded", function () {
             generateData: function () {
                 //Get API from here
                 let locStorage = window.localStorage;
+                var self = this;
                 if (locStorage.length <= 0) {
-                    for (let i = 0; i < mockBoxNo.length; i++) {
-                        let boxno = mockBoxNo[i]
-                        let aData = {
-                            BoxNo: boxno,
-                            CHK: "N",
-                            StoreNo: "",
-                        };
-                        this.lstBoxData.push(aData);
-                        locStorage.setItem(boxno, JSON.stringify(aData))
-                    }
+                    console.log("waiting");
+                     axios.get("http://10.254.247.103:18718/api/Shipping/v1/TrainBoxList/219", {headers: { "X-Powered-TK":"5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA="}})
+                        .then(function (response) {
+                            console.log(response);
+                            let data = response.data;
+                            if(data.Result == 1){console.log("success")};
+
+                            let returnList = data.ReturnList;
+                            self.lstBoxData = [...returnList.BoxData];
+
+                            for (let i = 0; i < lstBoxData.length; i++) {
+                                locStorage.setItem(self.lstBoxData[i].BoxNo, JSON.stringify(self.lstBoxData[i]))
+                            }
+
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        })
+                        .then(function () {
+                            // always executed
+                        });  
+                    // for (let i = 0; i < mockBoxNo.length; i++) {
+                    //     let boxno = mockBoxNo[i]
+                    //     let aData = {
+                    //         BoxNo: boxno,
+                    //         CHK: "N",
+                    //         StoreNo: "",
+                    //     };
+                    //     this.lstBoxData.push(aData);
+                    //     locStorage.setItem(boxno, JSON.stringify(aData))
+                    // }
                 }
                 else {
                     for (let i = 0; i < locStorage.length; i++) {
