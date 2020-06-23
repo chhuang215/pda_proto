@@ -1,6 +1,6 @@
 //var mockBoxNo = [ 'A911018010371', 'A911018010521', 'A911018010522', 'A911018010821', 'A911018010853', 'A911018010914', 'A911018010915', 'A911018010916', 'A911018010917', 'A911018010918', 'A911018010919', 'A911018010920', 'A911018010921', 'A911018010922', 'A911018010923', 'A911018010940', 'A911018011027', 'A911018011141', 'A911018011145', 'A911018011170', 'A911018011171', 'A911018011176', 'A911018011271', 'A911018011358', 'A911018011366', 'A911018011374', 'A911018011375', 'A911018011381', 'A911018011382', 'A911018011383', 'A911018011384', 'A911018011385', 'A911018011386', 'A911018011387', 'A911018011388', 'A911018011389', 'A911018011390', 'A911018011391', 'A911018011392', 'A911018011393', 'A911018011394', 'A911018011501', 'A911018011502', 'A911018011503', 'A911018011504', 'A911018011505', 'A911018011506', 'A911018011507', 'A911018011508', 'A911018011509', 'A911018011510', 'A911018011511', 'A911018011512', 'A911018011513', 'A911018011514', 'A911018011515', 'A911018011516', 'A911018011517', 'A911018011518', 'A911018011519', 'A911018011520', 'A911018011521', 'A911018011522', 'A911018011523', 'A911018011524', 'A911018011525', 'A911018011526', 'A911018011527', 'A911018011528', 'A911018011529', 'A911018011530', 'A911018011531', 'A911018011532', 'A911018011533', 'A911018011534', 'A911018011535', 'A911018011536', 'A911018011537', 'A911018011538', 'A911018011539', 'A911018011540', 'A911018011541', 'A911018011542', 'A911018011543', 'A911018011544', 'A911018011545', 'A911018011546', 'A911018011547', 'A911018011548', 'A911018011549', 'A911018011550', 'A911018011551', 'A911018011552', 'A911018011553', 'A911018011554', 'A911018011555', 'A911018011556', 'A911018011557', 'A911018011558' ];
 document.addEventListener("DOMContentLoaded", function () {
-    axios.defaults.baseURL = "http://10.254.247.103:18718/api/Shipping/v1/"
+    axios.defaults.baseURL = "http://10.254.247.103:18718/"
     axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
     //let _lsTotal=0,_xLen,_x;for(_x in localStorage){ if(!localStorage.hasOwnProperty(_x)){continue;} _xLen= ((localStorage[_x].length + _x.length)* 2);_lsTotal+=_xLen; console.log(_x.substr(0,50)+" = "+ (_xLen/1024).toFixed(2)+" KB")};console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");
     var vueApp = new Vue({
@@ -13,18 +13,20 @@ document.addEventListener("DOMContentLoaded", function () {
             _shpStore:"",     
             lstBoxData: [],
             chk_active: "N",
+            processingBoxes: [],
             fetchingData: false,
+            debugMessage: "",
         },
         computed: {
             storeNo: {
-                get: function() {return this._storeNo;},
+                get: function() {return  this._storeNo;},
                 set: function(val) {
                     this._storeNo = val;
                     localStorage.setItem('StoreNo', val);
                 }
             },
             workNo: {
-                get: function() {return this._workNo;},
+                get: function() {return  this._workNo;},
                 set: function(val) {
                     this._workNo = val;
                     localStorage.setItem('WorkNo', val);
@@ -64,12 +66,11 @@ document.addEventListener("DOMContentLoaded", function () {
         methods: {
             fetchData: function () {
                 var vueThis = this;
-                console.log(localStorage.length)
                 if (localStorage.length <= 1) {
                     if (vueThis.fetchingData) return;
                     vueThis.fetchingData = true;
                     console.log("waiting");
-                    const URL = "TrainBoxList/"+this.storeNo;
+                    const URL = "api/Shipping/v1/TrainBoxList/"+this.storeNo;
                     axios.get(URL).then(function (response) {
                             console.log(response);
                             let data = response.data;
@@ -84,11 +85,13 @@ document.addEventListener("DOMContentLoaded", function () {
                             localStorage.setItem("boxNoIndex", JSON.stringify(boxNoIndex))
                         })
                         .catch(function (error) {
-                            console.log(error);
+                            console.log("errMessage: " +error);
+                            vueThis.debugMessage = "errMessage: " +error;
                         })
                         .then(function () {
                             console.log("done");
                             vueThis.fetchingData = false;
+                            vueThis.debugMessage += " finish fetching";
                         });  
                 }
                 else {
@@ -102,9 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
             updateChk: function (e) {
                 let txtBox = e.target;
                 let boxno = txtBox.value.trim();
-                if (!boxno) {
+                if (!boxno || this.processingBoxes.includes(boxno)) {
                     return;
                 }
+                this.processingBoxes.push(boxno);
                 let tbIndex = this.lstBoxData.findIndex(function (tb) {return tb.BoxNo == boxno});
 
                 if (tbIndex >= 0) {
@@ -121,22 +125,25 @@ document.addEventListener("DOMContentLoaded", function () {
                             Flag: flag
                         }
                         console.log(trainBoxParam);
-                        const URL = "TrainBoxFlag";
+                        const URL = "api/Shipping/v1/TrainBoxFlag";
                         axios.post(URL, trainBoxParam).then(function (response) {
-                            console.log(response);
-                            if(response.data.Result != 1){ throw response.data.Result + " " + response.data.Message};
-                            boxListResult.CHK = flag;
-                            localStorage.setItem(boxno, JSON.stringify(boxListResult));
-                        })
-                        .catch(function (error) {
-                            console.log(error);
-                        })
-                        .then(function () {
-                            console.log("done");
-                            // always executed
-                        });  
+                                console.log(response);
+                                if(response.data.Result != 1){ throw response.data.Result + " " + response.data.Message};
+                                boxListResult.CHK = flag;
+                                localStorage.setItem(boxno, JSON.stringify(boxListResult));
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            })
+                            .then(function () {
+                                console.log("done");
+                                this.processingBoxes.splice( this.processingBoxes.indexOf(boxno), 1 )
+                            });  
                         // boxListResult.CHK = flag;
                         // localStorage.setItem(boxno, JSON.stringify(boxListResult));
+                    }
+                    else{
+                        this.processingBoxes.splice( this.processingBoxes.indexOf(boxno), 1 )
                     }
                 }
                 else {
@@ -147,8 +154,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     this.lstBoxData.push(newData);
                     localStorage.setItem(boxno, JSON.stringify(newData));
+                    this.processingBoxes.splice( this.processingBoxes.indexOf(boxno), 1 )
                 }
-                txtBox.focus();
                 //txtBox.value = "";
             },
             outReport: function(e){
@@ -161,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     OutDate: "" + loadedDate.getFullYear() + ("0" + (loadedDate.getMonth() + 1)).slice(-2) + ("0" + loadedDate.getDate()).slice(-2)
                 }
                 console.log(outReportParam);
-                const URL = "OutReport";
+                const URL = "api/Shipping/v1/OutReport";
                 axios.post(URL, outReportParam).then(function (response) {
                     console.log(response);
                     if(response.data.Result != 1){ throw response.data.Result + " " + response.data.Message};
@@ -171,7 +178,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(function () {
                     console.log("done");
-                    // always executed
                 }); 
             }
             ,

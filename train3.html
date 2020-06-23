@@ -23,7 +23,7 @@
   <div id="train3">
     <div v-cloak>
       <div id="topcontrol"> <!--onblur="this.focus()"-->
-        <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span><input v-on:keyup.13="updateChk"  
+        <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span><input v-on:keyup.13="updateChk"   onblur="this.focus()"
             type="text" id="txtBoxno" tabindex="0" autofocus></input> </div>
         <div id="filter">
           <button id="btnFilterN" v-on:click="chk_active='N'" class="btn" :class="{active: chk_active=='N'}" tabindex="-1">未上車 (<span
@@ -36,6 +36,8 @@
       </div>
 
       <div id="boxnolist">
+        <div :class="{hidden: !fetchingData}">讀取中</div>
+        <div id="debug">{{debugMessage}}</div>
         <table id="tableData">
           <thead>
             <tr>
@@ -48,14 +50,14 @@
             <tr v-for="(boxListResult, index) in lstBoxData" :class="['chk_'+ boxListResult.CHK , ((chk_active == boxListResult.CHK) ? '' : 'hidden')]">
               <td>{{index+1}}</td>
               <td>{{boxListResult.BoxNo}}</td>
-              <td></td>
+              <td>{{boxListResult.StoreNo}}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <div id="bottomcontrol">
         <button id="btnExit" v-on:click="outReport" class="btn" tabindex="-1">結束</button>
-        <button id="btnFetch" v-on:click="refetch" class="btn" tabindex="-1">重讀</button>
+        <button id="btnFetch" v-on:click="refetch" class="btn" tabindex="-1" :disabled="fetchingData">重讀</button>
       </div>
     </div>
   </div>
@@ -63,8 +65,6 @@
   <script src="axios.min.js"></script>
   <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
   <script src="vue.js"></script>
- 
-  <!-- <script src="axios.min.js"></script> -->
   <script src="script.js"></script>
   <!-- Change UA-XXXXX-X to be your site's ID -->
   <!-- <script>
@@ -73,8 +73,6 @@
     //   load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
     // });
   </script> -->
-
-
 </body>
 
 </html>
