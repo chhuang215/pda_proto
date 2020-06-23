@@ -77,6 +77,10 @@ document.addEventListener("DOMContentLoaded", function () {
                             if(data.Result != 1){ throw data.Result + " " + data.Message};
                             let boxNoIndex = [];
                             let trainBoxResult = data.ReturnList;
+                            vueThis.workNo = trainBoxResult.WorkNo;
+                            vueThis.macNo = trainBoxResult.MacNo;
+                            vueThis.carNo = trainBoxResult.CarNo;
+                            vueThis.shpStore = trainBoxResult.ShpStore;
                             vueThis.lstBoxData = trainBoxResult.BoxData;
                             for (let box of data.trainBoxResult){
                                 boxNoIndex.push(box.BoxNo);
@@ -95,6 +99,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         });  
                 }
                 else {
+                    this.workNo = localStorage.getItem("WorkNo");
+                    this.macNo = localStorage.getItem("MacNo");
+                    this.carNo = localStorage.getItem("CarNo");
+                    this.shpStore = localStorage.getItem("ShpStore");
                     let boxNoIndex = localStorage.getItem("boxNoIndex");
                     for (let boxno of boxNoIndex) {
                         let boxData = localStorage.getItem(boxno)

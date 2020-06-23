@@ -34,9 +34,8 @@
               class="counter">{{countE}}</span>)</button>
         </div>
       </div>
-
       <div id="boxnolist">
-        <div :class="{hidden: !fetchingData}">讀取中</div>
+        <div v-show="fetchingData">讀取中</div>
         <div id="debug">{{debugMessage}}</div>
         <table id="tableData">
           <thead>
