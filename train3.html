@@ -46,7 +46,7 @@
             </tr>
           </thead>
           <tbody id="tbodyData">
-            <tr v-for="(boxListResult, index) in lstBoxData" :class="['chk_'+ boxListResult.CHK , ((chk_active == boxListResult.CHK) ? '' : 'hidden')]">
+            <tr v-for="(boxListResult, index) in lstBoxData" v-show="chk_active == boxListResult.CHK" :class="['chk_'+ boxListResult.CHK, {processing: processingBoxes.indexOf(boxListResult.BoxNo) != -1}]">
               <td>{{index+1}}</td>
               <td>{{boxListResult.BoxNo}}</td>
               <td>{{boxListResult.StoreNo}}</td>

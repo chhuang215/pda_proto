@@ -64,6 +64,10 @@ td:nth-child(even){
     display: none;
 }
 
+.processing{
+    background-color: red;
+}
+
 #txtBoxno {
     padding: 2px;
     font-size: 15px;
@@ -106,6 +110,8 @@ td:nth-child(even){
     vertical-align: middle;
     width: 100%;
 }
+
+
 
 [v-cloak] {
     display: none;
