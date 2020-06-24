@@ -65,7 +65,11 @@ td:nth-child(even){
 }
 
 .processing{
-    background-color: red;
+    border-radius: 5px;
+    background-color: lightcoral;
+    padding: 3px 7px;
+
+    font-size: x-small;
 }
 
 #txtBoxno {

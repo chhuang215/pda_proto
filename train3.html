@@ -46,9 +46,9 @@
             </tr>
           </thead>
           <tbody id="tbodyData">
-            <tr v-for="(boxListResult, index) in lstBoxData" v-show="chk_active == boxListResult.CHK" :class="['chk_'+ boxListResult.CHK, {processing: processingBoxes.indexOf(boxListResult.BoxNo) != -1}]">
+            <tr v-for="(boxListResult, index) in boxData" v-show="chk_active == boxListResult.CHK">
               <td>{{index+1}}</td>
-              <td>{{boxListResult.BoxNo}}</td>
+              <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
               <td>{{boxListResult.StoreNo}}</td>
             </tr>
           </tbody>
