@@ -11,7 +11,6 @@ var vueApp = new Vue({
         carNo:"",
         shpStore:"",
         boxData: [],
-        boxData: [],
         chk_active: "N",
         processingBoxes: [],
         fetchingData: false,
@@ -65,7 +64,6 @@ var vueApp = new Vue({
                         vueThis.macNo = trainBoxResult.MacNo;
                         vueThis.carNo = trainBoxResult.CarNo;
                         vueThis.shpStore = trainBoxResult.ShpStore;
-                        vueThis.boxData = trainBoxResult.BoxData;
                         vueThis.boxData = trainBoxResult.BoxData;
                         localStorage.setItem('boxData', JSON.stringify(vueThis.boxData));
                         for (let box of trainBoxResult.BoxData){
@@ -198,6 +196,6 @@ var vueApp = new Vue({
     },
 });
 
-document.addEventListener("DOMContentLoaded", function () {
+// document.addEventListener("DOMContentLoaded", function () {
    
-});
+// });
