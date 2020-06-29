@@ -11,9 +11,7 @@ Vue.component("modal-outreport", {
     <div class="modal-wrapper">
       <div class="modal-container">
         <div class="modal-body">
-          <slot name="body">
-            default body
-          </slot>
+          <slot name="body"></slot>
         </div>
         <div class="modal-footer">
           <slot name="footer">
@@ -56,19 +54,17 @@ var vueApp = new Vue({
   methods: {
     simulation: async function () {
       let self = this;
-      async function enterValue(val) {
-        self.updateChk(val);
-      }
-
-
       let times = 0
-      for (let b of this.boxData) {
-        setTimeout(enterValue, 1000, b.BoxNo);
-        if (times >= 10) {
-          break;
+      
+      function enterValue() {
+        self.updateChk(self.boxData[times].BoxNo);
+        times ++;
+        if (times <= 10){
+          setTimeout(enterValue, 100);
         }
-        times++;
       }
+
+      enterValue();
     },
     fetchData: function () {
       this.storeNo = "219";
@@ -101,14 +97,11 @@ var vueApp = new Vue({
           
           vueThis.boxData = trainBoxResult.BoxData;
           //localStorage.setItem('boxData', JSON.stringify(vueThis.boxData));
-
-          let boxNoIndex = trainBoxResult.BoxData.map(function(box){localStorage.setItem(box.BoxNo, JSON.stringify(box)); return box.BoxNo});
-
           // for (let box of trainBoxResult.BoxData) {
           //   boxNoIndex.push(box.BoxNo);
           //   localStorage.setItem(box.BoxNo, JSON.stringify(box))
           // }
-          localStorage.setItem("boxNoIndex", JSON.stringify(boxNoIndex))
+          localStorage.setItem("boxNoIndex", JSON.stringify(trainBoxResult.BoxData.map(function(box){localStorage.setItem(box.BoxNo, JSON.stringify(box)); return box.BoxNo})));
         })
         .catch(function (error) {
           if(axios.isCancel(error)){
@@ -211,13 +204,14 @@ var vueApp = new Vue({
         CarNo: this.carNo,
         OutDate: "" + loadedDate.getFullYear() + ("0" + (loadedDate.getMonth() + 1)).slice(-2) + ("0" + loadedDate.getDate()).slice(-2)
       }
-      console.log({Data: outReportParam});
+      console.table(outReportParam);
       const URL = "api/Shipping/v1/OutReport";
       let vueThis = this;
       axios.post(URL, { Data: outReportParam }).then(function (response) {
         console.log(response);
         vueThis.modalMessage += response.data.Message + "\n";
         if (response.data.Result != 1) { throw response.data.Result + " " + response.data.Message };
+        vueThis.clearData();
       })
         .catch(function (error) {
           console.log(error);
