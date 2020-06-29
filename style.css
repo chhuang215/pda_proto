@@ -10,21 +10,22 @@ table {
 td, th {
     border: 1px solid #cccccc;
     text-align: left;
-    padding: 3px;
+    padding: 4px;
+    font-weight: normal;
 }
 
 tr {
     background-color: #eeeeee;
 }
 
-/* tr:nth-child(even) {
-background-color: #dddddd;
-} */
+table td:nth-child(2), table th:nth-child(2) {
+    width: 66%;
+}
 
-/* 
-td:nth-child(even){
-    width:100%
-} */
+table td:nth-child(1), table td:nth-child(3),
+table th:nth-child(1), table th:nth-child(3) {
+    width: 16%;
+}
 
 .btn {
     /* box-shadow:inset 0px 1px 0px 0px #9acc85; */
@@ -55,20 +56,10 @@ td:nth-child(even){
     border: 1px solid #3b6e22;
 }
 
-/* .btnGreen:hover {
-	background:linear-gradient(to bottom, #68a54b 5%, #74ad5a 100%);
-	background-color:#68a54b;
-} */
-
-.hidden {
-    display: none;
-}
-
-.processing{
+.processing {
     border-radius: 5px;
     background-color: lightcoral;
     padding: 3px 7px;
-
     font-size: x-small;
 }
 
@@ -105,7 +96,6 @@ td:nth-child(even){
     left: .7rem;
     right: .7rem;
 }
-
 #bottomcontrol {
     position: fixed;
     bottom: 5px;
@@ -114,8 +104,50 @@ td:nth-child(even){
     vertical-align: middle;
     width: 100%;
 }
-
-
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: table;
+    transition: opacity 0.3s ease;
+}
+.modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+.modal-container {
+    width: 70%;
+    margin: 0px auto;
+    padding: 25px 30px;
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+     transition: all 0.3s ease;
+    /* font-family: Helvetica, Arial, sans-serif; */
+}
+.modal-body {
+    margin: 20px 0;
+}
+.modal-footer{
+    text-align: center;
+}
+.modal-default-button {
+    margin: 0 auto
+}
+.modal-enter {
+    opacity: 0;
+}
+.modal-leave-active {
+    opacity: 0;
+}
+.modal-enter .modal-container, .modal-leave-active .modal-container {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+}
 
 [v-cloak] {
     display: none;

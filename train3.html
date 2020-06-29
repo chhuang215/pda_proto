@@ -10,9 +10,7 @@
   <title></title>
   <meta name="description" content="">
   <meta name="author" content="">
-  <!-- Mobile viewport optimized: j.mp/bplateviewport -->
   <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
   <!-- CSS: implied media=all -->
   <link rel="stylesheet" href="style.css">
   <!-- end CSS-->
@@ -23,8 +21,9 @@
   <div id="train3">
     <div v-cloak>
       <div id="topcontrol"> <!--onblur="this.focus()"-->
-        <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span><input v-on:keyup.13="updateChk"   onblur="this.focus()"
-            type="text" id="txtBoxno" tabindex="0" autofocus></input> </div>
+        <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span>
+          <input v-on:keyup.13="txtBoxEnter" onblur="this.focus()" type="text" id="txtBoxno" tabindex="0" autofocus> </input> 
+        </div>
         <div id="filter">
           <button id="btnFilterN" v-on:click="chk_active='N'" class="btn" :class="{active: chk_active=='N'}" tabindex="-1">未上車 (<span
               class="counter">{{countN}}</span>)</button>
@@ -35,14 +34,15 @@
         </div>
       </div>
       <div id="boxnolist">
-        <div v-show="fetchingData">讀取中</div>
+        <div v-if="fetchingData" style="text-align: center;">讀取中</div>
+        <div v-if="!fetchingData && boxData.length <= 0" style="text-align: center;">無資料</div>
         <div id="debug">{{debugMessage}}</div>
-        <table id="tableData">
+        <table id="tableData" v-show="boxData.length > 0">
           <thead>
             <tr>
-              <td></td>
-              <td>箱號</td>
-              <td>門市</td>
+              <th></th>
+              <th>箱號</th>
+              <th>門市</th>
             </tr>
           </thead>
           <tbody id="tbodyData">
@@ -58,11 +58,16 @@
         <button id="btnExit" v-on:click="outReport" class="btn" tabindex="-1">結束</button>
         <button id="btnFetch" v-on:click="refetch" class="btn" tabindex="-1" :disabled="fetchingData">重讀</button>
       </div>
+      <transition name="modal" :duration="200">
+        <modal-outreport v-if="modalMessage" v-on:modal-close="modalMessage=''">
+          <div slot="body">{{modalMessage}}</div>
+        </modal-outreport>
+      </transition>
     </div>
   </div>
   <!-- JavaScript at the bottom for fast page loading -->
+  <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
-  <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
   <script src="vue.js"></script>
   <script src="script.js"></script>
   <!-- Change UA-XXXXX-X to be your site's ID -->
