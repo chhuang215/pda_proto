@@ -17,7 +17,7 @@
     <div v-cloak>
       <div id="topcontrol"> <!--onblur="this.focus()"-->
         <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span>
-          <input @keyup.13="txtBoxEnter" onblur="this.focus()" type="text" id="txtBoxno" tabindex="0" autofocus> </input> 
+          <input @keyup.13="txtBoxEnter" type="text" id="txtBoxno" tabindex="0"> </input> 
         </div>
         <div id="filter">
           <button id="btnFilterN" @click="chk_active='N'" class="btn" :class="{active: chk_active=='N'}" tabindex="-1">未上車 (<span
@@ -51,13 +51,13 @@
         </table>
       </div>
       <div id="bottomcontrol">
-        <button id="btnExit" @click="outReport" class="btn" tabindex="-1">結束</button>
+        <button id="btnExit" @click="outReport" class="btn" tabindex="-1" :disabled="fetchingReport">結束</button>
         <button id="btnFetch" @click="refetch" class="btn" tabindex="-1" :disabled="fetchingData">重讀</button>
       </div>
       <transition name="modal" :duration="200">
-        <modal-outreport v-if="modalMessage" @modal-close="modalMessage=''">
+        <modal v-if="modalMessage" @modal-close="modalMessage=''" :fetching="fetchingReport">
           <div slot="body">{{modalMessage}}</div>
-        </modal-outreport>
+        </modal>
       </transition>
     </div>
   </div>

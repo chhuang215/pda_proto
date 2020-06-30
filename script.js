@@ -13,17 +13,18 @@ var ctSource;
 // --
 
 // Modal component
-Vue.component("modal-outreport", {
+Vue.component("modal", {
+  props:['fetching'],
   template: `
   <div class="modal-mask">
-    <div class="modal-wrapper">
+    <div class="modal-wrapper" @click.self="fetching ? null : $emit('modal-close')">
       <div class="modal-container">
         <div class="modal-body">
           <slot name="body"></slot>
         </div>
         <div class="modal-footer">
           <slot name="footer">
-            <button class="modal-default-button" @click="$emit('modal-close')">
+            <button class="modal-default-button" @click="$emit('modal-close')" :disabled="fetching">
               OK
             </button>
           </slot>
@@ -45,6 +46,7 @@ var vueApp = new Vue({
     chk_active: "N",
     processingBoxes: [],
     fetchingData: false,
+    fetchingReport: false,
     errorMessage: "",
     modalMessage: ""
   },
@@ -183,23 +185,23 @@ var vueApp = new Vue({
           console.log("updateChk " + boxno + " " + flag)
           let vueThis = this;
           axios.post("api/Shipping/v1/TrainBoxFlag", {
-            Data: trainBoxParam
-          },{cancelToken: ctSource.token}).then(function(response) {
-            console.log(response.data);
-            if (response.data.Result != "1") {
-              throw response.data.Result + " " + response.data.Message
-            };
-            boxListResult.CHK = flag;
-            localStorage.setItem(boxno, JSON.stringify(boxListResult));
-          })
-          .catch(function(error) {
-            console.log(error);
-          })
-          .then(function() {
-            vueThis.processingBoxes.splice(vueThis.processingBoxes.indexOf(boxno), 1)
-          });
-          // boxListResult.CHK = flag;
-          // localStorage.setItem(boxno, JSON.stringify(boxListResult));
+              Data: trainBoxParam
+            }, {
+              cancelToken: ctSource.token
+            }).then(function(response) {
+              console.log(response.data);
+              if (response.data.Result != "1") {
+                throw response.data.Result + " " + response.data.Message
+              };
+              boxListResult.CHK = flag;
+              localStorage.setItem(boxno, JSON.stringify(boxListResult));
+            })
+            .catch(function(error) {
+              console.log(error);
+            })
+            .then(function() {
+              vueThis.processingBoxes.splice(vueThis.processingBoxes.indexOf(boxno), 1)
+            });
         }
         else {
           this.processingBoxes.splice(this.processingBoxes.indexOf(boxno), 1)
@@ -220,6 +222,7 @@ var vueApp = new Vue({
       }
     },
     outReport: function (e) {
+      this.fetchingReport = true;
       if (ctSource){
         ctSource.cancel();
       }
@@ -250,6 +253,7 @@ var vueApp = new Vue({
       })
       .then(function() {
         console.log("done");
+        vueThis.fetchingReport = false;
       });
     },
     clearTable: function () {
