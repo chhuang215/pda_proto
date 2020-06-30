@@ -8,7 +8,8 @@ axios.defaults.baseURL = "http://10.254.247.103:18718/"
 axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
 // -- axios CancelToken
 const CancelToken = axios.CancelToken;
-var cancelFetch;
+//var cancelFetch;
+var ctSource;
 // --
 
 // Modal component
@@ -81,6 +82,7 @@ var vueApp = new Vue({
     //   enterValue();
     // },
     fetchData: function () {
+      ctSource = CancelToken.source();
       this.errorMessage = "";
       this.storeNo = "219";
       localStorage.setItem('StoreNo', this.storeNo);
@@ -90,9 +92,7 @@ var vueApp = new Vue({
         var vueThis = this;
         /* axios GET request*/
         axios.get(`api/Shipping/v1/TrainBoxList/${this.storeNo}`, {
-          cancelToken: new CancelToken(function executor(c) {
-            cancelFetch = c;
-          })
+          cancelToken: ctSource.token
         }).then(function(response) {
           console.log(response);
           let data = response.data;
@@ -184,7 +184,7 @@ var vueApp = new Vue({
           let vueThis = this;
           axios.post("api/Shipping/v1/TrainBoxFlag", {
             Data: trainBoxParam
-          }).then(function(response) {
+          },{cancelToken: ctSource.token}).then(function(response) {
             console.log(response.data);
             if (response.data.Result != "1") {
               throw response.data.Result + " " + response.data.Message
@@ -220,8 +220,8 @@ var vueApp = new Vue({
       }
     },
     outReport: function (e) {
-      if (cancelFetch){
-        cancelFetch();
+      if (ctSource){
+        ctSource.cancel();
       }
       let loadedDate = new Date();
       let outReportParam = {
