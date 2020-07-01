@@ -34,11 +34,8 @@ table th:nth-child(1), table th:nth-child(3) {
 	border:1px solid #3b6e22; */
     display: inline-block;
     cursor: pointer;
-    /* color:#ffffff; */
     font-family: Arial;
     font-size: 13.3px;
-    /* font-weight: bold; */
-    /* padding:.6rem .55rem; */
     padding: .6rem .4rem;
     text-decoration: none;
     width: 30%;
@@ -49,12 +46,12 @@ table th:nth-child(1), table th:nth-child(3) {
     top: 1.5px;
 }
 
-.btnGreen {
-    /* box-shadow:inset 0px 1px 0px 0px #9acc85; */
-    /* background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%); */
+/* .btnGreen {
+    box-shadow:inset 0px 1px 0px 0px #9acc85; 
+     background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%);
     background-color: #74ad5a;
     border: 1px solid #3b6e22;
-}
+} */
 
 .processing {
     border-radius: 5px;
@@ -81,7 +78,7 @@ table th:nth-child(1), table th:nth-child(3) {
 #topcontrol {
     position: fixed;
     top: .5rem;
-    height: 3rem;
+    height: 4.55rem;
     left: 0;
     text-align: center;
     vertical-align: middle;
