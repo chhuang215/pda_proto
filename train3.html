@@ -17,7 +17,8 @@
     <div v-cloak>
       <div id="topcontrol"> <!--onblur="this.focus()"-->
         <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span>
-          <input @keyup.13="txtBoxEnter" type="text" id="txtBoxno" tabindex="0"> </input> 
+          <input @keyup.13="updateChk" type="text" class="inputTxt" tabindex="0" v-model="inputText" @click="toggleManual"  @focus="scannerInputFocusKeyboardHide" :placeholder="manualInput ? '手動輸入' : '掃描輸入'"  @blur="setFocusScannerInput" autofocus> </input> <br/>
+          <!-- <input @keyup.13="updateChk" ref="scannerInput" type="text" tabindex="-1" v-model="inputText" @click.stop.prevent="scannerInputFocusKeyboardHide" @focus="scannerInputFocusKeyboardHide" placeholder="ScannerInput" autofocus> </input>  -->
         </div>
         <div id="filter">
           <button id="btnFilterN" @click="chk_active='N'" class="btn" :class="{active: chk_active=='N'}" tabindex="-1">未上車 (<span

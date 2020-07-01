@@ -48,7 +48,9 @@ var vueApp = new Vue({
     fetchingData: false,
     fetchingReport: false,
     errorMessage: "",
-    modalMessage: ""
+    modalMessage: "",
+    inputText: "",
+    manualInput: false,
   },
   computed: {
     countN: function () {
@@ -71,18 +73,18 @@ var vueApp = new Vue({
     }
   },
   methods: {
-    // simulation: async function () {
-    //   let self = this;
-    //   let i = 0
-    //   async function enterValue() {
-    //     self.updateChk(self.boxData[i].BoxNo);
-    //     if (i <= 13){
-    //       setTimeout(enterValue, 20);
-    //     }
-    //     i++;
-    //   }
-    //   enterValue();
-    // },
+    //simulation: function () {
+      // let self = this;
+      // let i = 0
+      // async function enterValue() {
+      //   self.updateChk(self.boxData[i].BoxNo);
+      //   if (i <= 13){
+      //     setTimeout(enterValue, 20);
+      //   }
+      //   i++;
+      // }
+      // enterValue();
+    //},
     fetchData: function () {
       ctSource = CancelToken.source();
       this.errorMessage = "";
@@ -117,11 +119,7 @@ var vueApp = new Vue({
           localStorage.setItem('ShpStore', trainBoxResult.ShpStore);
       
           vueThis.boxData = trainBoxResult.BoxData;
-          //localStorage.setItem('boxData', JSON.stringify(vueThis.boxData));
-          // for (let box of trainBoxResult.BoxData) {
-          //   boxNoIndex.push(box.BoxNo);
-          //   localStorage.setItem(box.BoxNo, JSON.stringify(box))
-          // }
+          
           localStorage.setItem("boxNoIndex", JSON.stringify(trainBoxResult.BoxData.map(function(box) {
             localStorage.setItem(box.BoxNo, JSON.stringify(box));
             return box.BoxNo
@@ -152,17 +150,27 @@ var vueApp = new Vue({
         this.boxData = boxNoIndex.map(function (boxno) { return JSON.parse(localStorage.getItem(boxno)) });
       }
     },
-    txtBoxEnter: function (e) {
-      let txtBox = e.target;
-      let boxno = txtBox.value.trim();
-      if (!boxno || this.processingBoxes.includes(boxno)) {
-        return;
+    scannerInputFocusKeyboardHide: function(e){
+      if (!this.manualInput){
+        let input = e.target
+        input.readOnly = true;
+        input.focus();
+        setTimeout(function(){input.readOnly = false;}, 60);
+        console.log("were")
       }
-      this.updateChk(boxno);
-      txtBox.value = "";
     },
-    updateChk: function (bno) {
-      let boxno = bno.trim();
+    setFocusScannerInput: function(e){
+      this.manualInput = false;
+      this.scannerInputFocusKeyboardHide(e);
+    },
+    toggleManual : function(e){
+      this.manualInput = !this.manualInput
+      this.scannerInputFocusKeyboardHide(e)
+    }
+    ,
+    updateChk: function () {
+      let boxno = this.inputText.trim();
+      this.inputText = "";
       if (!boxno || this.processingBoxes.includes(boxno)) {
         return;
       }
