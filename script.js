@@ -8,7 +8,6 @@ axios.defaults.baseURL = "http://10.254.247.103:18718/"
 axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
 // -- axios CancelToken
 const CancelToken = axios.CancelToken;
-//var cancelFetch;
 var ctSource;
 // --
 
@@ -48,7 +47,8 @@ var vueApp = new Vue({
     fetchingData: false,
     fetchingReport: false,
     errorMessage: "",
-    modalMessage: ""
+    modalMessage: "",
+    manualInput: false,
   },
   computed: {
     countN: function () {
@@ -68,21 +68,31 @@ var vueApp = new Vue({
         return "無資料"
       }
       return ""
+    },
+    axiosFetching: function(){
+      return  this.fetchingData || this.fetchingReport;
+    }
+  },
+  watch:{
+    axiosFetching: function(isFetching){
+      this.$refs.txtBoxNo.disabled = isFetching;
+      if (isFetching) {this.$refs.txtBoxNo.value = "";}
+      else this.inputFocus();
     }
   },
   methods: {
-    // simulation: async function () {
-    //   let self = this;
-    //   let i = 0
-    //   async function enterValue() {
-    //     self.updateChk(self.boxData[i].BoxNo);
-    //     if (i <= 13){
-    //       setTimeout(enterValue, 20);
-    //     }
-    //     i++;
-    //   }
-    //   enterValue();
-    // },
+    //simulation: function () {
+      // let self = this;
+      // let i = 0
+      // async function enterValue() {
+      //   self.updateChk(self.boxData[i].BoxNo);
+      //   if (i <= 13){
+      //     setTimeout(enterValue, 20);
+      //   }
+      //   i++;
+      // }
+      // enterValue();
+    //},
     fetchData: function () {
       ctSource = CancelToken.source();
       this.errorMessage = "";
@@ -117,11 +127,7 @@ var vueApp = new Vue({
           localStorage.setItem('ShpStore', trainBoxResult.ShpStore);
       
           vueThis.boxData = trainBoxResult.BoxData;
-          //localStorage.setItem('boxData', JSON.stringify(vueThis.boxData));
-          // for (let box of trainBoxResult.BoxData) {
-          //   boxNoIndex.push(box.BoxNo);
-          //   localStorage.setItem(box.BoxNo, JSON.stringify(box))
-          // }
+          
           localStorage.setItem("boxNoIndex", JSON.stringify(trainBoxResult.BoxData.map(function(box) {
             localStorage.setItem(box.BoxNo, JSON.stringify(box));
             return box.BoxNo
@@ -152,17 +158,23 @@ var vueApp = new Vue({
         this.boxData = boxNoIndex.map(function (boxno) { return JSON.parse(localStorage.getItem(boxno)) });
       }
     },
-    txtBoxEnter: function (e) {
-      let txtBox = e.target;
-      let boxno = txtBox.value.trim();
-      if (!boxno || this.processingBoxes.includes(boxno)) {
-        return;
+    inputFocus: function(e){
+      //let kbChecked = this.$refs.cbKboard.checked;
+      let input = this.$refs.txtBoxNo
+
+      if (!this.manualInput){
+        input.readOnly = true;
+        if (input != document.activeElement) input.focus();
+        setTimeout(function(){input.readOnly = false;}, 60);
+        console.log("hide")
+      }else if (input != document.activeElement) {
+        input.focus();
       }
-      this.updateChk(boxno);
-      txtBox.value = "";
-    },
-    updateChk: function (bno) {
-      let boxno = bno.trim();
+    }
+    ,
+    updateChk: function () {
+      let boxno = this.$refs.txtBoxNo.value.trim();
+      this.$refs.txtBoxNo.value = "";
       if (!boxno || this.processingBoxes.includes(boxno)) {
         return;
       }
@@ -244,7 +256,7 @@ var vueApp = new Vue({
         if (response.data.Result != 1) {
           throw response.data.Result + " " + response.data.Message
         };
-        vueThis.modalMessage = response.data.Message;
+        vueThis.modalMessage = response.data.Message + (response.data.ReturnList ? (" 單號: " + response.data.ReturnList) : "");
         vueThis.clearData();
       })
       .catch(function(error) {
@@ -269,6 +281,11 @@ var vueApp = new Vue({
     }
   },
   mounted: function () {
+    //DEBUG PURPOSE
+    document.addEventListener("keypress", function(e){      
+      console.log(function({ charCode, code, key, keyCode, which }) { return {charCode, code, key, keyCode, which}}(e));
+    })
+    //
     this.fetchData();
   },
 });

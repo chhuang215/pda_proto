@@ -9,14 +9,15 @@ body{
 #train3{
     position: absolute;
     top: .3rem;
-    left: .45rem;
-    right: .45rem;
+    left: .5rem;
+    right: .5rem;
     bottom: .3rem;
 }
 
 table {
     border-collapse: collapse;
     width: 100%;
+    margin: 0 auto;
 }
 
 td, th {
@@ -46,11 +47,8 @@ table th:nth-child(1), table th:nth-child(3) {
 	border:1px solid #3b6e22; */
     display: inline-block;
     cursor: pointer;
-    /* color:#ffffff; */
     font-family: Arial;
     font-size: 13.3px;
-    /* font-weight: bold; */
-    /* padding:.6rem .55rem; */
     padding: .6rem .4rem;
     text-decoration: none;
     width: 30%;
@@ -61,12 +59,12 @@ table th:nth-child(1), table th:nth-child(3) {
     top: 1.5px;
 }
 
-.btnGreen {
-    /* box-shadow:inset 0px 1px 0px 0px #9acc85; */
-    /* background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%); */
+/* .btnGreen {
+    box-shadow:inset 0px 1px 0px 0px #9acc85; 
+     background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%);
     background-color: #74ad5a;
     border: 1px solid #3b6e22;
-}
+} */
 
 .processing {
     border-radius: 5px;
@@ -83,9 +81,7 @@ table th:nth-child(1), table th:nth-child(3) {
     row-gap: 4px;
 }
 
-
-
-#txtBoxno {
+.inputTxt {
     padding: 2px;
     font-size: 15px;
     border-width: 1px;
@@ -96,28 +92,23 @@ table th:nth-child(1), table th:nth-child(3) {
     border-radius: 3px;
 }
 
-#txtBoxno:focus {
+.inputTxt:focus {
     outline: none;
+}
+
+.inputTxt:disabled{
+    border-color: gray;
+    background-color: darkgray;
 }
 
 #topcontrol {
     text-align: center;
     align-self: center;
-    /* position: fixed;
-    top: .5rem;
-    height: 3rem;
-    left: 0; */
-    /* vertical-align: middle;
-    width: 100%; */
 }
 
 #boxnolist {
     overflow: auto;
-    /* position: fixed; */
-    /* top: 5.2rem;
-    bottom: 3.5rem;
-    left: .7rem;
-    right: .7rem; */
+    padding: 0 .3rem
 }
 #bottomcontrol {
     text-align: center;
