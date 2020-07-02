@@ -164,7 +164,7 @@ var vueApp = new Vue({
 
       if (!this.manualInput){
         input.readOnly = true;
-        if (input != document.activeElement) input.focus();
+        input.focus();
         setTimeout(function(){input.readOnly = false;}, 60);
         console.log("hide")
       }else if (input != document.activeElement) {
@@ -256,7 +256,7 @@ var vueApp = new Vue({
         if (response.data.Result != 1) {
           throw response.data.Result + " " + response.data.Message
         };
-        vueThis.modalMessage = response.data.Message;
+        vueThis.modalMessage = response.data.Message + (response.data.ReturnList ? (" 單號: " + response.data.ReturnList) : "");
         vueThis.clearData();
       })
       .catch(function(error) {
