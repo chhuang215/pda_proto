@@ -8,7 +8,6 @@ axios.defaults.baseURL = "http://10.254.247.103:18718/"
 axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
 // -- axios CancelToken
 const CancelToken = axios.CancelToken;
-//var cancelFetch;
 var ctSource;
 // --
 
@@ -49,7 +48,6 @@ var vueApp = new Vue({
     fetchingReport: false,
     errorMessage: "",
     modalMessage: "",
-    inputText: "",
     manualInput: false,
   },
   computed: {
@@ -70,6 +68,16 @@ var vueApp = new Vue({
         return "無資料"
       }
       return ""
+    },
+    axiosFetching: function(){
+      return  this.fetchingData || this.fetchingReport;
+    }
+  },
+  watch:{
+    axiosFetching: function(isFetching){
+      this.$refs.txtBoxNo.disabled = isFetching;
+      if (isFetching) {this.$refs.txtBoxNo.value = "";}
+      else this.inputFocus();
     }
   },
   methods: {
@@ -150,27 +158,23 @@ var vueApp = new Vue({
         this.boxData = boxNoIndex.map(function (boxno) { return JSON.parse(localStorage.getItem(boxno)) });
       }
     },
-    scannerInputFocusKeyboardHide: function(e){
+    inputFocus: function(e){
+      //let kbChecked = this.$refs.cbKboard.checked;
+      let input = this.$refs.txtBoxNo
+
       if (!this.manualInput){
-        let input = e.target
         input.readOnly = true;
-        input.focus();
+        if (input != document.activeElement) input.focus();
         setTimeout(function(){input.readOnly = false;}, 60);
-        console.log("were")
+        console.log("hide")
+      }else if (input != document.activeElement) {
+        input.focus();
       }
-    },
-    setFocusScannerInput: function(e){
-      this.manualInput = false;
-      this.scannerInputFocusKeyboardHide(e);
-    },
-    toggleManual : function(e){
-      this.manualInput = !this.manualInput
-      this.scannerInputFocusKeyboardHide(e)
     }
     ,
     updateChk: function () {
-      let boxno = this.inputText.trim();
-      this.inputText = "";
+      let boxno = this.$refs.txtBoxNo.value.trim();
+      this.$refs.txtBoxNo.value = "";
       if (!boxno || this.processingBoxes.includes(boxno)) {
         return;
       }
@@ -277,6 +281,11 @@ var vueApp = new Vue({
     }
   },
   mounted: function () {
+    //DEBUG PURPOSE
+    document.addEventListener("keypress", function(e){      
+      console.log(function({ charCode, code, key, keyCode, which }) { return {charCode, code, key, keyCode, which}}(e));
+    })
+    //
     this.fetchData();
   },
 });

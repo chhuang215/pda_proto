@@ -17,7 +17,8 @@
     <div v-cloak>
       <div id="topcontrol"> <!--onblur="this.focus()"-->
         <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span>
-          <input @keyup.13="updateChk" type="text" class="inputTxt" tabindex="0" v-model="inputText" @click="toggleManual"  @focus="scannerInputFocusKeyboardHide" :placeholder="manualInput ? '手動輸入' : '掃描輸入'"  @blur="setFocusScannerInput" autofocus> </input> <br/>
+          <input @keyup.13="updateChk" ref="txtBoxNo" type="text" class="inputTxt" tabindex="0" :placeholder="manualInput ? '手動輸入' : ''"  @click="inputFocus" @blur="inputFocus" autofocus> </input> 
+          <input type="checkbox" ref="cbKboard" @change="manualInput = $event.target.checked;inputFocus()"><label>鍵盤</label></button>
           <!-- <input @keyup.13="updateChk" ref="scannerInput" type="text" tabindex="-1" v-model="inputText" @click.stop.prevent="scannerInputFocusKeyboardHide" @focus="scannerInputFocusKeyboardHide" placeholder="ScannerInput" autofocus> </input>  -->
         </div>
         <div id="filter">
@@ -65,15 +66,8 @@
   <!-- JavaScript at the bottom for fast page loading -->
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
-  <script src="vue.min.js"></script>
+  <script src="vue.js"></script>
   <script src="script.js"></script>
-  <!-- Change UA-XXXXX-X to be your site's ID -->
-  <!-- <script>
-    // window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']];
-    // Modernizr.load({
-    //   load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
-    // });
-  </script> -->
 </body>
 
 </html>
