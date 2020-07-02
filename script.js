@@ -164,7 +164,7 @@ var vueApp = new Vue({
 
       if (!this.manualInput){
         input.readOnly = true;
-        if (input != document.activeElement) input.focus();
+        input.focus();
         setTimeout(function(){input.readOnly = false;}, 60);
         console.log("hide")
       }else if (input != document.activeElement) {
