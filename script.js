@@ -161,14 +161,16 @@ var vueApp = new Vue({
     inputFocus: function(e){
       //let kbChecked = this.$refs.cbKboard.checked;
       let input = this.$refs.txtBoxNo
-
       if (!this.manualInput){
         input.readOnly = true;
         input.focus();
-        setTimeout(function(){input.readOnly = false;}, 60);
+        setTimeout(function(){input.readOnly = false;}, 50);
         console.log("hide")
-      }else if (input != document.activeElement) {
-        input.focus();
+      }else {
+        if(input.readOnly){
+          setTimeout(function(){input.blur();}, 60);
+        }
+        else {input.focus();console.log("showkeyboard")}
       }
     }
     ,
@@ -282,7 +284,7 @@ var vueApp = new Vue({
   },
   mounted: function () {
     //DEBUG PURPOSE
-    document.addEventListener("keypress", function(e){      
+    document.addEventListener("keyup", function(e){      
       console.log(function({ charCode, code, key, keyCode, which }) { return {charCode, code, key, keyCode, which}}(e));
     })
     //
