@@ -158,8 +158,11 @@ var vueApp = new Vue({
         this.boxData = boxNoIndex.map(function (boxno) { return JSON.parse(localStorage.getItem(boxno)) });
       }
     },
+    toggleKeyboard: function(){
+      this.manualInput = !this.manualInput
+      this.inputFocus();
+    },
     inputFocus: function(e){
-      //let kbChecked = this.$refs.cbKboard.checked;
       let input = this.$refs.txtBoxNo
       if (!this.manualInput){
         input.readOnly = true;
@@ -283,6 +286,12 @@ var vueApp = new Vue({
     }
   },
   mounted: function () {
+
+    let vueThis = this;
+    document.addEventListener("focus", function(e){
+      vueThis.inputFocus();
+    });
+
     //DEBUG PURPOSE
     document.addEventListener("keyup", function(e){      
       console.log(function({ charCode, code, key, keyCode, which }) { return {charCode, code, key, keyCode, which}}(e));

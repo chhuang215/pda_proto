@@ -20,8 +20,7 @@
       <div id="topcontrol"> <!--onblur="this.focus()"-->
         <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span>
           <input @keyup.13="updateChk" ref="txtBoxNo" type="text" class="inputTxt" tabindex="0" :placeholder="manualInput ? '手動輸入' : ''"  @click="inputFocus" @blur="inputFocus" autofocus> </input> 
-          <input type="checkbox" ref="cbKboard" @change="manualInput = $event.target.checked;inputFocus()"><label style="font-size: x-small;">鍵盤</label></button>
-          <!-- <input @keyup.13="updateChk" ref="scannerInput" type="text" tabindex="-1" v-model="inputText" @click.stop.prevent="scannerInputFocusKeyboardHide" @focus="scannerInputFocusKeyboardHide" placeholder="ScannerInput" autofocus> </input>  -->
+          <button @click="toggleKeyboard()">鍵盤</button>
         </div>
         <div id="filter">
           <button id="btnFilterN" @click="chk_active='N'" class="btn" :class="{active: chk_active=='N'}" tabindex="-1">未上車 (<span
