@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+  <title></title>
+  <!-- CSS: implied media=all -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="train1.css">
+  <!-- end CSS-->
+</head>
+
+<body>
+  <div id="train1" v-cloak>
+
+      <div class="tablelayout">
+          <div class="row">
+            <div class="col col-left">
+              車號: 
+            </div>
+            <div class="col col-right">
+              <select ></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-left">
+              裝車人:
+            </div>
+            <div class="col col-right">
+              <select ></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-left"></div>
+            <div class="col col-right">
+              <select ></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-left"></div>
+            <div class="col col-right">
+              <select ></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-left"></div>
+            <div class="col col-right">
+              <select ></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-left"></div>
+            <div class="col col-right">
+              <select ></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-left">
+              出車日期:
+            </div>
+            <div class="col col-right">
+              <select ></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-left">
+              出車人:
+            </div>
+            <div class="col col-right">
+              <select ></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-left"></div>
+            <div class="col col-right">
+              <select ></select>
+            </div>
+          </div>
+      </div>
+      
+      <div class="bottomcontrol btnUniformGroup">
+        <div>
+          <button class="btn">結束</button>
+        </div>
+        <div></div><div></div>
+        <div>
+          <button @click="next" class="btn">下一步</button>
+        </div>
+      </div>
+
+  </div>
+
+  <script src="es6-promise.auto.min.js"></script>
+  <script src="axios.min.js"></script>
+  <script src="vue.min.js"></script>
+  <script src="train1.js"></script>
+</body>
+
+</html>

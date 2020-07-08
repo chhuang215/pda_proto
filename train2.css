@@ -1,0 +1,24 @@
+select{
+    width:100%;   
+}
+.topcontrol{
+    position: absolute;
+    top: 0;
+    height:30px;
+    display: table;
+    width: 100%;
+    table-layout: auto;
+    white-space: nowrap;
+    margin: 0 auto;
+}
+
+.col-left{
+    display: table-cell;
+    width: 1%;
+    padding:5px;
+}
+
+.col-right{
+    display: table-cell;
+    padding:5px; 
+}

@@ -1,0 +1,12 @@
+.topcontrol{
+    margin: 0 auto;
+    width: intrinsic;           /* Safari/WebKit uses a non-standard name */
+    width: -webkit-max-content; /* Chrome */
+    width: max-content;
+    line-height: 2.7rem;
+}
+.topcontrol > div{
+    width: intrinsic;           
+    width: -webkit-max-content; 
+    width: max-content;
+}
