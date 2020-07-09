@@ -12,7 +12,7 @@ Vue.component("modal", {
       default: false
     },
     openmodal: {
-      required: [Boolean, String],
+      type: [Boolean, String],
       default: false
     }
   },
