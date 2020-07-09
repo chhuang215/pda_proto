@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      <div id="boxnolist">
+      <div class="tableWrapper">
         <div v-if="noDataMessage" style="text-align: center; margin-top: 10px;">
           <div>{{noDataMessage}}</div>
           <div>{{errorMessage}}</div>
@@ -79,7 +79,7 @@
       <modal @modal-close="confirmModalClose" :canclose="!axiosFetching" :openmodal="modalMessage">
         <div slot="body">{{modalMessage}}</div>
         <div slot="footer">
-          <button class="modal-default-button" @click="confirmModalClose" v-show="axiosFetching">完成</button>
+          <button class="modal-default-button" @click="confirmModalClose" v-show="!axiosFetching">完成</button>
         </div>
       </modal>
         
@@ -88,7 +88,8 @@
   </div>
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
-  <script src="vue.js"></script>
+  <script src="vue.min.js"></script>
+  <script src="modal.component.js"></script>
   <script src="train3.js"></script>
 </body>
 

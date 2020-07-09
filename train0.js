@@ -15,7 +15,7 @@ var ctSource;
 var vueApp = new Vue({
   el: '#train0',
   data: {
-    
+    eid : ""
   },
   computed: {
     
@@ -24,6 +24,9 @@ var vueApp = new Vue({
    
   },
   methods: {
+    exit: function(e){
+      NATIVE_CALL.QUIT_PO_TRAIN();
+    },
     next: function(e){
       location.href = "train1.html";
     }

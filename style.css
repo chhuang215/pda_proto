@@ -1,7 +1,12 @@
-html{
-    width: 100%;
+
+*{
+    font-family: 'Microsoft JhengHei', 'Apple LiGothic Medium', 'Arial', 'serif';
 }
 
+html{
+    width: 100%;
+
+}
 body {
     position: fixed;
     top:0;
@@ -13,9 +18,8 @@ body {
 .btn {
     display: inline-block;
     cursor: pointer;
-    font-family: Arial;
     font-size: 13px;
-    padding: .6rem .4rem;
+    padding: .55rem 0;
     text-decoration: none;
 }
 

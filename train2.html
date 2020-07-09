@@ -22,15 +22,30 @@
                 門市代號 :
               </div>
               <div class="col-right">
-                <select style="font-size: 15px;"></select>
+                <select></select>
               </div>
             </div>
         </div>
-
-        <table class="tableStoreBoxList">
-
-        </table>
-        
+        <div class="tableWrapper">
+          <table id="trainBranchBoxList">
+            <thead>
+              <tr>
+                <th>門市代碼</th>
+                <th>門市名稱</th>
+                <th>箱數</th>
+                <th>處理序號</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="bottomcontrol btnUniformGroup">
           <div><button class="btn">結束</button></div>
           <div><button @click="prev" class="btn">上一步</button></div>

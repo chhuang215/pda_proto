@@ -9,3 +9,12 @@
 //   _lsTotal += _xLen;
 // };
 // console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");
+
+var NATIVE_CALL = {
+    QUIT_PO_TRAIN : function(){
+        if (window.JSInterface){
+
+        }
+        alert("QUIT");
+    }
+}

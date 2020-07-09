@@ -1,10 +1,11 @@
 select{
     width:100%;   
+    height: 25px;
 }
 .topcontrol{
     position: absolute;
     top: 0;
-    height:30px;
+    height:fit-content;
     width: 100%;
 }
 
@@ -25,4 +26,34 @@ select{
 .col-right{
     display: table-cell;
     padding:5px; 
+}
+
+.tableWrapper {
+    overflow: auto;
+    position: absolute;
+    top : 45px;
+    left: 15px;
+    right: 15px;
+    bottom: 3.5rem;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+}
+
+.tableWrapper table {
+    border-collapse: collapse;
+    border-style: hidden;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.tableWrapper table td, 
+.tableWrapper table th {
+    border: 1px solid #cccccc;
+    text-align: left;
+    padding: 4px;
+    font-weight: normal;
+}
+
+.tableWrapper table tr {
+    background-color: #eeeeee;
 }

@@ -18,15 +18,14 @@
     <div v-cloak>
         <div class="topcontrol">
             <div>請輸入第2處理人員帳號</div>
-            <div>帳號: <input type="text"></input></div>
+            <div>帳號: <input type="text" v-model="eid"></input></div>
         </div>
         
         <div class="bottomcontrol btnUniformGroup">
-            <div><button class="btn">結束</button></div>
+            <div><button @click="exit" class="btn">結束</button></div>
             <div><button @click="next" class="btn">取消</button></div>
             <div></div>
-            <div><button @click="next" class="btn">下一步</button></div>
-              
+            <div><button @click="next" class="btn" :disabled="!eid">下一步</button></div>
         </div>
     </div>
   </div>
@@ -34,6 +33,7 @@
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
   <script src="vue.min.js"></script>
+  <script src="script.js"></script>
   <script src="train0.js"></script>
 </body>
 
