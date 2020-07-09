@@ -11,44 +11,6 @@ axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpem
 const CancelToken = axios.CancelToken;
 var ctSource;
 // --
-
-// Modal component
-Vue.component("modal", {
-  props:{
-    canclose: {
-      type: Boolean,
-      default: true
-    },
-    openmodal: {
-      required: [Boolean, String],
-      default: false
-    }
-  },
-  watch: { 
-    openmodal: function(open) {
-      if (!open){
-        this.$emit("modal-close");
-      }
-    }
-  },
-  //@click.self="canclose ? openmodal=false : null"
-  template: `
-  <transition name="modal" :duration="200">
-    <div class="modal-mask" v-if="openmodal">
-      <div class="modal-wrapper" >
-        <div class="modal-container">
-          <div class="modal-body">
-            <slot name="body"></slot>
-          </div>
-          <div class="modal-footer">
-            <slot name="footer"></slot>
-          </div>
-        </div>
-      </div>
-    </div>
-  </transition>`
-});
-
 var vueApp = new Vue({
   el: '#train3',
   data: {
