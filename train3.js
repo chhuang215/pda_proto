@@ -14,24 +14,39 @@ var ctSource;
 
 // Modal component
 Vue.component("modal", {
-  props:['fetching'],
+  props:{
+    canclose: {
+      type: Boolean,
+      default: true
+    },
+    openmodal: {
+      required: [Boolean, String],
+      default: false
+    }
+  },
+  watch: { 
+    openmodal: function(open) {
+      if (!open){
+        this.$emit("modal-close");
+      }
+    }
+  },
+  //@click.self="canclose ? openmodal=false : null"
   template: `
-  <div class="modal-mask">
-    <div class="modal-wrapper" @click.self="fetching ? null : $emit('modal-close')">
-      <div class="modal-container">
-        <div class="modal-body">
-          <slot name="body"></slot>
-        </div>
-        <div class="modal-footer">
-          <slot name="footer">
-            <button class="modal-default-button" @click="$emit('modal-close')" :disabled="fetching">
-              OK
-            </button>
-          </slot>
+  <transition name="modal" :duration="200">
+    <div class="modal-mask" v-if="openmodal">
+      <div class="modal-wrapper" >
+        <div class="modal-container">
+          <div class="modal-body">
+            <slot name="body"></slot>
+          </div>
+          <div class="modal-footer">
+            <slot name="footer"></slot>
+          </div>
         </div>
       </div>
     </div>
-  </div>`
+  </transition>`
 });
 
 var vueApp = new Vue({
@@ -49,6 +64,7 @@ var vueApp = new Vue({
     fetchingReport: false,
     errorMessage: "",
     modalMessage: "",
+    modalCloseAction: null,
     manualInput: false,
   },
   computed: {
@@ -160,7 +176,7 @@ var vueApp = new Vue({
         console.log("hide")
       }else {
         if(input.readOnly){
-          setTimeout(function(){input.blur();}, 60);
+          setTimeout(function(){input.blur();}, 65);
         }
         else {input.focus();console.log("showkeyboard")}
       }
@@ -227,7 +243,7 @@ var vueApp = new Vue({
         this.processingBoxes.splice(this.processingBoxes.indexOf(boxno), 1)
       }
     },
-    outReport: function (e) {
+    outReport: function () {
       this.fetchingReport = true;
       if (ctSource){
         ctSource.cancel();
@@ -242,7 +258,7 @@ var vueApp = new Vue({
       }
       console.table(outReportParam);
       let vueThis = this;
-      vueThis.modalMessage = "Waiting.."
+      vueThis.modalMessage = "結束中.."
       axios.post("api/Shipping/v1/OutReport", {
         Data: outReportParam
       }).then(function(response) {
@@ -250,20 +266,37 @@ var vueApp = new Vue({
         if (response.data.Result != 1) {
           throw response.data.Result + " " + response.data.Message
         };
-        vueThis.modalMessage = response.data.Message + (response.data.ReturnList ? (" 單號: " + response.data.ReturnList) : "");
+        vueThis.modalMessage = (response.data.ReturnList ? (" 單號: " + response.data.ReturnList) : "");
         vueThis.clearData();
       })
       .catch(function(error) {
         vueThis.modalMessage = error;
+        vueThis.modalCloseAction = null;
         console.log(error);
       })
       .then(function() {
-        console.log("done");
+        console.log("done:OutReport");
         vueThis.fetchingReport = false;
       });
     },
+    confirmModalClose : function(){
+      this.modalMessage = "";
+      if (this.modalCloseAction){
+        this.modalCloseAction();
+      }
+    }
+    ,
+    exit: function(e){
+      this.outReport();
+      this.modalCloseAction = function(){location.href="train0.html";}
+    },
     goBack: function(e){
-      location.href = "train2.html";
+      this.outReport();
+      this.modalCloseAction = function(){location.href = "train2.html";}
+    },
+    refetch: function () {
+      this.clearData();
+      this.fetchData();
     },
     clearTable: function () {
       this.boxData = [];
@@ -271,10 +304,6 @@ var vueApp = new Vue({
     clearData: function () {
       this.clearTable();
       window.localStorage.clear();
-    },
-    refetch: function () {
-      this.clearData();
-      this.fetchData();
     }
   },
   mounted: function () {

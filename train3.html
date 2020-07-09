@@ -18,10 +18,19 @@
 <body>
   <div id="train3">
     <div v-cloak>
-      <div id="topcontrol"> <!--onblur="this.focus()"-->
-        <div id="boxno" style="margin-bottom: 5px;"><span>箱號 :</span>
-          <input @keyup.13="updateChk" ref="txtBoxNo" type="text" class="inputTxt" tabindex="0" :placeholder="manualInput ? '手動輸入' : ''"  @click="inputFocus" @blur="inputFocus" autofocus> </input> 
-          <button @click="toggleKeyboard()">鍵盤</button>
+
+      <!-- --- 測試用鍵盤button -->
+      <button  @click="toggleKeyboard()" style="position: fixed;bottom:20%; right:1px; z-index: 999;">鍵盤</button>
+      <!-- END 測試用鍵盤button -->   
+
+      <div class="topcontrol"> <!--onblur="this.focus()"-->
+        <div class="labelInputGrid">
+          <div class="col col-left">
+            箱號 :
+          </div>
+          <div class="col"> 
+            <input @keyup.13="updateChk" ref="txtBoxNo" type="text" class="inputTxt" tabindex="0" :placeholder="manualInput ? '手動輸入' : ''"  @click="inputFocus" @blur="inputFocus" autofocus> </input> 
+          </div>
         </div>
         <div class="btnUniformGroup">
           <div>
@@ -61,21 +70,25 @@
         </table>
       </div>
       <div class="bottomcontrol btnUniformGroup">
-        <div><button id="btnExit" @click="outReport" class="btn" tabindex="-1" :disabled="fetchingReport">結束</button></div>
-        <div><button id="btnBack" @click="goBack" class="btn" tabindex="-1">上一步</button></div>
+        <div><button id="btnExit" @click="exit" class="btn" tabindex="-1" :disabled="fetchingReport">結束</button></div>
+        <div><button id="btnBack" @click="goBack" class="btn" tabindex="-1" :disabled="fetchingReport">上一步</button></div>
         <div><button id="btnFetch" @click="refetch" class="btn" tabindex="-1" :disabled="fetchingData">重讀</button></div>
         <div><button id="btnNextBatch" class="btn" tabindex="-1">下一批</button></div>
       </div>
-      <transition name="modal" :duration="200">
-        <modal v-if="modalMessage" @modal-close="modalMessage=''" :fetching="fetchingReport">
-          <div slot="body">{{modalMessage}}</div>
-        </modal>
-      </transition>
+      
+      <modal @modal-close="confirmModalClose" :canclose="!axiosFetching" :openmodal="modalMessage">
+        <div slot="body">{{modalMessage}}</div>
+        <div slot="footer">
+          <button class="modal-default-button" @click="confirmModalClose" v-show="axiosFetching">完成</button>
+        </div>
+      </modal>
+        
+      
     </div>
   </div>
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
-  <script src="vue.min.js"></script>
+  <script src="vue.js"></script>
   <script src="train3.js"></script>
 </body>
 

@@ -31,7 +31,12 @@ select{
     width:70%;
 }
 
+.col-mid{
+    text-align: center;
+}
+
 .col-left{
     width: 25%;
     text-align: center;
+    text-align-last: justify;
 }
