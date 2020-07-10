@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     window.onpopstate = function(e){
         console.log("location: " + document.location + ", state: " + JSON.stringify(e.state));
         vueApp.goBack();
+        history.pushState({},'');
     }
     document.addEventListener("deviceready", function(){
         document.addEventListener("backbutton", function(){
@@ -27,14 +28,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }, false);
     }, false);
     history.pushState({},'');
-    history.pushState({},'');
+
 });
 
 var NATIVE_CALL = {
     QUIT_PO_TRAIN : function(){
-        if (window.JSInterface){
-
+        if (window.finishWeb){
+            window.finishWeb.finishView();
         }
-        alert("QUIT");
+        else{
+            alert("QUIT");
+        }
+        if(localStorage.length > 0){
+            localStorage.clear();
+        }
     }
 }

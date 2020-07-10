@@ -247,7 +247,7 @@ var vueApp = new Vue({
     ,
     exit: function(e){
       this.outReport();
-      this.modalCloseAction = function(){location.href="train0.html";}
+      this.modalCloseAction = function(){NATIVE_CALL.QUIT_PO_TRAIN();}
     },
     goBack: function(e){
       this.outReport();
