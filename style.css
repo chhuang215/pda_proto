@@ -49,6 +49,55 @@ body {
     width: 100%;
 }
 
+.tableWrapper {
+    overflow: auto;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+}
+
+.tableWrapper table {
+    border-collapse: collapse;
+    border-style: hidden;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.tableWrapper table td, 
+.tableWrapper table th {
+    border: 1px solid #cccccc;
+    text-align: left;
+    padding: 4px;
+    font-weight: normal;
+}
+
+.tableWrapper table tr {
+    background-color: #eeeeee;
+}
+
+.tableWrapper table td{
+    font-size:14.5px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+input[type="text"]{
+    padding: 2px;
+    border-width: 1px;
+    border-color: #000000;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-style: solid;
+    border-radius: 3px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+}
+
+input[type="text"]:disabled{
+    border-color: gray;
+    background-color: darkgray;
+}
 
 
 [v-cloak] {

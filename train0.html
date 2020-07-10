@@ -19,20 +19,18 @@
 </head>
 
 <body>
-  <div id="train0">
-    <div v-cloak>
-        <div class="topcontrol">
-            <div>請輸入第2處理人員帳號</div>
-            <div>帳號: <input type="text" v-model="eid"></input></div>
-        </div>
-        
-        <div class="bottomcontrol btnUniformGroup">
-            <div><button @click="exit" class="btn">結束</button></div>
-            <div><button @click="next" class="btn">取消</button></div>
-            <div></div>
-            <div><button @click="next" class="btn" :disabled="!eid">下一步</button></div>
-        </div>
-    </div>
+  <div id="train0" v-cloak>
+      <div class="topcontrol">
+          <div>請輸入第2處理人員帳號</div>
+          <div>帳號: <input type="text" v-model="eid"></input></div>
+      </div>
+      
+      <div class="bottomcontrol btnUniformGroup">
+          <div><button @click="exit" class="btn">結束</button></div>
+          <div><button @click="next" class="btn">取消</button></div>
+          <div></div>
+          <div><button @click="next" class="btn" :disabled="!eid">下一步</button></div>
+      </div>
   </div>
 </body>
 

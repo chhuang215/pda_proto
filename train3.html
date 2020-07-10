@@ -12,6 +12,7 @@
   <!-- CSS: implied media=all -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="train3.css">
+  <link rel="stylesheet" href="model.component.css">
   <!-- end CSS-->
 </head>
 
@@ -60,7 +61,7 @@
               <th>門市</th>
             </tr>
           </thead>
-          <tbody id="tbodyData">
+          <tbody>
             <tr v-for="(boxListResult, index) in boxData" v-show="chk_active == boxListResult.CHK">
               <td>{{index+1}}</td>
               <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
@@ -89,6 +90,7 @@
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
   <script src="vue.min.js"></script>
+  <script src="script.js"></script>
   <script src="modal.component.js"></script>
   <script src="train3.js"></script>
 </body>

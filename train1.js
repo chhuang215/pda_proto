@@ -26,8 +26,15 @@ var vueApp = new Vue({
   methods: {
     next: function(e){
       location.href = "train2.html";
+    },
+    goBack:function(){
+      console.log("EXIT YO!")
     }
+  },
+  created: function(){
+    
   },
   mounted: function () {
   },
 });
+

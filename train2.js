@@ -27,8 +27,8 @@ var vueApp = new Vue({
     next: function(e){
       location.href = "train3.html";
     },
-    prev: function(e){
-      location.href = "train1.html";
+    goBack: function(e){
+      location.replace("train1.html");
     }
   },
   mounted: function () {

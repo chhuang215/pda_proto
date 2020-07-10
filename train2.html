@@ -14,50 +14,49 @@
 </head>
 
 <body>
-  <div id="train2">
-    <div v-cloak>
-        <div class="topcontrol">
-            <div class="labelInputGrid">
-              <div class="col-left">
-                門市代號 :
-              </div>
-              <div class="col-right">
-                <select></select>
-              </div>
+  <div id="train2" v-cloak>
+      <div class="topcontrol">
+          <div class="labelInputGrid">
+            <div class="col-left">
+              門市代號 :
             </div>
-        </div>
-        <div class="tableWrapper">
-          <table id="trainBranchBoxList">
-            <thead>
-              <tr>
-                <th>門市代碼</th>
-                <th>門市名稱</th>
-                <th>箱數</th>
-                <th>處理序號</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="bottomcontrol btnUniformGroup">
-          <div><button class="btn">結束</button></div>
-          <div><button @click="prev" class="btn">上一步</button></div>
-          <div></div>
-          <div><button @click="next" class="btn">下一步</button></div>
-        </div>
-    </div>
+            <div class="col-right">
+              <select></select>
+            </div>
+          </div>
+      </div>
+      <div class="tableWrapper">
+        <table id="trainBranchBoxList">
+          <thead>
+            <tr>
+              <th>門市代碼</th>
+              <th>門市名稱</th>
+              <th>箱數</th>
+              <th>處理序號</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="bottomcontrol btnUniformGroup">
+        <div><button class="btn">結束</button></div>
+        <div><button @click="goBack" class="btn">上一步</button></div>
+        <div></div>
+        <div><button @click="next" class="btn">下一步</button></div>
+      </div>
   </div>
 
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
   <script src="vue.min.js"></script>
+  <script src="script.js"></script>
   <script src="train2.js"></script>
 </body>
 

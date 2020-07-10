@@ -10,6 +10,26 @@
 // };
 // console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");
 
+// axios defaults
+axios.defaults.baseURL = "http://10.254.247.103:18718/"
+axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log("global script LOADED")
+    window.onpopstate = function(e){
+        console.log("location: " + document.location + ", state: " + JSON.stringify(e.state));
+        vueApp.goBack();
+    }
+    document.addEventListener("deviceready", function(){
+        document.addEventListener("backbutton", function(){
+            alert("!");
+            vueApp.goBack();
+        }, false);
+    }, false);
+    history.pushState({},'');
+    history.pushState({},'');
+});
+
 var NATIVE_CALL = {
     QUIT_PO_TRAIN : function(){
         if (window.JSInterface){

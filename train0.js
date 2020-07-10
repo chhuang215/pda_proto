@@ -28,9 +28,14 @@ var vueApp = new Vue({
       NATIVE_CALL.QUIT_PO_TRAIN();
     },
     next: function(e){
-      location.href = "train1.html";
+      // window.history.pushState({page:'train0.html'}, '', 'train0.html');
+      location.replace("train1.html");
+    },
+    goBack:function(){
+      this.exit()
     }
   },
   mounted: function () {
+   
   },
 });

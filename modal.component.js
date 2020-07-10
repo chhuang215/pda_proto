@@ -12,7 +12,6 @@ Vue.component("modal", {
       default: false
     },
     openmodal: {
-      type: [Boolean, String],
       default: false
     }
   },
