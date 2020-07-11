@@ -8,6 +8,11 @@
 const CancelToken = axios.CancelToken;
 var ctSource;
 // --
+
+const BOXSTATUS = Object.freeze({
+  N: "N", Y: "Y", E:"E"
+});
+
 var vueApp = new Vue({
   el: '#train3',
   data: {
@@ -17,7 +22,7 @@ var vueApp = new Vue({
     carNo: "",
     shpStore: "",
     boxData: [],
-    chk_active: "N",
+    chk_active: BOXSTATUS.N,
     processingBoxes: [],
     fetchingData: false,
     fetchingReport: false,
@@ -28,13 +33,13 @@ var vueApp = new Vue({
   },
   computed: {
     countN: function () {
-      return this.boxData.filter(function (tb) { return tb.CHK == "N" }).length
+      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.N }).length
     },
     countY: function () {
-      return this.boxData.filter(function (tb) { return tb.CHK == "Y" }).length
+      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.Y }).length
     },
     countE: function () {
-      return this.boxData.filter(function (tb) { return tb.CHK == "E" }).length
+      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.E }).length
     },
     noDataMessage: function(){
       if (this.fetchingData){
@@ -60,8 +65,11 @@ var vueApp = new Vue({
     fetchData: function () {
       ctSource = CancelToken.source();
       this.errorMessage = "";
-      this.storeNo = "219";
-      localStorage.setItem('StoreNo', this.storeNo);
+
+      if (localStorage.getItem('StoreNo')){
+        this.storeNo = localStorage.getItem('StoreNo');
+      }
+
       if (localStorage.length <= 1) {
         if (this.fetchingData) return;
         this.fetchingData = true;
@@ -96,7 +104,7 @@ var vueApp = new Vue({
             localStorage.setItem(box.BoxNo, JSON.stringify(box));
             return box.BoxNo
           })));
-          vueThis.chk_active = "N";
+          vueThis.chk_active = BOXSTATUS.N;
         })
         .catch(function(error) {
           if (axios.isCancel(error)) {
@@ -123,7 +131,9 @@ var vueApp = new Vue({
       }
     },
     toggleKeyboard: function(){
+      if (this.axiosFetching) return;
       this.manualInput = !this.manualInput
+      this.$refs.txtBoxNo.value = "";
       this.inputFocus();
     },
     inputFocus: function(e){
@@ -139,8 +149,7 @@ var vueApp = new Vue({
         }
         else {input.focus();console.log("showkeyboard")}
       }
-    }
-    ,
+    },
     updateChk: function () {
       let boxno = this.$refs.txtBoxNo.value.trim();
       this.$refs.txtBoxNo.value = "";
@@ -152,8 +161,8 @@ var vueApp = new Vue({
 
       if (tbIndex >= 0) {
         let boxListResult = this.boxData[tbIndex];
-        if (boxListResult.CHK != "E") {
-          let flag = boxListResult.CHK == "Y" ? "N" : "Y"
+        if (boxListResult.CHK != BOXSTATUS.E) {
+          let flag = (boxListResult.CHK == BOXSTATUS.Y) ? BOXSTATUS.N : BOXSTATUS.Y
 
           let trainBoxParam = {
             ShpStore: this.shpStore,
@@ -168,6 +177,7 @@ var vueApp = new Vue({
           axios.post("api/Shipping/v1/TrainBoxFlag", {
               Data: trainBoxParam
             }, {
+              timeout: 0,
               cancelToken: ctSource.token
             }).then(function(response) {
               console.log(response.data);
@@ -191,7 +201,7 @@ var vueApp = new Vue({
       else {
         let newData = {
           BoxNo: boxno,
-          CHK: "E",
+          CHK: BOXSTATUS.E,
           StoreNo: ""
         }
         this.boxData.push(newData);
@@ -203,6 +213,7 @@ var vueApp = new Vue({
       }
     },
     outReport: function () {
+      if (this.fetchingReport) return;
       this.fetchingReport = true;
       if (ctSource){
         ctSource.cancel();
@@ -277,6 +288,8 @@ var vueApp = new Vue({
       console.log(function({ charCode, code, key, keyCode, which }) { return {charCode, code, key, keyCode, which}}(e));
     })
     //
+
+    localStorage.setItem("StoreNo", "219");
     this.fetchData();
   },
 });
