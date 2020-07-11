@@ -14,13 +14,11 @@ select{
     padding-top: 5px;
     padding-bottom: 80px;
     white-space: nowrap;
-    margin-right: auto;
-    margin-left: auto;    
+    margin: 0 auto;
 }
 
 .row {
     display:table-row;
-    width: 90%;
 }
 
 .col{
