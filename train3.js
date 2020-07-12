@@ -116,6 +116,7 @@ var vueApp = new Vue({
           vueThis.chk_active = BOXSTATUS.N;
         })
         .catch(function(error) {
+          vueThis.modalCloseAction = null;
           if (axios.isCancel(error)) {
             vueThis.errorMessage = "讀取中斷";
           }
