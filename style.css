@@ -72,9 +72,16 @@ body {
     font-weight: normal;
 }
 
-.tableWrapper table tr {
-    background-color: #eeeeee;
+.tableWrapper table tbody tr:nth-child(odd) {
+    background-color: #dfdfdf;
 }
+.tableWrapper table tr {
+    background-color: #f8f8f8;
+    /* background-color: #ffd000; */
+}
+
+
+
 
 .tableWrapper table td{
     font-size:14.5px;

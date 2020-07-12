@@ -24,7 +24,7 @@
       <button  @click="toggleKeyboard()" style="position: fixed;bottom:20%; right:1px; z-index: 999;">鍵盤</button>
       <!-- END 測試用鍵盤button -->   
 
-      <div class="topcontrol"> <!--onblur="this.focus()"-->
+      <div class="topcontrol">
         <div class="labelInputGrid">
           <div class="col col-left">
             箱號 :
@@ -53,7 +53,7 @@
           <div>{{noDataMessage}}</div>
           <div>{{errorMessage}}</div>
         </div>
-        <table id="tableData" v-show="boxData.length > 0">
+        <table class="tableData" v-show="boxData.length > 0 && chk_active == 'N'">
           <thead>
             <tr>
               <th></th>
@@ -62,12 +62,46 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(boxListResult, index) in boxData" v-show="chk_active == boxListResult.CHK">
+            <tr v-for="(boxListResult, index) in boxDataN">
               <td>{{index+1}}</td>
               <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
               <td>{{boxListResult.StoreNo}}</td>
             </tr>
           </tbody>
+
+          <table class="tableData" v-show="boxData.length > 0 && chk_active == 'Y'">
+            <thead>
+              <tr>
+                <th></th>
+                <th>箱號</th>
+                <th>門市</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(boxListResult, index) in boxDataY" >
+                <td>{{index+1}}</td>
+                <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
+                <td>{{boxListResult.StoreNo}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="tableData" v-show="boxData.length > 0 && chk_active == 'E'">
+            <thead>
+              <tr>
+                <th></th>
+                <th>箱號</th>
+                <th>門市</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(boxListResult, index) in boxDataE">
+                <td>{{index+1}}</td>
+                <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
+                <td>{{boxListResult.StoreNo}}</td>
+              </tr>
+            </tbody>
+          </table>
         </table>
       </div>
       <div class="bottomcontrol btnUniformGroup">

@@ -32,14 +32,23 @@ var vueApp = new Vue({
     manualInput: false,
   },
   computed: {
+    boxDataN: function(){
+      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.N })
+    },
+    boxDataY: function(){
+      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.Y })
+    },
+    boxDataE: function(){
+      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.E })
+    },
     countN: function () {
-      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.N }).length
+      return this.boxDataN.length
     },
     countY: function () {
-      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.Y }).length
+      return this.boxDataY.length
     },
     countE: function () {
-      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.E }).length
+      return this.boxDataE.length
     },
     noDataMessage: function(){
       if (this.fetchingData){
@@ -288,6 +297,10 @@ var vueApp = new Vue({
       console.log(function({ charCode, code, key, keyCode, which }) { return {charCode, code, key, keyCode, which}}(e));
     })
     //
+
+    window.addEventListener("visibilitychange", function(e){
+      if (!document.hidden) {window.focus()}
+    });
 
     localStorage.setItem("StoreNo", "219");
     this.fetchData();
