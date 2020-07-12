@@ -1,0 +1,58 @@
+.counter{
+    font-size: 9px;
+}
+
+.processing {
+    border-radius: 5px;
+    background-color: lightcoral;
+    padding: 1px 5px;
+    font-size: 10px;
+}
+
+.topcontrol {
+    position: absolute;
+    height: 75px;
+    left: 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.labelInputGrid{
+    display: table;
+    table-layout: auto;
+    white-space: nowrap;
+    margin: 0 auto;
+}
+.col{
+    display: table-cell;
+    vertical-align:middle;
+    padding:5px;
+}
+.col-left{
+    text-align: right;
+}
+
+.inputTxt {
+    font-size: 15px;
+}
+
+.tableWrapper {
+    position: absolute;
+    top: 78px;
+    bottom: 49px;
+    left: 12px;
+    right: 12px;
+}
+
+.tableData {
+    table-layout: fixed;
+}
+.tableData td:nth-child(2), .tableData th:nth-child(2) {
+    width: 66%;
+}
+
+.tableData td:nth-child(1), .tableData td:nth-child(3),
+.tableData th:nth-child(1), .tableData th:nth-child(3) {
+    width: 16%;
+}
