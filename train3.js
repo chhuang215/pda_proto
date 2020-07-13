@@ -116,7 +116,6 @@ var vueApp = new Vue({
           vueThis.chk_active = BOXSTATUS.N;
         })
         .catch(function(error) {
-          vueThis.modalCloseAction = null;
           if (axios.isCancel(error)) {
             vueThis.errorMessage = "讀取中斷";
           }
@@ -268,11 +267,11 @@ var vueApp = new Vue({
     ,
     exit: function(e){
       this.outReport();
-      this.modalCloseAction = function(){NATIVE_CALL.QUIT_PO_TRAIN();}
+      this.modalCloseAction = function(){NATIVE_CALL.QUIT_PO_TRAIN(); vueThis.modalCloseAction = null;}
     },
     goBack: function(e){
       this.outReport();
-      this.modalCloseAction = function(){location.href = "train2.html";}
+      this.modalCloseAction = function(){location.href = "train2.html"; vueThis.modalCloseAction = null;}
     },
     refetch: function () {
       this.clearData();
