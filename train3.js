@@ -79,7 +79,12 @@ var vueApp = new Vue({
         this.storeNo = localStorage.getItem('StoreNo');
       }
 
-      if (localStorage.length <= 1) {
+      this.workNo = localStorage.getItem("WorkNo");
+      this.macNo = localStorage.getItem("MacNo");
+      this.carNo = localStorage.getItem("CarNo");
+      this.shpStore = localStorage.getItem("ShpStore");
+
+      if (!(this.storeNo && this.workNo && this.macNo && this.carNo && this.shpStore)) {
         if (this.fetchingData) return;
         this.fetchingData = true;
         var vueThis = this;
@@ -116,7 +121,6 @@ var vueApp = new Vue({
           vueThis.chk_active = BOXSTATUS.N;
         })
         .catch(function(error) {
-          vueThis.modalCloseAction = null;
           if (axios.isCancel(error)) {
             vueThis.errorMessage = "讀取中斷";
           }
@@ -132,10 +136,6 @@ var vueApp = new Vue({
         /*axios GET request end*/
       }
       else {
-        this.workNo = localStorage.getItem("WorkNo");
-        this.macNo = localStorage.getItem("MacNo");
-        this.carNo = localStorage.getItem("CarNo");
-        this.shpStore = localStorage.getItem("ShpStore");
         let boxNoIndex = JSON.parse(localStorage.getItem("boxNoIndex"));
         this.boxData = boxNoIndex.map(function (boxno) { return JSON.parse(localStorage.getItem(boxno)) });
       }
@@ -147,6 +147,7 @@ var vueApp = new Vue({
       this.inputFocus();
     },
     inputFocus: function(e){
+      if (this.axiosFetching) return;
       let input = this.$refs.txtBoxNo
       if (!this.manualInput){
         input.readOnly = true;
@@ -230,10 +231,10 @@ var vueApp = new Vue({
       }
       let loadedDate = new Date();
       let outReportParam = {
-        WorkNo: this.workNo,
-        MacNo: this.macNo,
+        WorkNo: this.workNo ? this.workNo : "",
+        MacNo: this.macNo? this.macNo : "",
         StoreNo: this.storeNo,
-        CarNo: this.carNo,
+        CarNo: this.carNo? this.carNo : "",
         OutDate: "" + loadedDate.getFullYear() + ("0" + (loadedDate.getMonth() + 1)).slice(-2) + ("0" + loadedDate.getDate()).slice(-2)
       }
       console.table(outReportParam);
@@ -268,21 +269,24 @@ var vueApp = new Vue({
     ,
     exit: function(e){
       this.outReport();
-      this.modalCloseAction = function(){NATIVE_CALL.QUIT_PO_TRAIN();}
+      this.modalCloseAction = function(){
+        NATIVE_CALL.QUIT_PO_TRAIN(); 
+        this.modalCloseAction = null;
+      }
     },
     goBack: function(e){
       this.outReport();
-      this.modalCloseAction = function(){location.href = "train2.html";}
+      this.modalCloseAction = function(){
+        location.href = "train2.html";
+        this.modalCloseAction = null;
+      }
     },
     refetch: function () {
       this.clearData();
       this.fetchData();
     },
-    clearTable: function () {
-      this.boxData = [];
-    },
     clearData: function () {
-      this.clearTable();
+      this.boxData = [];
       window.localStorage.clear();
     }
   },
@@ -303,7 +307,10 @@ var vueApp = new Vue({
       if (!document.hidden) {window.focus()}
     });
 
-    localStorage.setItem("StoreNo", "219");
+    if (!localStorage.getItem('StoreNo')){
+      localStorage.setItem("StoreNo", "219");
+    }    
+
     this.fetchData();
   },
 });

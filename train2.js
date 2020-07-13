@@ -25,10 +25,17 @@ var vueApp = new Vue({
   },
   methods: {
     next: function(e){
+      localStorage.removeItem("WorkNo");
+      localStorage.removeItem("MacNo");
+      localStorage.removeItem("CarNo");
+      localStorage.removeItem("ShpStore");
+      localStorage.removeItem("boxNoIndex");
+      localStorage.setItem("StoreNo", "219");
       location.href = "train3.html";
     },
     goBack: function(e){
-      location.replace("train1.html");
+      location.href = "train1.html";
+      //location.replace("train1.html");
     }
   },
   mounted: function () {
