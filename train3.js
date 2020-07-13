@@ -154,7 +154,7 @@ var vueApp = new Vue({
         console.log("hide")
       }else {
         if(input.readOnly){
-          setTimeout(function(){input.blur();}, 65);
+          setTimeout(function(){input.blur();}, 60);
         }
         else {input.focus();console.log("showkeyboard")}
       }
@@ -298,9 +298,9 @@ var vueApp = new Vue({
     })
     //
 
-    window.addEventListener("visibilitychange", function(e){
-      if (!document.hidden) {window.focus()}
-    });
+    // window.addEventListener("visibilitychange", function(e){
+    //   if (!document.hidden) {window.focus()}
+    // });
 
     localStorage.setItem("StoreNo", "219");
     this.fetchData();
