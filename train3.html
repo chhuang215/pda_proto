@@ -6,8 +6,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
   <title></title>
   <!-- CSS: implied media=all -->
   <link rel="stylesheet" href="style.css">
@@ -53,55 +51,17 @@
           <div>{{noDataMessage}}</div>
           <div>{{errorMessage}}</div>
         </div>
-        <table class="tableData" v-show="boxData.length > 0 && chk_active == 'N'">
+        <table class="tableData" v-show="boxData.length > 0">
           <thead>
-            <tr>
-              <th></th>
-              <th>箱號</th>
-              <th>門市</th>
-            </tr>
+            <tr> <th></th> <th>箱號</th> <th>門市</th> </tr>
           </thead>
-          <tbody>
-            <tr v-for="(boxListResult, index) in boxDataN">
+          <tbody v-for="{bdata, chkCode} in [{bdata: boxDataN, chkCode: 'N'},{bdata: boxDataY, chkCode: 'Y'},{bdata: boxDataE, chkCode: 'E'}]" v-show="chk_active == chkCode">
+            <tr v-for="(boxListResult, index) in bdata">
               <td>{{index+1}}</td>
               <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
               <td>{{boxListResult.StoreNo}}</td>
             </tr>
           </tbody>
-
-          <table class="tableData" v-show="boxData.length > 0 && chk_active == 'Y'">
-            <thead>
-              <tr>
-                <th></th>
-                <th>箱號</th>
-                <th>門市</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(boxListResult, index) in boxDataY" >
-                <td>{{index+1}}</td>
-                <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
-                <td>{{boxListResult.StoreNo}}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <table class="tableData" v-show="boxData.length > 0 && chk_active == 'E'">
-            <thead>
-              <tr>
-                <th></th>
-                <th>箱號</th>
-                <th>門市</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(boxListResult, index) in boxDataE">
-                <td>{{index+1}}</td>
-                <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
-                <td>{{boxListResult.StoreNo}}</td>
-              </tr>
-            </tbody>
-          </table>
         </table>
       </div>
       <div class="bottomcontrol btnUniformGroup">
@@ -110,15 +70,12 @@
         <div><button id="btnFetch" @click="refetch" class="btn" tabindex="-1" :disabled="fetchingData">重讀</button></div>
         <div><button id="btnNextBatch" class="btn" tabindex="-1">下一批</button></div>
       </div>
-      
       <modal @modal-close="confirmModalClose" :canclose="!axiosFetching" :openmodal="modalMessage">
         <div slot="body">{{modalMessage}}</div>
         <div slot="footer">
           <button class="modal-default-button" @click="confirmModalClose" v-show="!axiosFetching">完成</button>
         </div>
       </modal>
-        
-      
     </div>
   </div>
   <script src="es6-promise.auto.min.js"></script>

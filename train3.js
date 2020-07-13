@@ -75,10 +75,10 @@ var vueApp = new Vue({
       ctSource = CancelToken.source();
       this.errorMessage = "";
 
-      if (localStorage.getItem('StoreNo')){
-        this.storeNo = localStorage.getItem('StoreNo');
-      }
-
+      if (!localStorage.getItem('StoreNo')){
+        localStorage.setItem("StoreNo", "219");
+      }    
+      this.storeNo = localStorage.getItem('StoreNo');
       this.workNo = localStorage.getItem("WorkNo");
       this.macNo = localStorage.getItem("MacNo");
       this.carNo = localStorage.getItem("CarNo");

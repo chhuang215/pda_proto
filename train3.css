@@ -48,11 +48,11 @@
 .tableData {
     table-layout: fixed;
 }
-.tableData td:nth-child(2), .tableData th:nth-child(2) {
+.tableData tbody td:nth-child(2), .tableData th:nth-child(2) {
     width: 66%;
 }
 
-.tableData td:nth-child(1), .tableData td:nth-child(3),
+.tableData tbody td:nth-child(1), .tableData tbody td:nth-child(3),
 .tableData th:nth-child(1), .tableData th:nth-child(3) {
     width: 16%;
 }

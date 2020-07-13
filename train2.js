@@ -4,9 +4,6 @@
  * @author Chih-Hsuan Huang
  */
 
-// axios defaults
-axios.defaults.baseURL = "http://10.254.247.103:18718/"
-axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
 // -- axios CancelToken
 const CancelToken = axios.CancelToken;
 var ctSource;
@@ -35,7 +32,6 @@ var vueApp = new Vue({
     },
     goBack: function(e){
       location.href = "train1.html";
-      //location.replace("train1.html");
     }
   },
   mounted: function () {
