@@ -229,13 +229,13 @@ var vueApp = new Vue({
       if (ctSource){
         ctSource.cancel();
       }
-      let loadedDate = new Date();
+      let outDate = new Date();
       let outReportParam = {
         WorkNo: this.workNo ? this.workNo : "",
         MacNo: this.macNo? this.macNo : "",
         StoreNo: this.storeNo,
         CarNo: this.carNo? this.carNo : "",
-        OutDate: "" + loadedDate.getFullYear() + ("0" + (loadedDate.getMonth() + 1)).slice(-2) + ("0" + loadedDate.getDate()).slice(-2)
+        OutDate: "" + outDate.getFullYear() + ("0" + (outDate.getMonth() + 1)).slice(-2) + ("0" + outDate.getDate()).slice(-2)
       }
       console.table(outReportParam);
       let vueThis = this;
@@ -287,7 +287,15 @@ var vueApp = new Vue({
     },
     clearData: function () {
       this.boxData = [];
-      window.localStorage.clear();
+      localStorage.removeItem("WorkNo");
+      localStorage.removeItem("MacNo");
+      localStorage.removeItem("CarNo");
+      localStorage.removeItem("ShpStore");
+      let bIndex = JSON.parse(localStorage.getItem("boxNoIndex"))
+      for (let bno of bIndex){
+        localStorage.removeItem(bno);
+      }
+      localStorage.removeItem("boxNoIndex");
     }
   },
   mounted: function () {
@@ -296,12 +304,6 @@ var vueApp = new Vue({
     document.addEventListener("focus", function(e){
       vueThis.inputFocus();
     });
-
-    //DEBUG PURPOSE
-    document.addEventListener("keyup", function(e){      
-      console.log(function({ charCode, code, key, keyCode, which }) { return {charCode, code, key, keyCode, which}}(e));
-    })
-    //
 
     window.addEventListener("visibilitychange", function(e){
       if (!document.hidden) {window.focus()}

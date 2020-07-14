@@ -21,7 +21,10 @@
               門市代號 :
             </div>
             <div class="col-right">
-              <select></select>
+              <select v-model="selectedStore">
+                <!-- <option disabled value="">選擇門市</option> -->
+                <option>219</option>
+              </select>
             </div>
           </div>
       </div>
@@ -46,10 +49,10 @@
         </table>
       </div>
       <div class="bottomcontrol btnUniformGroup">
-        <div><button onclick="NATIVE_CALL.QUIT_PO_TRAIN()" class="btn">結束</button></div>
+        <div><button @click="exit" class="btn">結束</button></div>
         <div><button @click="goBack" class="btn">上一步</button></div>
         <div></div>
-        <div><button @click="next" class="btn">下一步</button></div>
+        <div><button @click="next" class="btn" :disabled="!selectedStore">下一步</button></div>
       </div>
   </div>
 

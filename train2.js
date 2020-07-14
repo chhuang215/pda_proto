@@ -12,28 +12,41 @@ var ctSource;
 var vueApp = new Vue({
   el: '#train2',
   data: {
-    
+    selectedStore : "",
   },
   computed: {
-    
-  },
-  watch:{
    
   },
+  watch: {
+    selectedStore: function(store){
+      //axios.get('api/Shipping/v1/TrainBranchBoxList/219').then(function (d) { console.log(d) }).catch(function (err) { console.log(err) });
+    }
+  },
   methods: {
-    next: function(e){
+    next: function (e) {
+
+      if (this.selectedStore){
+        localStorage.setItem("StoreNo", this.selectedStore);
+      }
+      
+      location.href = "train3.html";
+    },
+    goBack: function (e) {
+      localStorage.removeItem("StoreNo");
+      location.href = "train1.html";
+    },
+    exit: function(e){
+      NATIVE_CALL.QUIT_PO_TRAIN();
+    }
+  },
+  mounted: function () {
+    window.onbeforeunload = function(){
       localStorage.removeItem("WorkNo");
       localStorage.removeItem("MacNo");
       localStorage.removeItem("CarNo");
       localStorage.removeItem("ShpStore");
       localStorage.removeItem("boxNoIndex");
-      localStorage.setItem("StoreNo", "219");
-      location.href = "train3.html";
-    },
-    goBack: function(e){
-      location.href = "train1.html";
     }
-  },
-  mounted: function () {
+    //axios.get('api/Shipping/v1/TrainBranchList').then(function (d) { console.log(d) }).catch(function (err) { console.log(err) });
   },
 });

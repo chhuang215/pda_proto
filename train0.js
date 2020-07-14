@@ -9,10 +9,11 @@ const CancelToken = axios.CancelToken;
 var ctSource;
 // --
 
+
 var vueApp = new Vue({
   el: '#train0',
   data: {
-    eid : ""
+    eid2 : ""
   },
   computed: {
     
@@ -23,6 +24,9 @@ var vueApp = new Vue({
   methods: {
     exit: function(e){
       NATIVE_CALL.QUIT_PO_TRAIN();
+    },
+    skip: function(e){
+      location.href = "train1.html";
     },
     next: function(e){
       location.href = "train1.html";

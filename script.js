@@ -15,22 +15,16 @@ axios.defaults.baseURL = "http://10.254.247.103:18718/"
 axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
 axios.defaults.timeout = 20000;
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    console.log("global script LOADED")
-    window.onpopstate = function(e){
-        console.log("location: " + document.location + ", state: " + JSON.stringify(e.state));
-        vueApp.goBack();
-        history.pushState({},'');
-    }
-    document.addEventListener("deviceready", function(){
-        document.addEventListener("backbutton", function(){
-            alert("!");
-            vueApp.goBack();
-        }, false);
-    }, false);
-    history.pushState({},'');
 
-});
+Vue.mixin({
+    // methods: {
+    //     toggleKeyboard: function(){}
+    // }
+})
+
+var LOGIN_STATUS = {
+    
+};
 
 var NATIVE_CALL = {
     QUIT_PO_TRAIN : function(){
@@ -45,3 +39,27 @@ var NATIVE_CALL = {
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.log("global script LOADED")
+
+    //DEBUG PURPOSE
+    document.addEventListener("keyup", function(e){      
+        console.log(function({ charCode, code, key, keyCode, which }) { return {charCode, code, key, keyCode, which}}(e));
+    })
+    //
+
+    window.onpopstate = function(e){
+        console.log("location: " + document.location + ", state: " + JSON.stringify(e.state));
+        vueApp.goBack();
+        history.pushState({},'');
+    }
+    document.addEventListener("deviceready", function(){
+        document.addEventListener("backbutton", function(){
+            alert("!");
+            vueApp.goBack();
+        }, false);
+    }, false);
+    history.pushState({},'');
+
+});
