@@ -40,6 +40,8 @@ var NATIVE_CALL = {
     }
 }
 
+// history.back(); 
+// history.forward();
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log("global script LOADED")
 
@@ -52,7 +54,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     window.onpopstate = function(e){
         console.log("location: " + document.location + ", state: " + JSON.stringify(e.state));
         vueApp.goBack();
-        history.pushState({},'');
+        history.pushState(null, null, location.href)
     }
     document.addEventListener("deviceready", function(){
         document.addEventListener("backbutton", function(){
@@ -60,6 +62,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             vueApp.goBack();
         }, false);
     }, false);
-    history.pushState({},'');
+    history.pushState(null, null, location.href)
 
 });
