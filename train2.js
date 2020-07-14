@@ -13,23 +13,27 @@ var vueApp = new Vue({
   el: '#train2',
   data: {
     selectedStore : "",
+    branchId: "",
+    branchName: "",
+    boxCnt: "",
+    procSeq: ""
   },
   computed: {
    
   },
   watch: {
     selectedStore: function(store){
+      
+    this.branchId = store;
       //axios.get('api/Shipping/v1/TrainBranchBoxList/219').then(function (d) { console.log(d) }).catch(function (err) { console.log(err) });
     }
   },
   methods: {
     next: function (e) {
-
       if (this.selectedStore){
         localStorage.setItem("StoreNo", this.selectedStore);
+        location.href = "train3.html";
       }
-      
-      location.href = "train3.html";
     },
     goBack: function (e) {
       localStorage.removeItem("StoreNo");

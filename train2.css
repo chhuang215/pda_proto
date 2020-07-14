@@ -33,5 +33,11 @@ select{
     top : 45px;
     left: 15px;
     right: 15px;
-    bottom: 49px;
+    bottom: 60px;
+}
+
+@media all and (max-height: 350px) { 
+    .tableWrapper {
+        bottom: 30px;
+    }
 }

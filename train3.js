@@ -292,8 +292,10 @@ var vueApp = new Vue({
       localStorage.removeItem("CarNo");
       localStorage.removeItem("ShpStore");
       let bIndex = JSON.parse(localStorage.getItem("boxNoIndex"))
-      for (let bno of bIndex){
-        localStorage.removeItem(bno);
+      if (bIndex){
+        for (let bno of bIndex){
+          localStorage.removeItem(bno);
+        }
       }
       localStorage.removeItem("boxNoIndex");
     }

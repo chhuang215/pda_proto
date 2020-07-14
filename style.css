@@ -26,6 +26,8 @@ body {
     top: 1.5px;
 }
 
+
+
 .bottomcontrol {
     position: absolute;
     bottom: 0;
@@ -49,6 +51,16 @@ body {
     width: 100%;
     height: 100%;
 }
+
+@media all and (max-height: 350px) { 
+    .bottomcontrol {
+        height: 10px;
+    }
+    .bottomcontrol .btn{
+        padding: 0 ;
+    }
+}
+
 
 .tableWrapper {
     overflow: auto;
