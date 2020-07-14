@@ -9,10 +9,6 @@ const CancelToken = axios.CancelToken;
 var ctSource;
 // --
 
-const BOXSTATUS = Object.freeze({
-  N: "N", Y: "Y", E:"E"
-});
-
 var vueApp = new Vue({
   el: '#train3',
   data: {
@@ -22,7 +18,7 @@ var vueApp = new Vue({
     carNo: "",
     shpStore: "",
     boxData: [],
-    chk_active: BOXSTATUS.N,
+    chk_active: 'N',
     processingBoxes: [],
     fetchingData: false,
     fetchingReport: false,
@@ -33,13 +29,13 @@ var vueApp = new Vue({
   },
   computed: {
     boxDataN: function(){
-      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.N })
+      return this.boxData.filter(function (tb) { return tb.CHK == 'N' })
     },
     boxDataY: function(){
-      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.Y })
+      return this.boxData.filter(function (tb) { return tb.CHK == 'Y' })
     },
     boxDataE: function(){
-      return this.boxData.filter(function (tb) { return tb.CHK == BOXSTATUS.E })
+      return this.boxData.filter(function (tb) { return tb.CHK == 'E' })
     },
     countN: function () {
       return this.boxDataN.length
@@ -113,7 +109,7 @@ var vueApp = new Vue({
             localStorage.setItem(box.BoxNo, JSON.stringify(box));
             return box.BoxNo
           })));
-          vueThis.chk_active = BOXSTATUS.N;
+          vueThis.chk_active = 'N';
         })
         .catch(function(error) {
           if (axios.isCancel(error)) {
@@ -170,8 +166,8 @@ var vueApp = new Vue({
 
       if (tbIndex >= 0) {
         let boxListResult = this.boxData[tbIndex];
-        if (boxListResult.CHK != BOXSTATUS.E) {
-          let flag = (boxListResult.CHK == BOXSTATUS.Y) ? BOXSTATUS.N : BOXSTATUS.Y
+        if (boxListResult.CHK != 'E') {
+          let flag = (boxListResult.CHK == 'Y') ? 'N' : 'Y'
 
           let trainBoxParam = {
             ShpStore: this.shpStore,
@@ -210,7 +206,7 @@ var vueApp = new Vue({
       else {
         let newData = {
           BoxNo: boxno,
-          CHK: BOXSTATUS.E,
+          CHK: 'E',
           StoreNo: ""
         }
         this.boxData.push(newData);

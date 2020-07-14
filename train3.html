@@ -17,109 +17,70 @@
 </head>
 
 <body>
-  <div id="train3">
-    <div v-cloak>
+  <div id="train3"  v-cloak>
+    <!-- --- 測試用鍵盤button -->
+    <button  @click="toggleKeyboard()" style="position: fixed;bottom:20%; right:1px; z-index: 999;">鍵盤</button>
+    <!-- END 測試用鍵盤button -->   
 
-      <!-- --- 測試用鍵盤button -->
-      <button  @click="toggleKeyboard()" style="position: fixed;bottom:20%; right:1px; z-index: 999;">鍵盤</button>
-      <!-- END 測試用鍵盤button -->   
-
-      <div class="topcontrol">
-        <div class="labelInputGrid">
-          <div class="col col-left">
-            箱號 :
-          </div>
-          <div class="col"> 
-            <input @keyup.13="updateChk" ref="txtBoxNo" type="text" class="inputTxt" tabindex="0" :placeholder="manualInput ? '手動輸入' : ''"  @click="inputFocus" @blur="inputFocus" autofocus> </input> 
-          </div>
+    <div class="topcontrol">
+      <div class="labelInputGrid">
+        <div class="col col-left">
+          箱號 :
         </div>
-        <div class="btnUniformGroup">
-          <div>
-            <button @click="chk_active='N'" class="btn" :class="{active: chk_active=='N'}" tabindex="-1">未上車 <span
-              class="counter">({{countN}})</span></button>
-          </div>
-          <div>
-            <button @click="chk_active='Y'" class="btn" :class="{active: chk_active=='Y'}" tabindex="-1">已上車 <span
-              class="counter">({{countY}})</span></button>
-          </div>
-          <div>
-            <button @click="chk_active='E'" class="btn" :class="{active: chk_active=='E'}" tabindex="-1">錯箱 <span
-              class="counter">({{countE}})</span></button>
-          </div>
+        <div class="col"> 
+          <input @keyup.13="updateChk" ref="txtBoxNo" type="text" class="inputTxt" tabindex="0" :placeholder="manualInput ? '手動輸入' : ''"  @click="inputFocus" @blur="inputFocus" autofocus> </input> 
         </div>
       </div>
-      <div class="tableWrapper">
-        <div v-if="noDataMessage" style="text-align: center; margin-top: 10px;">
-          <div>{{noDataMessage}}</div>
-          <div>{{errorMessage}}</div>
+      <div class="btnUniformGroup">
+        <div>
+          <button @click="chk_active='N'" class="btn" :class="{active: chk_active=='N'}" tabindex="-1">未上車 <span
+            class="counter">({{countN}})</span></button>
         </div>
-        <table class="tableData" v-show="boxData.length > 0 && chk_active == 'N'">
-          <thead>
-            <tr>
-              <th></th>
-              <th>箱號</th>
-              <th>門市</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(boxListResult, index) in boxDataN">
-              <td>{{index+1}}</td>
-              <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
-              <td>{{boxListResult.StoreNo}}</td>
-            </tr>
-          </tbody>
-
-          <table class="tableData" v-show="boxData.length > 0 && chk_active == 'Y'">
-            <thead>
-              <tr>
-                <th></th>
-                <th>箱號</th>
-                <th>門市</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(boxListResult, index) in boxDataY" >
-                <td>{{index+1}}</td>
-                <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
-                <td>{{boxListResult.StoreNo}}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <table class="tableData" v-show="boxData.length > 0 && chk_active == 'E'">
-            <thead>
-              <tr>
-                <th></th>
-                <th>箱號</th>
-                <th>門市</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(boxListResult, index) in boxDataE">
-                <td>{{index+1}}</td>
-                <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
-                <td>{{boxListResult.StoreNo}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </table>
-      </div>
-      <div class="bottomcontrol btnUniformGroup">
-        <div><button id="btnExit" @click="exit" class="btn" tabindex="-1" :disabled="fetchingReport">結束</button></div>
-        <!-- <div><button id="btnBack" @click="goBack" class="btn" tabindex="-1" :disabled="fetchingReport">上一步</button></div> -->
-        <div><button id="btnFetch" @click="refetch" class="btn" tabindex="-1" :disabled="fetchingData">重讀</button></div>
-        <!-- <div><button id="btnNextBatch" class="btn" tabindex="-1">下一批</button></div> -->
-      </div>
-      
-      <modal @modal-close="confirmModalClose" :canclose="!axiosFetching" :openmodal="modalMessage">
-        <div slot="body">{{modalMessage}}</div>
-        <div slot="footer">
-          <button class="modal-default-button" @click="confirmModalClose" v-show="!axiosFetching">完成</button>
+        <div>
+          <button @click="chk_active='Y'" class="btn" :class="{active: chk_active=='Y'}" tabindex="-1">已上車 <span
+            class="counter">({{countY}})</span></button>
         </div>
-      </modal>
-        
-      
+        <div>
+          <button @click="chk_active='E'" class="btn" :class="{active: chk_active=='E'}" tabindex="-1">錯箱 <span
+            class="counter">({{countE}})</span></button>
+        </div>
+      </div>
     </div>
+    <div class="tableWrapper">
+      <div v-if="noDataMessage" style="text-align: center; margin-top: 10px;">
+        <div>{{noDataMessage}}</div>
+        <div>{{errorMessage}}</div>
+      </div>
+      <table class="tableData" v-show="boxData.length > 0">
+        <thead>
+          <tr>
+            <th></th>
+            <th>箱號</th>
+            <th>門市</th>
+          </tr>
+        </thead>
+        <tbody v-for="{bdata, chkCode} in [{bdata:boxDataN,chkCode:'N'}, {bdata:boxDataY,chkCode:'Y'}, {bdata:boxDataE,chkCode:'E'}]" v-show="chk_active==chkCode">
+          <tr v-for="(boxListResult, index) in bdata">
+            <td>{{index+1}}</td>
+            <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
+            <td>{{boxListResult.StoreNo}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bottomcontrol btnUniformGroup">
+      <div><button id="btnExit" @click="exit" class="btn" tabindex="-1" :disabled="fetchingReport">結束</button></div>
+      <!-- <div><button id="btnBack" @click="goBack" class="btn" tabindex="-1" :disabled="fetchingReport">上一步</button></div> -->
+      <div><button id="btnFetch" @click="refetch" class="btn" tabindex="-1" :disabled="fetchingData">重讀</button></div>
+      <!-- <div><button id="btnNextBatch" class="btn" tabindex="-1">下一批</button></div> -->
+    </div>
+    
+    <modal @modal-close="confirmModalClose" :canclose="!axiosFetching" :openmodal="modalMessage">
+      <div slot="body">{{modalMessage}}</div>
+      <div slot="footer">
+        <button class="modal-default-button" @click="confirmModalClose" v-show="!axiosFetching">完成</button>
+      </div>
+    </modal>
   </div>
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>

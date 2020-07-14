@@ -13,7 +13,7 @@
 // axios defaults
 axios.defaults.baseURL = "http://10.254.247.103:18718/"
 axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
-axios.defaults.timeout = 15000;
+axios.defaults.timeout = 20000;
 
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log("global script LOADED")
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
     document.addEventListener("deviceready", function(){
         document.addEventListener("backbutton", function(){
-            alert("!");
+            //alert("!");
             vueApp.goBack();
         }, false);
     }, false);
