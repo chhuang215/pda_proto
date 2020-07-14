@@ -22,6 +22,83 @@ Vue.mixin({
     // }
 })
 
+
+var TrainIDB = {
+    initialize : function() {
+        return new Promise((resolve, reject) => {
+            let request = indexedDB.open('TrainIDB');
+            request.onupgradeneeded = function() {
+                request.result.createObjectStore('DBStore');
+                resolve();
+            }
+            request.onerror = function() {
+                reject(request.error);
+            }
+        })
+    },
+    getItem : function (key, store) {
+        if (!store) store="DBStore";
+
+        return new Promise((resolve, reject) => {
+            let oRequest = indexedDB.open('TrainIDB');
+            oRequest.onsuccess = function() {
+                let st = oRequest.result.transaction(store, 'readonly').objectStore(store);
+                let gRequest = st.get(key);
+                gRequest.onsuccess = function() {
+                    resolve(gRequest.result);
+                }
+                gRequest.onerror = function() {
+                    reject(gRequest.error);
+                }
+            };
+            oRequest.onerror = function() {
+                reject(request.error);
+            };
+        })
+    },
+   
+    setItem : function (key, value, store) {
+        if (!store) store="DBStore";
+        return new Promise((resolve, reject) => {
+			let oRequest = indexedDB.open('TrainIDB');
+			oRequest.onsuccess = function() {
+				let st = oRequest.result.transaction(store, 'readwrite').objectStore(store);
+				let sRequest = st.put(value, key);
+				sRequest.onsuccess = function() {
+					resolve();
+				}
+				sRequest.onerror = function() {
+					reject(sRequest.error);
+				}
+			};
+			oRequest.onerror = function() {
+				reject(oRequest.error);
+			};
+		});
+    },
+    removeItem : function (key, store) {
+        if (!store) store="DBStore";
+        return new Promise((resolve, reject) => {
+			let oRequest = indexedDB.open('TrainIDB');
+			oRequest.onsuccess = function() {
+				let db = oRequest.result;
+				let tx = db.transaction(store, 'readwrite');
+				let st = tx.objectStore(store);
+				let rRequest = st.delete(key);
+				rRequest.onsuccess = function() {
+					resolve();
+				}
+				rRequest.onerror = function() {
+					reject(rRequest.error);
+				}
+			};
+			oRequest.onerror = function() {
+				reject(oRequest.error)
+			};
+		});
+    }
+ }
+
 var LOGIN_STATUS = {
     
 };

@@ -114,6 +114,8 @@ var vueApp = new Vue({
       
           vueThis.boxData = trainBoxResult.BoxData;
           
+          TrainIDB.setItem("BoxData", trainBoxResult.BoxData, "Train3");
+
           localStorage.setItem("boxNoIndex", JSON.stringify(trainBoxResult.BoxData.map(function(box) {
             localStorage.setItem(box.BoxNo, JSON.stringify(box));
             return box.BoxNo
@@ -299,6 +301,8 @@ var vueApp = new Vue({
     }
   },
   mounted: function () {
+
+    TrainIDB.initialize();
 
     let vueThis = this;
     document.addEventListener("focus", function(e){
