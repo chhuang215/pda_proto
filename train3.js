@@ -263,11 +263,11 @@ var vueApp = new Vue({
     ,
     exit: function(e){
       this.outReport();
-      this.modalCloseAction = function(){NATIVE_CALL.QUIT_PO_TRAIN(); vueThis.modalCloseAction = null;}
+      this.modalCloseAction = function(){NATIVE_CALL.QUIT_PO_TRAIN(); this.modalCloseAction = null;}
     },
     goBack: function(e){
       this.outReport();
-      this.modalCloseAction = function(){location.href = "train2.html"; vueThis.modalCloseAction = null;}
+      this.modalCloseAction = function(){location.href = "train2.html"; this.modalCloseAction = null;}
     },
     refetch: function () {
       this.clearData();
