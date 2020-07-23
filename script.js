@@ -40,8 +40,22 @@ var WEB_TO_NATIVE = {
     },
     REFRESH_TOKEN: function(){}
 }
+
+var NATIVE_TO_WEB = {
+    setAuthorizationToken: function(authtoken){
+        localStorage.setItem("AuthToken", authtoken);
+    },
+    setPDAToken: function(pdatoken){
+        localStorage.setItem("PDAToken", pdatoken);
+    },
+    setShpNo: function (shpno){
+        localStorage.setItem("ShpNo", shpno);
+    },
+    startPOTrain: function(){
+      location.href = "train1.html"  
     }
 }
+
 
 // history.back(); 
 // history.forward();
