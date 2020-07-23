@@ -1,0 +1,58 @@
+/*  css-loading-spinners.css
+  Copyright (c) Ian A. Cook
+  MIT License
+  https://github.com/nai888/css-loading-spinners
+*/
+:root {
+  --cls-color: #558B6E;
+  --cls-sec-color: #EEEEEE;
+  --cls-size: 5rem;
+  --cls-margin: 1rem;
+  --cls-speed: 2s;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  } 100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  } 100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+[class^="cls-"] {
+  box-sizing: border-box;
+}
+
+.cls-spinner {
+  display: block;
+  position: relative;
+  width: var(--cls-size);
+  height: var(--cls-size);
+  margin: var(--cls-margin);
+}
+
+.cls-spin {
+  -webkit-animation: spin var(--cls-speed) linear infinite;
+          animation: spin var(--cls-speed) linear infinite;
+}
+
+.cls-circle {
+  border-width: calc(var(--cls-size) / 5 * 0.75);
+  border-style: solid;
+  border-color: var(--cls-sec-color);
+  border-top-color: var(--cls-color);
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+
