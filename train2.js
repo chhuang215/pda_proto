@@ -40,7 +40,7 @@ var vueApp = new Vue({
       location.href = "train1.html";
     },
     exit: function(e){
-      NATIVE_CALL.QUIT_PO_TRAIN();
+      WEB_TO_NATIVE.QUIT_PO_TRAIN();
     }
   },
   mounted: function () {

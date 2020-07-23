@@ -26,7 +26,7 @@ var LOGIN_STATUS = {
     
 };
 
-var NATIVE_CALL = {
+var WEB_TO_NATIVE = {
     QUIT_PO_TRAIN : function(){
         if (window.finishWeb){
             window.finishWeb.finishView();
@@ -37,6 +37,9 @@ var NATIVE_CALL = {
         if(localStorage.length > 0){
             localStorage.clear();
         }
+    },
+    REFRESH_TOKEN: function(){}
+}
     }
 }
 

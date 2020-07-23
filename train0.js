@@ -23,7 +23,7 @@ var vueApp = new Vue({
   },
   methods: {
     exit: function(e){
-      NATIVE_CALL.QUIT_PO_TRAIN();
+      WEB_TO_NATIVE.QUIT_PO_TRAIN();
     },
     skip: function(e){
       location.href = "train1.html";

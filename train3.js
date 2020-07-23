@@ -266,7 +266,7 @@ var vueApp = new Vue({
     exit: function(e){
       this.outReport();
       this.modalCloseAction = function(){
-        NATIVE_CALL.QUIT_PO_TRAIN(); 
+        WEB_TO_NATIVE.QUIT_PO_TRAIN(); 
         this.modalCloseAction = null;
       }
     },
