@@ -308,7 +308,7 @@ var vueApp = new Vue({
     });
 
     if (!localStorage.getItem('StoreNo')){
-      localStorage.setItem("StoreNo", "219");
+      this.goBack();
     }    
 
     this.fetchData();

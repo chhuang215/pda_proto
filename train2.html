@@ -21,9 +21,10 @@
               門市代號 :
             </div>
             <div class="col-right">
-              <select v-model="selectedStore">
+              <select  v-model="selectedStore">
+                <option v-for="s in storeList">{{s}}</option>
+                <option value="-1">新增</option>
                 <!-- <option disabled value="">選擇門市</option> -->
-                <option>219</option>
               </select>
             </div>
           </div>
@@ -39,11 +40,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>{{branchId}}</td>
-              <td>{{branchName}}</td>
-              <td>{{boxCnt}}</td>
-              <td>{{procSeq}}</td>
+            <tr v-for="(s, index) in selectedStoreList">
+              <td>{{s.branchId}}</td>
+              <td></td>
+              <td></td>
+              <td>{{index+1}}</td>
+              <!-- <td>{{branchName}}</td>
+              <td>{{boxCnt}}</td> -->
+            </tr>
+            <tr v-show="focusTxtInputStore">
+              <td> <input tabindex="-1" type="text" ref="txtNewStoreId" v-on:keyup.enter.prevent="addNewStore" @blur="clearInput"> </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <!-- <td>{{branchName}}</td>
+              <td>{{boxCnt}}</td> -->
             </tr>
           </tbody>
         </table>
@@ -52,13 +63,13 @@
         <div><button @click="exit" class="btn">結束</button></div>
         <div><button @click="goBack" class="btn">上一步</button></div>
         <div></div>
-        <div><button @click="next" class="btn" :disabled="!selectedStore">下一步</button></div>
+        <div><button @click="next" class="btn" :disabled="selectedStoreList.length==0">下一步</button></div>
       </div>
   </div>
 
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
-  <script src="vue.min.js"></script>
+  <script src="vue.js"></script>
   <script src="script.js"></script>
   <script src="train2.js"></script>
 </body>
