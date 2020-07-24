@@ -10,10 +10,7 @@
 // };
 // console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");
 
-// axios defaults
-axios.defaults.baseURL = "http://10.254.247.103:18718/"
-axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
-axios.defaults.timeout = 20000;
+
 
 
 Vue.mixin({
@@ -22,9 +19,33 @@ Vue.mixin({
     // }
 })
 
-var LOGIN_STATUS = {
-    
-};
+var GLOBAL = {
+    GET:{
+        AuthToken: function(){
+            return localStorage.getItem("AuthToken")
+        },
+        PDAToken: function(){
+            return localStorage.getItem("PDAToken")
+        },
+        ShpNo: function(){
+            return localStorage.getItem("ShpNo")
+        },
+        TrainLoadNo: function(){
+            return localStorage.getItem("TrainLoadNo");
+        },
+        LogSymbol: function(){
+            return localStorage.getItem("LogSymbol");
+        }
+    },
+    SET:{
+        TrainLoadNo: function(trainLoadNo){
+            localStorage.setItem("TrainLoadNo", trainLoadNo);
+        },
+        LogSymbol: function(logSymbol){
+            localStorage.setItem("LogSymbol", logSymbol);
+        }
+    }    
+}
 
 var WEB_TO_NATIVE = {
     QUIT_PO_TRAIN : function(){
@@ -41,8 +62,11 @@ var WEB_TO_NATIVE = {
     REFRESH_TOKEN: function(){}
 }
 
+
+
 var NATIVE_TO_WEB = {
     setAuthorizationToken: function(authtoken){
+        axios.defaults.headers.common['X-Powered-TK'] = authtoken;
         localStorage.setItem("AuthToken", authtoken);
     },
     setPDAToken: function(pdatoken){
@@ -60,6 +84,14 @@ var NATIVE_TO_WEB = {
 // history.back(); 
 // history.forward();
 document.addEventListener('DOMContentLoaded', (event) => {
+
+    // axios defaults
+    let apiVer = "v2"
+    axios.defaults.baseURL = "http://10.254.247.103:18718/api/Shipping/" + apiVer + "/"
+    //axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
+    axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.GET_AuthToken;
+    axios.defaults.timeout = 30000;
+
     console.log("global script LOADED")
 
     //DEBUG PURPOSE

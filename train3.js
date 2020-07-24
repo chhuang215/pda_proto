@@ -85,7 +85,7 @@ var vueApp = new Vue({
         this.fetchingData = true;
         var vueThis = this;
         /* axios GET request*/
-        axios.get(`api/Shipping/v1/TrainBoxList/${this.storeNo}`, {
+        axios.get(`TrainBoxList/${this.storeNo}`, {
           cancelToken: ctSource.token
         }).then(function(response) {
           console.log(response);
@@ -181,7 +181,7 @@ var vueApp = new Vue({
           }
           console.log("updateChk " + boxno + " " + flag)
           let vueThis = this;
-          axios.post("api/Shipping/v1/TrainBoxFlag", {
+          axios.post("TrainBoxFlag", {
               Data: trainBoxParam
             }, {
               timeout: 0,
@@ -236,7 +236,7 @@ var vueApp = new Vue({
       console.table(outReportParam);
       let vueThis = this;
       vueThis.modalMessage = "結束中.."
-      axios.post("api/Shipping/v1/OutReport", {
+      axios.post("OutReport", {
         Data: outReportParam
       }).then(function(response) {
         console.log(response);
