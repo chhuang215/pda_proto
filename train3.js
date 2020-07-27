@@ -1,6 +1,6 @@
 /**
  * @summary PDA Web UI (Proof of Concept)
- * Page 4 Of 4
+ * Page 3 Of 3
  * @author Chih-Hsuan Huang
  */
 
@@ -15,7 +15,7 @@ var vueApp = new Vue({
     storeNo: "",
     workNo: "",
     macNo: "",
-    carLicenceNo: "",
+    carLicenseNo: "",
     shpStore: "",
     boxData: [],
     chk_active: 'N',
@@ -71,14 +71,15 @@ var vueApp = new Vue({
       ctSource = CancelToken.source();
       this.errorMessage = "";
 
-      // if (!localStorage.getItem('StoreNo')){
-      //   localStorage.setItem("StoreNo", "219");
-      // }    
+      if (!localStorage.getItem('StoreNo')){
+        localStorage.setItem("StoreNo", "219");
+      }    
       this.storeNo = localStorage.getItem('StoreNo');
       this.macNo = localStorage.getItem("MacNo");
-      this.carLicenceNo = localStorage.getItem("CarLicenceNo");
+      this.carLicenseNo = localStorage.getItem("CarLicenseNo");
+      let boxNos = localStorage.getItem("boxNoIndex");
 
-      if (!this.macNo || !this.carLicenceNo) {
+      if (!this.macNo || !this.carLicenseNo || !boxNos || !JSON.parse(boxNos)) {
         if (this.fetchingData) return;
         this.fetchingData = true;
         var vueThis = this;
@@ -107,7 +108,7 @@ var vueApp = new Vue({
             vueThis.errorMessage = "讀取中斷";
           }
           else {
-            vueThis.errorMessage = "err: " + error;
+            vueThis.errorMessage = "無法讀取資料: " + error;
             vueThis.modalMessage += "無法讀取資料\n" + error + "\n"
           }
           console.log("errMessage: " + error);
@@ -161,7 +162,7 @@ var vueApp = new Vue({
             TrainLoadNo: GLOBAL.TrainLoadNo.get(),
             ShpNo: GLOBAL.ShpNo.get(),
             StoreNo: this.storeNo,
-            CarLicenseNo: this.carLicenceNo,
+            CarLicenseNo: this.carLicenseNo,
             BoxNo: boxno,
           }
           console.log("updateChk " + boxno + " " + flag)
@@ -212,7 +213,7 @@ var vueApp = new Vue({
         TrainLoadNo: GLOBAL.TrainLoadNo.get(),
         MacNo: GLOBAL.MacNo.get(),
         StoreNo: this.storeNo,
-        CarLicenseNo: this.carLicenceNo? this.carLicenceNo : "",
+        CarLicenseNo: this.carLicenseNo? this.carLicenseNo : "",
         OutDate: "" + outDate.getFullYear() + ("0" + (outDate.getMonth() + 1)).slice(-2) + ("0" + outDate.getDate()).slice(-2)
       }
       console.table(outReportParam);
@@ -265,7 +266,7 @@ var vueApp = new Vue({
     },
     clearData: function () {
       this.boxData = [];
-      localStorage.removeItem("carLicenceNo");
+      localStorage.removeItem("carLicenseNo");
       localStorage.removeItem("ShpStore");
       let bIndex = JSON.parse(localStorage.getItem("boxNoIndex"))
       if (bIndex){
@@ -288,7 +289,7 @@ var vueApp = new Vue({
     });
 
     if (!localStorage.getItem('StoreNo')){
-      this.goBack();
+      //this.goBack();
     }    
 
     this.fetchData();

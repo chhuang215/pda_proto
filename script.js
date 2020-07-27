@@ -103,16 +103,16 @@ var GLOBAL = {
             localStorage.setItem("LogSymbol", symbol);
         }
     } ,
-    CarLicenceNoList:{
+    CarLicenseNoList:{
         get: function(){
             if(!_carList){
-                _carList = JSON.parse(localStorage.getItem("CarLicenceNoList"));
+                _carList = JSON.parse(localStorage.getItem("CarLicenseNoList"));
             }
             return _carList;
         },
         set: function(carList){
             _carList = carList;
-            localStorage.setItem("CarLicenceNoList", JSON.stringify(carList))
+            localStorage.setItem("CarLicenseNoList", JSON.stringify(carList))
         }
     }
 }
@@ -171,6 +171,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     axios.defaults.baseURL = "http://10.254.247.103:18718/api/Shipping/" + apiVer + "/"
     //(v1)// axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
     axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.AuthToken.get(); //v2
+    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*',
+    axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE'
     //axios.defaults.timeout = 45000; NO TIMEOUT REQUEST
 
     //DEBUG PURPOSE

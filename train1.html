@@ -16,80 +16,57 @@
 <body>
   <div id="train1" v-cloak>
 
-      <div class="tablelayout">
-          <div class="row">
-            <div class="col col-left">
-               車號
+      <div class="wrap">
+        <div class="tablelayout">
+            <div class="row">
+              <div class="col col-left">
+                車號
+              </div>
+              <div class="col col-mid"> : </div>
+              <div class="col col-right">
+                <select >
+                  <option v-for="c in carLicenseList">{{c}}</option>
+                </select>
+              </div>
             </div>
-            <div class="col col-mid"> : </div>
-            <div class="col col-right">
-               <select ></select>
+            <div class="row" v-for="i in numOfLoadUsers">
+              <div class="col col-left"><span v-if="i==1">裝車人</span></div>
+              <div class="col col-mid"><span v-if="i==1"> : </span></div>
+              <div class="col col-right">
+                <select  @change="selectLoadUser($event)">
+                  <option v-for="(u, index) in logUsers" :value="u.Account">{{u.Name}}</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col col-left">
-              裝車人
+            <div class="row" style="height:0">
+              <div class="col col-left"></div>
+              <div class="col col-mid"></div>
+              <div class="col col-right">
+                <div ><button @click="numOfLoadUsers++"  style="width:100%">+裝車人</button></div>
+              </div>
             </div>
-            <div class="col col-mid"> : </div>
-            <div class="col col-right">
-              <select ></select>
+            
+            <div class="row">
+              <div class="col col-left">
+                出車日期
+              </div>
+              <div class="col col-mid"> : </div>
+              <div class="col col-right">
+                <input type="text" :value="sysDate" class="dateinput">
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col col-left"></div>
-            <div class="col col-mid"></div>
-            <div class="col col-right">
-              <select ></select>
+            <div class="row"  v-for="i in 2">
+              <div class="col col-left">
+                <span v-if="i==1">出車人</span>
+              </div>
+              <div class="col col-mid"><span v-if="i==1"> : </span></div>
+              <div class="col col-right">
+                <select ><option v-for="(u, index) in logUsers" :value="u.Account">{{u.Name}}</option></select>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col col-left"></div>
-            <div class="col col-mid"></div>
-            <div class="col col-right">
-              <select ></select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-left"></div>
-            <div class="col col-mid"></div>
-            <div class="col col-right">
-              <select ></select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-left"></div>
-            <div class="col col-mid"></div>
-            <div class="col col-right">
-              <select ></select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-left">
-              出車日期
-            </div>
-            <div class="col col-mid"> : </div>
-            <div class="col col-right">
-              <select ></select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-left">
-              出車人
-            </div>
-            <div class="col col-mid"> : </div>
-            <div class="col col-right">
-              <select ></select>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col col-left"></div>
-            <div class="col col-mid"></div>
-            <div class="col col-right">
-              <select ></select>
-            </div>
-          </div>
+          
+        </div>
       </div>
-      
       <div class="bottomcontrol btnUniformGroup">
         <div>
           <button @click="exit" class="btn">結束</button>
@@ -104,7 +81,7 @@
 
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
-  <script src="vue.min.js"></script>
+  <script src="vue.js"></script>
   <script src="script.js"></script>
   <script src="train1.js"></script>
 </body>

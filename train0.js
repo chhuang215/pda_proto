@@ -1,14 +1,8 @@
 /**
  * @summary PDA Web UI (Proof of Concept)
- * Page 1 Of 4
+ * Unused Page
  * @author Chih-Hsuan Huang
  */
-
-// -- axios CancelToken
-const CancelToken = axios.CancelToken;
-var ctSource;
-// --
-
 
 var vueApp = new Vue({
   el: '#train0',
