@@ -14,7 +14,9 @@ let authToken, pdaToken, shpNo
 var vueApp = new Vue({
   el: '#train1',
   data: {
-    
+    carLicenceList : [],
+    logUsers : [],
+    sysDate : ""
   },
   computed: {
     
@@ -24,6 +26,7 @@ var vueApp = new Vue({
   },
   methods: {
     fetchSettingData: function(){
+      var vueThis = this;
       axios.get(`TrainSettingInfo/${pdaToken}/${shpNo}`).then(function(response){
         let resp = response.data;
         console.log(resp);
@@ -31,12 +34,12 @@ var vueApp = new Vue({
           throw resp.Result + " " + resp.Message
         };
         let returnList = resp.ReturnList; 
-        let sysDate = returnList.SystemDate;
-        let logSymbol = returnList.LogSymbol;
-        let cars = returnList.Cars;
-        let logUsers = returnList.LogUsers;
+        vueThis.sysDate = returnList.SystemDate;
+        vueThis.carLicenceList = returnList.Cars.map(function(car) {return car.CarLicenceNo});
+        vueThis.logUsers = returnList.LogUsers;
 
-        GLOBAL.SET.LogSymbol(logSymbol);
+        GLOBAL.LogSymbol.set(returnList.LogSymbol);
+        GLOBAL.CarLicenseNoList.set(vueThis.carLicenceList);
 
       }).catch(function(err){ console.log(err)});
     },
@@ -44,7 +47,7 @@ var vueApp = new Vue({
 
       let reqParam = {
         Data: {
-          LogSymbol: GLOBAL.GET.LogSymbol(),
+          LogSymbol: GLOBAL.LogSymbol.get(),
           CarLicenseNo: "",
           SecondUser: "",
           LoadOutUsers: [],
@@ -59,7 +62,7 @@ var vueApp = new Vue({
           throw resp.Result + " " + resp.Message
         };
         let trainLoadNo = resp.ReturnList; //上車憑證
-        GLOBAL.SET.TrainLoadNo(trainLoadNo);
+        GLOBAL.TrainLoadNo.set(trainLoadNo);
         location.href = "train2.html";
       })
       .catch(function(err) {
@@ -80,12 +83,12 @@ var vueApp = new Vue({
     
   },
   mounted: function () {
-    authToken = GLOBAL.GET.AuthToken();
-    pdaToken = GLOBAL.GET.PDAToken();
-    shpNo = GLOBAL.GET.ShpNo();
+    authToken = GLOBAL.AuthToken.get();
+    pdaToken = GLOBAL.PDAToken.get();
+    shpNo = GLOBAL.ShpNo.get();
     if (!authToken || !pdaToken || !shpNo){
       console.log("No required Tokens and ShpNo")
-      this.exit();
+      //this.exit();
       return;
     }
     this.fetchSettingData();

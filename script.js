@@ -12,94 +12,172 @@
 
 
 
+// if (Vue){
+//     Vue.mixin({
+//         // methods: {
+//         //     toggleKeyboard: function(){}
+//         // }
+//     })
+// }
 
-Vue.mixin({
-    // methods: {
-    //     toggleKeyboard: function(){}
-    // }
-})
+
+let _authtoken = null;
+let _pdatoken = null;
+let _shpno = null;
+let _macno = null;
+let _trainloadno = null;
+let _logsymbol = null;
+let _carList = null;
 
 var GLOBAL = {
-    GET:{
-        AuthToken: function(){
-            return localStorage.getItem("AuthToken")
+    AuthToken: {
+        get: function(){
+            if(!_authtoken) {
+                _authtoken = localStorage.getItem("AuthToken");
+            } 
+            return _authtoken
         },
-        PDAToken: function(){
-            return localStorage.getItem("PDAToken")
-        },
-        ShpNo: function(){
-            return localStorage.getItem("ShpNo")
-        },
-        TrainLoadNo: function(){
-            return localStorage.getItem("TrainLoadNo");
-        },
-        LogSymbol: function(){
-            return localStorage.getItem("LogSymbol");
+        set: function(token) {
+            _authtoken = token;
+            axios.defaults.headers.common['X-Powered-TK'] = token;
+            localStorage.setItem("AuthToken", token);
         }
     },
-    SET:{
-        TrainLoadNo: function(trainLoadNo){
-            localStorage.setItem("TrainLoadNo", trainLoadNo);
+    PDAToken: {
+        get: function(){ 
+            if(!_pdatoken) {
+                _pdatoken = localStorage.getItem("PDAToken");
+            } 
+            return  _pdatoken
         },
-        LogSymbol: function(logSymbol){
-            localStorage.setItem("LogSymbol", logSymbol);
+        set: function(token) {
+            _pdatoken = token;
+            localStorage.setItem("PDAToken", token);
         }
-    }    
+    },
+    ShpNo: {
+        get: function(){
+            if(!_shpno) {
+                _shpno = localStorage.getItem("ShpNo");
+            } 
+            return _shpno
+        },
+        set: function(shpNo) {
+            _shpno = shpNo;
+            localStorage.setItem("ShpNo", shpNo);
+        }
+    },
+    MacNo:{
+        get: function(){
+            if(!_macno) {
+                _macno = localStorage.getItem("MacNo");
+            } 
+            return _macno
+        },
+        set:function(macno){
+            _macno = localStorage.getItem("MacNo");
+            localStorage.setItem("MacNo", macno);
+        }
+    },
+    TrainLoadNo: {
+        get: function(){
+            if(!_trainloadno) {
+                _trainloadno = localStorage.getItem("TrainLoadNo");
+            } 
+            return _trainloadno;
+        },
+        set: function(loadNo) {
+            _trainloadno = loadNo
+            localStorage.setItem("TrainLoadNo", loadNo);
+        }
+    },
+    LogSymbol: {
+        get: function(){
+            if(!_logsymbol) {
+                _logsymbol = localStorage.getItem("LogSymbol");
+            } 
+            return _logsymbol
+        },
+        set: function(symbol) {
+            _logsymbol = symbol
+            localStorage.setItem("LogSymbol", symbol);
+        }
+    } ,
+    CarLicenceNoList:{
+        get: function(){
+            if(!_carList){
+                _carList = JSON.parse(localStorage.getItem("CarLicenceNoList"));
+            }
+            return _carList;
+        },
+        set: function(carList){
+            _carList = carList;
+            localStorage.setItem("CarLicenceNoList", JSON.stringify(carList))
+        }
+    }
 }
 
 var WEB_TO_NATIVE = {
     QUIT_PO_TRAIN : function(){
-        if (window.finishWeb){
-            window.finishWeb.finishView();
-        }
-        else{
-            alert("QUIT");
-        }
-        if(localStorage.length > 0){
-            localStorage.clear();
-        }
+
+        //TrainProcessRecord
+
+        axios.delete('TrainProcessRecord', {
+            data:{
+                Data: {
+                    LogSymbol: GLOBAL.LogSymbol.get(),
+                    MacNo: ""
+                }
+            }
+        }).then(function(res){
+
+        }).catch(function(err){
+            
+        }).then(function(){
+            if(localStorage.length > 0){
+                localStorage.clear();
+            }
+            if (window.finishWeb){
+                window.finishWeb.finishView();
+            }
+            else{
+                alert("QUIT");
+            }
+        })
     },
     REFRESH_TOKEN: function(){}
 }
 
 
-
 var NATIVE_TO_WEB = {
     setAuthorizationToken: function(authtoken){
-        axios.defaults.headers.common['X-Powered-TK'] = authtoken;
-        localStorage.setItem("AuthToken", authtoken);
+        GLOBAL.AuthToken.set(authtoken);
     },
     setPDAToken: function(pdatoken){
-        localStorage.setItem("PDAToken", pdatoken);
+        GLOBAL.PDAToken.set(pdatoken);
     },
     setShpNo: function (shpno){
-        localStorage.setItem("ShpNo", shpno);
+        GLOBAL.ShpNo.set(shpno);
     },
     startPOTrain: function(){
       location.href = "train1.html"  
     }
 }
 
-
-// history.back(); 
-// history.forward();
 document.addEventListener('DOMContentLoaded', (event) => {
 
     // axios defaults
     let apiVer = "v2"
     axios.defaults.baseURL = "http://10.254.247.103:18718/api/Shipping/" + apiVer + "/"
-    //axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
-    axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.GET_AuthToken;
-    axios.defaults.timeout = 30000;
-
-    console.log("global script LOADED")
+    //(v1)// axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
+    axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.AuthToken.get(); //v2
+    //axios.defaults.timeout = 45000; NO TIMEOUT REQUEST
 
     //DEBUG PURPOSE
     document.addEventListener("keyup", function(e){      
         console.log(function({ charCode, code, key, keyCode, which }) { return {charCode, code, key, keyCode, which}}(e));
     })
     //
-
     window.onpopstate = function(e){
         console.log("location: " + document.location + ", state: " + JSON.stringify(e.state));
         vueApp.goBack();
@@ -112,5 +190,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }, false);
     }, false);
     history.pushState(null, null, location.href)
-
+    console.log("global script LOADED")
+    console.log("TEST display GLOBAL data: ")
+    console.table(Object.keys(GLOBAL).map(function(key) {return {k: key, v: GLOBAL[key].get()}}).reduce(function(map, obj){map[obj.k] = obj.v ; return map;}, {}))
 });

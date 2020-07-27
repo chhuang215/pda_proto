@@ -15,7 +15,7 @@ var vueApp = new Vue({
     storeNo: "",
     workNo: "",
     macNo: "",
-    carNo: "",
+    carLicenceNo: "",
     shpStore: "",
     boxData: [],
     chk_active: 'N',
@@ -71,16 +71,14 @@ var vueApp = new Vue({
       ctSource = CancelToken.source();
       this.errorMessage = "";
 
-      if (!localStorage.getItem('StoreNo')){
-        localStorage.setItem("StoreNo", "219");
-      }    
+      // if (!localStorage.getItem('StoreNo')){
+      //   localStorage.setItem("StoreNo", "219");
+      // }    
       this.storeNo = localStorage.getItem('StoreNo');
-      this.workNo = localStorage.getItem("WorkNo");
       this.macNo = localStorage.getItem("MacNo");
-      this.carNo = localStorage.getItem("CarNo");
-      this.shpStore = localStorage.getItem("ShpStore");
+      this.carLicenceNo = localStorage.getItem("CarLicenceNo");
 
-      if (!(this.storeNo && this.workNo && this.macNo && this.carNo && this.shpStore)) {
+      if (!this.macNo || !this.carLicenceNo) {
         if (this.fetchingData) return;
         this.fetchingData = true;
         var vueThis = this;
@@ -94,23 +92,11 @@ var vueApp = new Vue({
             throw data.Result + " " + data.Message
           };
       
-          let trainBoxResult = data.ReturnList;
-      
-          vueThis.workNo = trainBoxResult.WorkNo;
-          localStorage.setItem('WorkNo', trainBoxResult.WorkNo);
-      
-          vueThis.macNo = trainBoxResult.MacNo;
-          localStorage.setItem('MacNo', trainBoxResult.MacNo);
-      
-          vueThis.carNo = trainBoxResult.CarNo;
-          localStorage.setItem('CarNo', trainBoxResult.CarNo);
-      
-          vueThis.shpStore = trainBoxResult.ShpStore;
-          localStorage.setItem('ShpStore', trainBoxResult.ShpStore);
-      
-          vueThis.boxData = trainBoxResult.BoxData;
-          
-          localStorage.setItem("boxNoIndex", JSON.stringify(trainBoxResult.BoxData.map(function(box) {
+          let boxInfo = data.ReturnList;
+          let storeNo = boxInfo.StoreNo;
+          let boxes = boxInfo.Boxs;
+
+          localStorage.setItem("boxNoIndex", JSON.stringify(boxes.map(function(box) {
             localStorage.setItem(box.BoxNo, JSON.stringify(box));
             return box.BoxNo
           })));
@@ -172,34 +158,30 @@ var vueApp = new Vue({
           let flag = (boxListResult.CHK == 'Y') ? 'N' : 'Y'
 
           let trainBoxParam = {
-            ShpStore: this.shpStore,
+            TrainLoadNo: GLOBAL.TrainLoadNo.get(),
+            ShpNo: GLOBAL.ShpNo.get(),
             StoreNo: this.storeNo,
-            CarNo: this.carNo,
-            WorkNo: this.workNo,
+            CarLicenseNo: this.carLicenceNo,
             BoxNo: boxno,
-            Flag: flag
           }
           console.log("updateChk " + boxno + " " + flag)
+
           let vueThis = this;
-          axios.post("TrainBoxFlag", {
-              Data: trainBoxParam
-            }, {
-              timeout: 0,
-              cancelToken: ctSource.token
-            }).then(function(response) {
-              console.log(response.data);
-              if (response.data.Result != "1") {
-                throw response.data.Result + " " + response.data.Message
-              };
-              boxListResult.CHK = flag;
-              localStorage.setItem(boxno, JSON.stringify(boxListResult));
-            })
-            .catch(function(error) {
-              console.log(error);
-            })
-            .then(function() {
-              vueThis.processingBoxes.splice(vueThis.processingBoxes.indexOf(boxno), 1)
-            });
+          axios.post((flag == 'N') ? "BoxLoadCheck" : "BoxUnLoadCheck", {
+                Data: trainBoxParam
+          }, {
+                timeout: 0,
+                cancelToken: ctSource.token
+          }).then(function(response) {
+            console.log(response)
+            if (response.data.Result != "1") {
+              throw response.data.Result + " " + response.data.Message
+            };
+          }).catch(function(err){
+              console.log(err);
+          }).then(function(){
+            vueThis.processingBoxes.splice(vueThis.processingBoxes.indexOf(boxno), 1)
+          })
         }
         else {
           this.processingBoxes.splice(this.processingBoxes.indexOf(boxno), 1)
@@ -227,10 +209,10 @@ var vueApp = new Vue({
       }
       let outDate = new Date();
       let outReportParam = {
-        WorkNo: this.workNo ? this.workNo : "",
-        MacNo: this.macNo? this.macNo : "",
+        TrainLoadNo: GLOBAL.TrainLoadNo.get(),
+        MacNo: GLOBAL.MacNo.get(),
         StoreNo: this.storeNo,
-        CarNo: this.carNo? this.carNo : "",
+        CarLicenseNo: this.carLicenceNo? this.carLicenceNo : "",
         OutDate: "" + outDate.getFullYear() + ("0" + (outDate.getMonth() + 1)).slice(-2) + ("0" + outDate.getDate()).slice(-2)
       }
       console.table(outReportParam);
@@ -283,9 +265,7 @@ var vueApp = new Vue({
     },
     clearData: function () {
       this.boxData = [];
-      localStorage.removeItem("WorkNo");
-      localStorage.removeItem("MacNo");
-      localStorage.removeItem("CarNo");
+      localStorage.removeItem("carLicenceNo");
       localStorage.removeItem("ShpStore");
       let bIndex = JSON.parse(localStorage.getItem("boxNoIndex"))
       if (bIndex){

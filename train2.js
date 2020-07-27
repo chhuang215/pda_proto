@@ -80,9 +80,6 @@ var vueApp = new Vue({
   },
   mounted: function () {
     window.onbeforeunload = function(){
-      localStorage.removeItem("WorkNo");
-      localStorage.removeItem("MacNo");
-      localStorage.removeItem("CarNo");
       localStorage.removeItem("boxNoIndex");
     }
 

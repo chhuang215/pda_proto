@@ -36,6 +36,6 @@ var vueApp = new Vue({
     }
   },
   mounted: function () {
-   
+    location.href = "train1.html";
   },
 });
