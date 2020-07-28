@@ -4,11 +4,11 @@
   https://github.com/nai888/css-loading-spinners
 */
 :root {
-  --cls-color: #558B6E;
+  --cls-color: #e2db7b;
   --cls-sec-color: #EEEEEE;
-  --cls-size: 5rem;
+  --cls-size: 3rem;
   --cls-margin: 1rem;
-  --cls-speed: 2s;
+  --cls-speed: 1.5s;
 }
 
 @-webkit-keyframes spin {

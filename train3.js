@@ -159,8 +159,8 @@ var vueApp = new Vue({
           let flag = (boxListResult.CHK == 'Y') ? 'N' : 'Y'
 
           let trainBoxParam = {
-            TrainLoadNo: GLOBAL.TrainLoadNo.get(),
-            ShpNo: GLOBAL.ShpNo.get(),
+            TrainLoadNo: GLOBAL.TrainLoadNo,
+            ShpNo: GLOBAL.ShpNo,
             StoreNo: this.storeNo,
             CarLicenseNo: this.carLicenseNo,
             BoxNo: boxno,
@@ -210,8 +210,8 @@ var vueApp = new Vue({
       }
       let outDate = new Date();
       let outReportParam = {
-        TrainLoadNo: GLOBAL.TrainLoadNo.get(),
-        MacNo: GLOBAL.MacNo.get(),
+        TrainLoadNo: GLOBAL.TrainLoadNo,
+        MacNo: GLOBAL.MacNo,
         StoreNo: this.storeNo,
         CarLicenseNo: this.carLicenseNo? this.carLicenseNo : "",
         OutDate: "" + outDate.getFullYear() + ("0" + (outDate.getMonth() + 1)).slice(-2) + ("0" + outDate.getDate()).slice(-2)

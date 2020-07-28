@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
   <title></title>
   <!-- CSS: implied media=all -->
+  <link rel="stylesheet" href="datepicker/datepicker.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="train1.css">
   <!-- end CSS-->
@@ -18,50 +19,65 @@
 
       <div class="wrap">
         <div class="tablelayout">
+            <!-- 車號 -->
             <div class="row">
               <div class="col col-left">
                 車號
               </div>
               <div class="col col-mid"> : </div>
               <div class="col col-right">
-                <select >
-                  <option v-for="c in carLicenseList">{{c}}</option>
+                <select v-if="!manualAddCarLicense" @change="onSelectCarLicense($event)">
+                  <option value="InsertNewCarlicense">+新增</option>
+                  <option v-for="licenseNo in carLicenseList" :selected="selectedCarLicense==licenseNo" :value="licenseNo">{{licenseNo}}</option>
                 </select>
+                <div v-else>
+                  <input tabindex="-1" type="text" ref="txtInputCarLicense" @keyup.enter.prevent="$event.target.blur()"  @blur="addInputCarLicense($event)" >
+                </div>
               </div>
             </div>
+            <!-- 裝車人 -->
             <div class="row" v-for="i in numOfLoadUsers">
               <div class="col col-left"><span v-if="i==1">裝車人</span></div>
               <div class="col col-mid"><span v-if="i==1"> : </span></div>
               <div class="col col-right">
-                <select  @change="selectLoadUser($event)">
-                  <option v-for="(u, index) in logUsers" :value="u.Account">{{u.Name}}</option>
+                <!-- <input tabindex="-1" type="text" list="loadUsers" @change="onSelectLoadUser($event, i)" > -->
+                <!-- <datalist id="loadUsers"  > -->
+                <select v-if="manualAddLoadUser!=(i-1)"  @change="onSelectLoadUser($event, i-1)" >
+                  <option value=""></option>
+                  <option value="InsertNewLoadUser">+新增</option>
+                  <option v-for="u in logUsers" :disabled="selectedLoadUsers.includes(u.Account)" :selected="selectedLoadUsers.indexOf(u.Account) == i-1" :value="u.Account" >{{u.Account}} {{u.Name}}</option>
                 </select>
+                <div v-else>
+                  <input  tabindex="-1" type="text" ref="txtInputLoadUser" @keyup.enter.prevent="$event.target.blur()"  @blur="addInputNewLoadUser($event, i-1)" >
+                </div>
+                <!-- </datalist> -->
               </div>
-            </div>
-            <div class="row" style="height:0">
-              <div class="col col-left"></div>
-              <div class="col col-mid"></div>
-              <div class="col col-right">
-                <div ><button @click="numOfLoadUsers++"  style="width:100%">+裝車人</button></div>
-              </div>
-            </div>
-            
+            </div>            
+             <!-- 出車日期 -->
             <div class="row">
               <div class="col col-left">
                 出車日期
               </div>
               <div class="col col-mid"> : </div>
               <div class="col col-right">
-                <input type="text" :value="sysDate" class="dateinput">
+                <input type="text" :value="formattedDate" class="dateinput" readonly>
               </div>
             </div>
-            <div class="row"  v-for="i in 2">
+            <!-- 出車人 -->
+            <div class="row"  v-for="i in numOfDrivers">
               <div class="col col-left">
                 <span v-if="i==1">出車人</span>
               </div>
               <div class="col col-mid"><span v-if="i==1"> : </span></div>
               <div class="col col-right">
-                <select ><option v-for="(u, index) in logUsers" :value="u.Account">{{u.Name}}</option></select>
+                <select v-if="manualAddDriver!=(i-1)"  @change="onSelectDriver($event, i-1)">
+                  <option value=""></option>
+                  <option value="InsertNewDriver">+新增</option>
+                  <option v-for="u in logUsers" :disabled="selectedDrivers.includes(u.Account)" :selected="selectedDrivers.indexOf(u.Account) == i-1" :value="u.Account">{{u.Account}} {{u.Name}}</option>
+                </select>
+                <div v-else>
+                  <input  tabindex="-1" type="text" ref="txtInputDriver" @keyup.enter.prevent="$event.target.blur()"  @blur="addInputNewDriver($event, i-1)" >
+                </div>
               </div>
             </div>
           
@@ -73,13 +89,15 @@
         </div>
         <div></div><div></div>
         <div>
-          <button @click="next" class="btn">下一步</button>
+          <button @click="next" class="btn" :disabled="!requiredFilled">下一步</button>
         </div>
       </div>
 
   </div>
 
   <script src="es6-promise.auto.min.js"></script>
+  <script src="datepicker/datepicker.min.js"></script>
+  <script src="datepicker/zh-TW.js"></script>
   <script src="axios.min.js"></script>
   <script src="vue.js"></script>
   <script src="script.js"></script>

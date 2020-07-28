@@ -48,3 +48,8 @@ select, .dateinput{
     text-align: center;
     text-align-last: justify;
 }
+
+select option:disabled {
+
+    font-style: italic;
+}

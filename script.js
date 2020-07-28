@@ -20,113 +20,213 @@
 //     })
 // }
 
-
 let _authtoken = null;
 let _pdatoken = null;
 let _shpno = null;
 let _macno = null;
 let _trainloadno = null;
 let _logsymbol = null;
+let _carNo = null;
 let _carList = null;
+let _sysDate;
 
 var GLOBAL = {
-    AuthToken: {
-        get: function(){
-            if(!_authtoken) {
-                _authtoken = localStorage.getItem("AuthToken");
-            } 
-            return _authtoken
-        },
-        set: function(token) {
-            _authtoken = token;
-            axios.defaults.headers.common['X-Powered-TK'] = token;
-            localStorage.setItem("AuthToken", token);
-        }
+    set AuthToken(token){
+        _authtoken = token;
+        axios.defaults.headers.common['X-Powered-TK'] = token;
+        localStorage.setItem("AuthToken", token);
     },
-    PDAToken: {
-        get: function(){ 
-            if(!_pdatoken) {
-                _pdatoken = localStorage.getItem("PDAToken");
-            } 
-            return  _pdatoken
-        },
-        set: function(token) {
-            _pdatoken = token;
-            localStorage.setItem("PDAToken", token);
-        }
+    get AuthToken(){
+        if(!_authtoken) {
+            _authtoken = localStorage.getItem("AuthToken");
+        } 
+        return _authtoken
     },
-    ShpNo: {
-        get: function(){
-            if(!_shpno) {
-                _shpno = localStorage.getItem("ShpNo");
-            } 
-            return _shpno
-        },
-        set: function(shpNo) {
-            _shpno = shpNo;
-            localStorage.setItem("ShpNo", shpNo);
-        }
+    set PDAToken(token){
+        _pdatoken = token;
+        localStorage.setItem("PDAToken", token);
     },
-    MacNo:{
-        get: function(){
-            if(!_macno) {
-                _macno = localStorage.getItem("MacNo");
-            } 
-            return _macno
-        },
-        set:function(macno){
+    get PDAToken(){
+        if(!_pdatoken) {
+            _pdatoken = localStorage.getItem("PDAToken");
+        } 
+        return _pdatoken
+    },
+    set ShpNo(shpNo){
+        _shpno = shpNo;
+        localStorage.setItem("ShpNo", shpNo);
+    },
+    get ShpNo(){
+        if(!_shpno) {
+            _shpno = localStorage.getItem("ShpNo");
+        } 
+        return _shpno
+    },
+    get MacNo(){
+        if(!_macno) {
             _macno = localStorage.getItem("MacNo");
-            localStorage.setItem("MacNo", macno);
-        }
+        } 
+        return _macno
     },
-    TrainLoadNo: {
-        get: function(){
-            if(!_trainloadno) {
-                _trainloadno = localStorage.getItem("TrainLoadNo");
-            } 
-            return _trainloadno;
-        },
-        set: function(loadNo) {
-            _trainloadno = loadNo
-            localStorage.setItem("TrainLoadNo", loadNo);
-        }
+    set MacNo(macno){
+        _macno = localStorage.getItem("MacNo");
+        localStorage.setItem("MacNo", macno);
     },
-    LogSymbol: {
-        get: function(){
-            if(!_logsymbol) {
-                _logsymbol = localStorage.getItem("LogSymbol");
-            } 
-            return _logsymbol
-        },
-        set: function(symbol) {
-            _logsymbol = symbol
-            localStorage.setItem("LogSymbol", symbol);
+    get TrainLoadNo(){
+        if(!_trainloadno) {
+            _trainloadno = localStorage.getItem("TrainLoadNo");
+        } 
+        return _trainloadno;
+    },
+    set TrainLoadNo(loadNo) {
+        _trainloadno = loadNo
+        localStorage.setItem("TrainLoadNo", loadNo);
+    },
+    get LogSymbol(){
+        if(!_logsymbol) {
+            _logsymbol = localStorage.getItem("LogSymbol");
+        } 
+        return _logsymbol
+    },
+    set LogSymbol(symbol) {
+        _logsymbol = symbol
+        localStorage.setItem("LogSymbol", symbol);
+    },
+    get CarLicenseNoList(){
+        if(!_carList){
+            _carList = JSON.parse(localStorage.getItem("CarLicenseNoList"));
         }
-    } ,
-    CarLicenseNoList:{
-        get: function(){
-            if(!_carList){
-                _carList = JSON.parse(localStorage.getItem("CarLicenseNoList"));
-            }
-            return _carList;
-        },
-        set: function(carList){
-            _carList = carList;
-            localStorage.setItem("CarLicenseNoList", JSON.stringify(carList))
+        return _carList;
+    },
+    set CarLicenseNoList(carList){
+        _carList = carList;
+        localStorage.setItem("CarLicenseNoList", JSON.stringify(carList))
+    },
+    get CarLicenseNo(){
+        if(!_carNo){
+            _carNo = localStorage.getItem("CarLicenseNo");
         }
-    }
+        return _carNo;
+    },
+    set CarLicenseNo(carNo){
+        _carNo = carNo;
+        localStorage.setItem("CarLicenseNo", carNo)
+    },
+    get SystemDate(){
+        if(!_sysDate){
+            _sysDate = localStorage.getItem("SystemDate");
+        }
+        return _sysDate;
+    },
+    set SystemDate(date){
+        _sysDate = date;
+        localStorage.setItem("SystemDate", date)
+    },
+    // PDAToken: {
+    //     get: function(){ 
+    //         if(!_pdatoken) {
+    //             _pdatoken = localStorage.getItem("PDAToken");
+    //         } 
+    //         return  _pdatoken
+    //     },
+    //     set: function(token) {
+    //         _pdatoken = token;
+    //         localStorage.setItem("PDAToken", token);
+    //     }
+    // },
+    // ShpNo: {
+    //     get: function(){
+    //         if(!_shpno) {
+    //             _shpno = localStorage.getItem("ShpNo");
+    //         } 
+    //         return _shpno
+    //     },
+    //     set: function(shpNo) {
+    //         _shpno = shpNo;
+    //         localStorage.setItem("ShpNo", shpNo);
+    //     }
+    // },
+    // MacNo:{
+    //     get: function(){
+    //         if(!_macno) {
+    //             _macno = localStorage.getItem("MacNo");
+    //         } 
+    //         return _macno
+    //     },
+    //     set:function(macno){
+    //         _macno = localStorage.getItem("MacNo");
+    //         localStorage.setItem("MacNo", macno);
+    //     }
+    // },
+    // TrainLoadNo: {
+    //     get: function(){
+    //         if(!_trainloadno) {
+    //             _trainloadno = localStorage.getItem("TrainLoadNo");
+    //         } 
+    //         return _trainloadno;
+    //     },
+    //     set: function(loadNo) {
+    //         _trainloadno = loadNo
+    //         localStorage.setItem("TrainLoadNo", loadNo);
+    //     }
+    // },
+    // LogSymbol: {
+    //     get: function(){
+    //         if(!_logsymbol) {
+    //             _logsymbol = localStorage.getItem("LogSymbol");
+    //         } 
+    //         return _logsymbol
+    //     },
+    //     set: function(symbol) {
+    //         _logsymbol = symbol
+    //         localStorage.setItem("LogSymbol", symbol);
+    //     }
+    // } ,
+    // CarLicenseNoList:{
+    //     get: function(){
+    //         if(!_carList){
+    //             _carList = JSON.parse(localStorage.getItem("CarLicenseNoList"));
+    //         }
+    //         return _carList;
+    //     },
+    //     set: function(carList){
+    //         _carList = carList;
+    //         localStorage.setItem("CarLicenseNoList", JSON.stringify(carList))
+    //     }
+    // },
+    // CarLicenseNo: {
+    //     get: function(){
+    //         if(!_carNo){
+    //             _carNo = localStorage.getItem("CarLicenseNo");
+    //         }
+    //         return _carNo;
+    //     },
+    //     set: function(carNo){
+    //         _carNo = carNo;
+    //         localStorage.setItem("CarLicenseNo", carNo)
+    //     }
+    // },
+    // SystemDate : {
+    //     get: function(){
+    //         if(!_sysDate){
+    //             _sysDate = localStorage.getItem("SystemDate");
+    //         }
+    //         return _carList;
+    //     },
+    //     set: function(date){
+    //         _sysDate = date;
+    //         localStorage.setItem("SystemDate", date)
+    //     }
+    // }
 }
 
 var WEB_TO_NATIVE = {
     QUIT_PO_TRAIN : function(){
-
-        //TrainProcessRecord
-
         axios.delete('TrainProcessRecord', {
             data:{
                 Data: {
-                    LogSymbol: GLOBAL.LogSymbol.get(),
-                    MacNo: ""
+                    LogSymbol: GLOBAL.LogSymbol,
+                    MacNo: GLOBAL.MacNo
                 }
             }
         }).then(function(res){
@@ -151,13 +251,16 @@ var WEB_TO_NATIVE = {
 
 var NATIVE_TO_WEB = {
     setAuthorizationToken: function(authtoken){
-        GLOBAL.AuthToken.set(authtoken);
+        GLOBAL.AuthToken = authtoken;
     },
     setPDAToken: function(pdatoken){
-        GLOBAL.PDAToken.set(pdatoken);
+        GLOBAL.PDAToken = pdatoken;
     },
     setShpNo: function (shpno){
-        GLOBAL.ShpNo.set(shpno);
+        GLOBAL.ShpNo = shpno ;
+    },
+    setMachineID: function(macno){
+        GLOBAL.MacNo = macno;
     },
     startPOTrain: function(){
       location.href = "train1.html"  
@@ -170,7 +273,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let apiVer = "v2"
     axios.defaults.baseURL = "http://10.254.247.103:18718/api/Shipping/" + apiVer + "/"
     //(v1)// axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
-    axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.AuthToken.get(); //v2
+    axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.AuthToken; //v2
     axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*',
     axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE'
     //axios.defaults.timeout = 45000; NO TIMEOUT REQUEST
@@ -194,5 +297,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
     history.pushState(null, null, location.href)
     console.log("global script LOADED")
     console.log("TEST display GLOBAL data: ")
-    console.table(Object.keys(GLOBAL).map(function(key) {return {k: key, v: GLOBAL[key].get()}}).reduce(function(map, obj){map[obj.k] = obj.v ; return map;}, {}))
+    // console.table(Object.keys(GLOBAL).map(function(key) {return {k: key, v: GLOBAL[key].get()}}).reduce(function(map, obj){map[obj.k] = obj.v ; return map;}, {}))
 });
