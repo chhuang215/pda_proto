@@ -28,100 +28,9 @@ let _trainloadno = null;
 let _logsymbol = null;
 let _carNo = null;
 let _carList = null;
-let _sysDate;
+let _sysDate = null;
 
 var GLOBAL = {
-    set AuthToken(token){
-        _authtoken = token;
-        axios.defaults.headers.common['X-Powered-TK'] = token;
-        localStorage.setItem("AuthToken", token);
-    },
-    get AuthToken(){
-        if(!_authtoken) {
-            _authtoken = localStorage.getItem("AuthToken");
-        } 
-        return _authtoken
-    },
-    set PDAToken(token){
-        _pdatoken = token;
-        localStorage.setItem("PDAToken", token);
-    },
-    get PDAToken(){
-        if(!_pdatoken) {
-            _pdatoken = localStorage.getItem("PDAToken");
-        } 
-        return _pdatoken
-    },
-    set ShpNo(shpNo){
-        _shpno = shpNo;
-        localStorage.setItem("ShpNo", shpNo);
-    },
-    get ShpNo(){
-        if(!_shpno) {
-            _shpno = localStorage.getItem("ShpNo");
-        } 
-        return _shpno
-    },
-    get MacNo(){
-        if(!_macno) {
-            _macno = localStorage.getItem("MacNo");
-        } 
-        return _macno
-    },
-    set MacNo(macno){
-        _macno = localStorage.getItem("MacNo");
-        localStorage.setItem("MacNo", macno);
-    },
-    get TrainLoadNo(){
-        if(!_trainloadno) {
-            _trainloadno = localStorage.getItem("TrainLoadNo");
-        } 
-        return _trainloadno;
-    },
-    set TrainLoadNo(loadNo) {
-        _trainloadno = loadNo
-        localStorage.setItem("TrainLoadNo", loadNo);
-    },
-    get LogSymbol(){
-        if(!_logsymbol) {
-            _logsymbol = localStorage.getItem("LogSymbol");
-        } 
-        return _logsymbol
-    },
-    set LogSymbol(symbol) {
-        _logsymbol = symbol
-        localStorage.setItem("LogSymbol", symbol);
-    },
-    get CarLicenseNoList(){
-        if(!_carList){
-            _carList = JSON.parse(localStorage.getItem("CarLicenseNoList"));
-        }
-        return _carList;
-    },
-    set CarLicenseNoList(carList){
-        _carList = carList;
-        localStorage.setItem("CarLicenseNoList", JSON.stringify(carList))
-    },
-    get CarLicenseNo(){
-        if(!_carNo){
-            _carNo = localStorage.getItem("CarLicenseNo");
-        }
-        return _carNo;
-    },
-    set CarLicenseNo(carNo){
-        _carNo = carNo;
-        localStorage.setItem("CarLicenseNo", carNo)
-    },
-    get SystemDate(){
-        if(!_sysDate){
-            _sysDate = localStorage.getItem("SystemDate");
-        }
-        return _sysDate;
-    },
-    set SystemDate(date){
-        _sysDate = date;
-        localStorage.setItem("SystemDate", date)
-    },
     // PDAToken: {
     //     get: function(){ 
     //         if(!_pdatoken) {
@@ -220,6 +129,130 @@ var GLOBAL = {
     // }
 }
 
+Object.defineProperties(GLOBAL, {
+    'AuthToken' : {
+        enumerable: true,
+        get() {
+            if(!_authtoken) {
+                _authtoken = localStorage.getItem("AuthToken");
+            } 
+            return _authtoken
+        },
+        set(token){
+            _authtoken = token;
+            axios.defaults.headers.common['X-Powered-TK'] = token;
+            localStorage.setItem("AuthToken", token);
+        }
+    },
+    'PDAToken' : {
+        enumerable: true,
+        get() {
+            if(!_pdatoken) {
+                _pdatoken = localStorage.getItem("PDAToken");
+            } 
+            return _pdatoken
+        }, 
+        set(token){
+            _pdatoken = token;
+            localStorage.setItem("PDAToken", token);
+        }
+    }
+    ,
+    'ShpNo' : {
+        enumerable: true,
+        get() {
+            if(!_shpno) {
+                _shpno = localStorage.getItem("ShpNo");
+            } 
+            return _shpno
+        }, 
+        set(shpNo){
+            _shpno = shpNo;
+            localStorage.setItem("ShpNo", shpNo);
+        }
+    }
+    ,
+    'MacNo' : {
+        enumerable: true,
+        get() {
+            if(!_macno) {
+                _macno = localStorage.getItem("MacNo");
+            } 
+            return _macno
+        }, 
+        set(macno){
+            _macno = localStorage.getItem("MacNo");
+            localStorage.setItem("MacNo", macno);
+        }
+    },
+    'TrainLoadNo' : {
+        enumerable: true,
+        get() {
+            if(!_trainloadno) {
+                _trainloadno = localStorage.getItem("TrainLoadNo");
+            } 
+            return _trainloadno;
+        }, 
+        set(loadNo){
+            _trainloadno = loadNo
+            localStorage.setItem("TrainLoadNo", loadNo);
+        }
+    },
+    'LogSymbol' : {
+        enumerable: true,
+        get() {
+            if(!_logsymbol) {
+                _logsymbol = localStorage.getItem("LogSymbol");
+            } 
+            return _logsymbol
+        }, 
+        set(symbol){
+            _logsymbol = symbol
+            localStorage.setItem("LogSymbol", symbol);
+        }
+    },
+    'CarLicenseNoList' : {
+        enumerable: true,
+        get() {
+            if(!_carList){
+                _carList = JSON.parse(localStorage.getItem("CarLicenseNoList"));
+            }
+            return _carList;
+        }, 
+        set(carList){
+            _carList = carList;
+            localStorage.setItem("CarLicenseNoList", JSON.stringify(carList))
+        }
+    },
+    'CarLicenseNo' : {
+        enumerable: true,
+        get() {
+            if(!_carNo){
+                _carNo = localStorage.getItem("CarLicenseNo");
+            }
+            return _carNo;
+        }, 
+        set(carNo){
+            _carNo = carNo;
+            localStorage.setItem("CarLicenseNo", carNo)
+        }
+    }
+    ,
+    'SystemDate' : {
+        enumerable: true,
+        get() {
+            if(!_sysDate){
+                _sysDate = localStorage.getItem("SystemDate");
+            }
+            return _sysDate;
+        }, 
+        set(date){
+            _sysDate = date;
+            localStorage.setItem("SystemDate", date)
+        }
+    }
+});
+
 var WEB_TO_NATIVE = {
     QUIT_PO_TRAIN : function(){
         axios.delete('TrainProcessRecord', {
@@ -297,5 +330,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
     history.pushState(null, null, location.href)
     console.log("global script LOADED")
     console.log("TEST display GLOBAL data: ")
-    // console.table(Object.keys(GLOBAL).map(function(key) {return {k: key, v: GLOBAL[key].get()}}).reduce(function(map, obj){map[obj.k] = obj.v ; return map;}, {}))
+    console.table({...GLOBAL})
 });

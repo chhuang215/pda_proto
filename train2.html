@@ -22,8 +22,9 @@
             </div>
             <div class="col-right">
               <select  v-model="selectedStore">
-                <option v-for="s in storeList">{{s}}</option>
                 <option value="-1">新增</option>
+                
+                <option v-for="s in storeList" :value="s.StoreNo">{{s.StoreNo}} <!-- <span>已選取</span>  --> </option>         
                 <!-- <option disabled value="">選擇門市</option> -->
               </select>
             </div>
@@ -41,8 +42,8 @@
           </thead>
           <tbody>
             <tr v-for="(s, index) in selectedStoreList">
-              <td>{{s.branchId}}</td>
-              <td></td>
+              <td>{{s.StoreNo}}</td>
+              <td>{{s.StoreName}}</td>
               <td></td>
               <td>{{index+1}}</td>
               <!-- <td>{{branchName}}</td>

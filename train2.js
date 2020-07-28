@@ -4,6 +4,8 @@
  * @author Chih-Hsuan Huang
  */
 
+var mockData={Result:"1",Message:"成功",ReturnList:[{StoreNo:"016",StoreName:"鶯歌"},{StoreNo:"017",StoreName:"中壢"},{StoreNo:"030",StoreName:"新莊"},{StoreNo:"033",StoreName:"吉安"},{StoreNo:"036",StoreName:"國際"},{StoreNo:"037",StoreName:"中山"},{StoreNo:"039",StoreName:"土城"},{StoreNo:"040",StoreName:"羅東"},{StoreNo:"049",StoreName:"景美"},{StoreNo:"062",StoreName:"板橋"}]};
+
 // -- axios CancelToken
 const CancelToken = axios.CancelToken;
 var ctSource;
@@ -12,48 +14,55 @@ var ctSource;
 var vueApp = new Vue({
   el: '#train2',
   data: {
-    storeList : [219,1,2,3],
+    storeList : [],
     selectedStore : "",
     selectedStoreList: [],
     focusTxtInputStore: false
   },
   computed: {
-    selectedStoreIdList: function(){
+    storeNoList : function(){
+      return this.storeList.map(function(s) {return s.StoreNo});
+    },
+    selectedStoreNoList: function(){
       
-      return this.selectedStoreList.map(function(s) {return s.branchId});
+      return this.selectedStoreList.map(function(s) {return s.StoreNo});
     }
   },
   watch: {
-    selectedStore: function(storeId){  
-      storeId = parseInt(storeId);
-      console.log("oi") ;
-      if(!storeId){return};   
-      if(storeId == -1){
+    selectedStore: function(storeNo){  
+      //storeNo = parseInt(storeNo);
+      storeNo = storeNo.trim();
+      if(!storeNo){return};   
+      if(storeNo == -1){
         this.focusTxtInputStore=true;
         let input = this.$refs.txtNewStoreId; 
         setTimeout(function(){input.focus();}, 50);
         return
       };
-      if (!this.storeList.includes(storeId)){
-        console.log("???")
-        this.storeList.push(storeId);
+
+      if (!this.storeNoList.includes(storeNo)){
+        // console.log("???")
+        this.storeList.push({StoreNo: storeNo, StoreName:""});
       }
-      let index = this.selectedStoreIdList.indexOf(storeId);
-      
+      let index = this.selectedStoreNoList.indexOf(storeNo);
       if (index == -1){
-        this.selectedStoreList.push({
-          branchId: storeId
-        })
+        this.selectedStoreList.push(this.storeList[this.storeNoList.indexOf(storeNo)])
       }
       else{
         this.selectedStoreList.splice(index, 1)
       }
       this.selectedStore = "";
       localStorage.setItem('selectedStores', JSON.stringify(this.selectedStoreList))
-      //axios.get('api/Shipping/v1/TrainBranchBoxList/219').then(function (d) { console.log(d) }).catch(function (err) { console.log(err) });
+      //axios.post('StoreInfoCheck',{}).then(function (d) { console.log(d) }).catch(function (err) { console.log(err) });
     }
   },
   methods: {
+    fetchStoreList: function(){
+      
+      this.storeList = mockData.ReturnList
+      let shpNo = GLOBAL.ShpNo;
+      //axios.get('StoreList/shpNo').then(function (d) { console.log(d) }).catch(function (err) { console.log(err) });
+    },
     addNewStore: function(e){
       let sid = e.target.value
       if (sid.trim()) this.selectedStore = sid;
@@ -66,7 +75,7 @@ var vueApp = new Vue({
       this.focusTxtInputStore = false;
     },
     next: function (e) {
-      localStorage.setItem("StoreNo", this.selectedStoreIdList[0]);
+      localStorage.setItem("StoreNo", this.selectedStoreNoList[0]);
       location.href = "train3.html";
     },
     goBack: function (e) {
@@ -83,9 +92,11 @@ var vueApp = new Vue({
       localStorage.removeItem("boxNoIndex");
     }
 
+    this.fetchStoreList();
+
     if (localStorage.getItem('selectedStores')){
       this.selectedStoreList = JSON.parse(localStorage.getItem('selectedStores'));
     }
-    //axios.get('api/Shipping/v1/TrainBranchList').then(function (d) { console.log(d) }).catch(function (err) { console.log(err) });
+    
   },
 });
