@@ -41,27 +41,54 @@ var vueApp = new Vue({
       };
 
       if (!this.storeNoList.includes(storeNo)){
-        // console.log("???")
         this.storeList.push({StoreNo: storeNo, StoreName:""});
       }
       let index = this.selectedStoreNoList.indexOf(storeNo);
       if (index == -1){
-        this.selectedStoreList.push(this.storeList[this.storeNoList.indexOf(storeNo)])
+        let storeInfo = this.storeList[this.storeNoList.indexOf(storeNo)];
+        this.selectedStoreList.push(storeInfo)
+
+        let vueThis = this;
+
+        // axios.post('StoreInfoCheck',{
+        //   Data:{
+        //     LogSymbol:GLOBAL.LogSymbol,
+        //     CarLicenseNo: GLOBAL.CarLicenseNo,
+        //     UserAccount: GLOBAL.UserAccount,
+        //     StoreNo: storeNo,
+        //     ShpNo: GLOBAL.ShpNo,
+        //   }
+        // }).then(function (resp) { 
+        //   console.log(resp) 
+        //   let storeCheckInfo = resp.ReturnList;
+        //storeInfo = storeCheckInfo;
+        // }).catch(function (err) { 
+        //   console.log(err)
+        //  }).then(function(){
+        //   GLOBAL.SelectedStoresToLoad = this.selectedStoreList
+        // });
+        storeInfo.BoxCount = 2;
       }
       else{
         this.selectedStoreList.splice(index, 1)
       }
       this.selectedStore = "";
-      localStorage.setItem('selectedStores', JSON.stringify(this.selectedStoreList))
-      //axios.post('StoreInfoCheck',{}).then(function (d) { console.log(d) }).catch(function (err) { console.log(err) });
+      GLOBAL.SelectedStoresToLoad = this.selectedStoreList.map(function(s) {return {StoreNo: s.StoreNo, StoreName: s.StoreName}})
+      
     }
   },
   methods: {
     fetchStoreList: function(){
       
       this.storeList = mockData.ReturnList
-      let shpNo = GLOBAL.ShpNo;
-      //axios.get('StoreList/shpNo').then(function (d) { console.log(d) }).catch(function (err) { console.log(err) });
+
+      let vueThis = this;
+      // axios.get(`StoreList/${GLOBAL.ShpNo}`).then(function (resp) { 
+      //   console.log(resp) 
+      //   vueThis.storeList = resp.ReturnList;
+      // }).catch(function (err) { 
+      //   console.log(err) 
+      // }).then(function(){});
     },
     addNewStore: function(e){
       let sid = e.target.value
@@ -75,12 +102,27 @@ var vueApp = new Vue({
       this.focusTxtInputStore = false;
     },
     next: function (e) {
-      localStorage.setItem("StoreNo", this.selectedStoreNoList[0]);
+      let vueThis = this;
+      // axios.post('SetProcessStore', {
+      //     Data:{
+      //       LogSymbol: GLOBAL.LogSymbol,
+      //       CarLicenseNo: GLOBAL.CarLicenseNo,
+      //       ShpNo: GLOBAL.ShpNo,
+      //       Stores: vueThis.selectedStoreNoList
+      //     }
+      // }).then(function(resp){
+      //   console.log(resp)
+      //   GLOBAL.CurrentLoadingStore =  this.selectedStoreNoList[0];
+      //   location.href = "train3.html";  
+      // }).error(function(err){
+      //   console.log(err)
+      // }).then(function(){})
+
+      GLOBAL.CurrentLoadingStore =  this.selectedStoreNoList[0];
       location.href = "train3.html";
     },
     goBack: function (e) {
-      localStorage.removeItem("StoreNo");
-      localStorage.removeItem("selectedStores");
+      CLEAR_PAGE_DATA(PAGE.Train2)
       location.href = "train1.html";
     },
     exit: function(e){
@@ -94,8 +136,8 @@ var vueApp = new Vue({
 
     this.fetchStoreList();
 
-    if (localStorage.getItem('selectedStores')){
-      this.selectedStoreList = JSON.parse(localStorage.getItem('selectedStores'));
+    if (GLOBAL.SelectedStoresToLoad){
+      this.selectedStoreList = GLOBAL.SelectedStoresToLoad
     }
     
   },

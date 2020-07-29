@@ -51,11 +51,11 @@
           <div>{{noDataMessage}}</div>
           <div>{{errorMessage}}</div>
         </div>
-        <table class="tableData" v-show="boxData.length > 0">
+        <table class="tableData" v-show="boxes.length > 0">
           <thead>
             <tr> <th></th> <th>箱號</th> <th>門市</th> </tr>
           </thead>
-          <tbody v-for="{bdata, chkCode} in [{bdata: boxDataN, chkCode: 'N'},{bdata: boxDataY, chkCode: 'Y'},{bdata: boxDataE, chkCode: 'E'}]" v-show="chk_active == chkCode">
+          <tbody v-for="{bdata, chkCode} in [{bdata: boxesN, chkCode: 'N'},{bdata: boxesY, chkCode: 'Y'},{bdata: boxesE, chkCode: 'E'}]" v-show="chk_active == chkCode">
             <tr v-for="(boxListResult, index) in bdata">
               <td>{{index+1}}</td>
               <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>

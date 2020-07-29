@@ -12,12 +12,10 @@ var ctSource;
 var vueApp = new Vue({
   el: '#train3',
   data: {
-    storeNo: "",
-    workNo: "",
-    macNo: "",
-    carLicenseNo: "",
-    shpStore: "",
-    boxData: [],
+    boxes: [],
+    boxesN: [],
+    boxesY: [],
+    boxesE: [],
     chk_active: 'N',
     processingBoxes: [],
     fetchingData: false,
@@ -28,29 +26,29 @@ var vueApp = new Vue({
     manualInput: false,
   },
   computed: {
-    boxDataN: function(){
-      return this.boxData.filter(function (tb) { return tb.CHK == 'N' })
+    boxesN: function(){
+      return this.boxes.filter(function (tb) { return tb.LoadStatus == 'N' })
     },
-    boxDataY: function(){
-      return this.boxData.filter(function (tb) { return tb.CHK == 'Y' })
+    boxesY: function(){
+      return this.boxes.filter(function (tb) { return tb.LoadStatus == 'Y' })
     },
-    boxDataE: function(){
-      return this.boxData.filter(function (tb) { return tb.CHK == 'E' })
+    boxesE: function(){
+      return this.boxes.filter(function (tb) { return tb.LoadStatus == 'E' })
     },
     countN: function () {
-      return this.boxDataN.length
+      return this.boxesN.length
     },
     countY: function () {
-      return this.boxDataY.length
+      return this.boxesY.length
     },
     countE: function () {
-      return this.boxDataE.length
+      return this.boxesE.length
     },
     noDataMessage: function(){
       if (this.fetchingData){
         return "讀取中"
       }
-      else if (!this.fetchingData && this.boxData.length <= 0){
+      else if (!this.fetchingData && this.boxes.length <= 0){
         return "無資料"
       }
       return ""
@@ -71,20 +69,18 @@ var vueApp = new Vue({
       ctSource = CancelToken.source();
       this.errorMessage = "";
 
-      if (!localStorage.getItem('StoreNo')){
-        localStorage.setItem("StoreNo", "219");
+      if (!GLOBAL.CurrentLoadingStore){
+        GLOBAL.CurrentLoadingStore = "219";
       }    
-      this.storeNo = localStorage.getItem('StoreNo');
-      this.macNo = localStorage.getItem("MacNo");
-      this.carLicenseNo = localStorage.getItem("CarLicenseNo");
+
       let boxNos = localStorage.getItem("boxNoIndex");
 
-      if (!this.macNo || !this.carLicenseNo || !boxNos || !JSON.parse(boxNos)) {
+      if (!GLOBAL.MacNo || !GLOBAL.CarLicenseNo || !boxNos || !JSON.parse(boxNos)) {
         if (this.fetchingData) return;
         this.fetchingData = true;
         var vueThis = this;
         /* axios GET request*/
-        axios.get(`TrainBoxList/${this.storeNo}`, {
+        axios.get(`TrainBoxList/${GLOBAL.CurrentLoadingStore}`, {
           cancelToken: ctSource.token
         }).then(function(response) {
           console.log(response);
@@ -94,8 +90,8 @@ var vueApp = new Vue({
           };
       
           let boxInfo = data.ReturnList;
-          let storeNo = boxInfo.StoreNo;
-          let boxes = boxInfo.Boxs;
+          //let storeNo = boxInfo.StoreNo;
+          vueThis.boxes = boxInfo.Boxs.map(function(box) {box['LoadStatus'] = 'N'; return box;});
 
           localStorage.setItem("boxNoIndex", JSON.stringify(boxes.map(function(box) {
             localStorage.setItem(box.BoxNo, JSON.stringify(box));
@@ -120,7 +116,7 @@ var vueApp = new Vue({
       }
       else {
         let boxNoIndex = JSON.parse(localStorage.getItem("boxNoIndex"));
-        this.boxData = boxNoIndex.map(function (boxno) { return JSON.parse(localStorage.getItem(boxno)) });
+        this.boxes = boxNoIndex.map(function (boxno) { return JSON.parse(localStorage.getItem(boxno)) });
       }
     },
     toggleKeyboard: function(){
@@ -151,25 +147,25 @@ var vueApp = new Vue({
         return;
       }
       this.processingBoxes.push(boxno);
-      let tbIndex = this.boxData.findIndex(function (tb) { return tb.BoxNo == boxno });
+      let tbIndex = this.boxes.findIndex(function (tb) { return tb.BoxNo == boxno });
 
       if (tbIndex >= 0) {
-        let boxListResult = this.boxData[tbIndex];
-        if (boxListResult.CHK != 'E') {
-          let flag = (boxListResult.CHK == 'Y') ? 'N' : 'Y'
+        let loadingBox = this.boxes[tbIndex];
+        if (loadingBox.LoadStatus != 'E') {
+          let flag = (loadingBox.LoadStatus == 'Y') ? 'N' : 'Y'
 
-          let trainBoxParam = {
+          let boxLoadInfo = {
             TrainLoadNo: GLOBAL.TrainLoadNo,
             ShpNo: GLOBAL.ShpNo,
-            StoreNo: this.storeNo,
-            CarLicenseNo: this.carLicenseNo,
+            CarLicenseNo: GLOBAL.CarLicenseNo,
+            StoreNo: GLOBAL.CurrentLoadingStore,
             BoxNo: boxno,
           }
           console.log("updateChk " + boxno + " " + flag)
 
           let vueThis = this;
-          axios.post((flag == 'N') ? "BoxLoadCheck" : "BoxUnLoadCheck", {
-                Data: trainBoxParam
+          axios.post((flag == 'Y') ? "BoxLoadCheck" : "BoxUnLoadCheck", {
+                Data: boxLoadInfo
           }, {
                 timeout: 0,
                 cancelToken: ctSource.token
@@ -178,10 +174,12 @@ var vueApp = new Vue({
             if (response.data.Result != "1") {
               throw response.data.Result + " " + response.data.Message
             };
+            loadingBox.LoadStatus = flag;
+            localStorage.setItem(boxno, JSON.stringify(loadingBox));
           }).catch(function(err){
               console.log(err);
           }).then(function(){
-            vueThis.processingBoxes.splice(vueThis.processingBoxes.indexOf(boxno), 1)
+              vueThis.processingBoxes.splice(vueThis.processingBoxes.indexOf(boxno), 1)
           })
         }
         else {
@@ -191,10 +189,9 @@ var vueApp = new Vue({
       else {
         let newData = {
           BoxNo: boxno,
-          CHK: 'E',
-          StoreNo: ""
+          LoadStatus: 'E',
         }
-        this.boxData.push(newData);
+        this.boxes.push(newData);
         let lst = JSON.parse(localStorage.getItem("boxNoIndex"));
         lst.push(boxno);
         localStorage.setItem("boxNoIndex" , JSON.stringify(lst));
@@ -208,13 +205,13 @@ var vueApp = new Vue({
       if (ctSource){
         ctSource.cancel();
       }
-      let outDate = new Date();
+      //let outDate = new Date();
       let outReportParam = {
         TrainLoadNo: GLOBAL.TrainLoadNo,
         MacNo: GLOBAL.MacNo,
-        StoreNo: this.storeNo,
-        CarLicenseNo: this.carLicenseNo? this.carLicenseNo : "",
-        OutDate: "" + outDate.getFullYear() + ("0" + (outDate.getMonth() + 1)).slice(-2) + ("0" + outDate.getDate()).slice(-2)
+        StoreNo: GLOBAL.CurrentLoadingStore,
+        CarLicenseNo: GLOBAL.CarLicenseNo,
+        OutDate: GLOBAL.SystemDate
       }
       console.table(outReportParam);
       let vueThis = this;
@@ -226,7 +223,7 @@ var vueApp = new Vue({
         if (response.data.Result != 1) {
           throw response.data.Result + " " + response.data.Message
         };
-        vueThis.modalMessage = (response.data.ReturnList ? (" 單號: " + response.data.ReturnList) : "");
+        // vueThis.modalMessage = (response.data.ReturnList ? (" 單號: " + response.data.ReturnList) : "");
         vueThis.clearData();
       })
       .catch(function(error) {
@@ -265,9 +262,7 @@ var vueApp = new Vue({
       this.fetchData();
     },
     clearData: function () {
-      this.boxData = [];
-      localStorage.removeItem("carLicenseNo");
-      localStorage.removeItem("ShpStore");
+      this.boxes = [];
       let bIndex = JSON.parse(localStorage.getItem("boxNoIndex"))
       if (bIndex){
         for (let bno of bIndex){
@@ -288,9 +283,9 @@ var vueApp = new Vue({
       if (!document.hidden) {window.focus()}
     });
 
-    if (!localStorage.getItem('StoreNo')){
+    // if (!localStorage.getItem('StoreNo')){
       //this.goBack();
-    }    
+    // }    
 
     this.fetchData();
   },

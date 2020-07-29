@@ -20,15 +20,28 @@
 //     })
 // }
 
+const PAGE = {
+    Train1 : 1,
+    Train2 : 2,
+    Train3 : 3,
+    ALL: -1
+}
+
+let _userAccount = null;
 let _authtoken = null;
 let _pdatoken = null;
 let _shpno = null;
 let _macno = null;
 let _trainloadno = null;
 let _logsymbol = null;
+let _logUsers = null;
 let _carNo = null;
 let _carList = null;
+let _drivers = null;
+let _loadUsers = null;
 let _sysDate = null;
+let _selectedStores = null;
+let _currentStoreNo = null;
 
 var GLOBAL = {
     // PDAToken: {
@@ -130,6 +143,18 @@ var GLOBAL = {
 }
 
 Object.defineProperties(GLOBAL, {
+    'UserAccount' : {
+        enumerable: true,
+        get(){
+            if (!_userAccount){
+                _userAccount = localStorage.getItem("UserAccount");
+            }
+            return _userAccount
+        },set(user){
+            _userAccount = user;
+            localStorage.setItem("UserAccount", user);
+        }
+    },
     'AuthToken' : {
         enumerable: true,
         get() {
@@ -211,6 +236,19 @@ Object.defineProperties(GLOBAL, {
             localStorage.setItem("LogSymbol", symbol);
         }
     },
+    'LogUsers':{
+        enumerable: true,
+        get() {
+            if(!_logUsers){
+                _logUsers = JSON.parse(localStorage.getItem("LogUsers"));
+            }
+            return _logUsers;
+        }, 
+        set(users){
+            _logUsers = users;
+            localStorage.setItem("LogUsers", JSON.stringify(users))
+        },
+    },
     'CarLicenseNoList' : {
         enumerable: true,
         get() {
@@ -236,8 +274,35 @@ Object.defineProperties(GLOBAL, {
             _carNo = carNo;
             localStorage.setItem("CarLicenseNo", carNo)
         }
-    }
-    ,
+    },
+    'LoadOutUsers': {
+        enumerable: true,
+        get() {
+            if(!_loadUsers){
+                _loadUsers = localStorage.getItem("LoadOutUsers");
+                _loadUsers = _loadUsers ? JSON.parse(_loadUsers) : []
+            }
+            return _loadUsers;
+        }, 
+        set(users){
+            _loadUsers = users;
+            localStorage.setItem("LoadOutUsers", JSON.stringify(users))
+        },
+    },
+    'Drivers' : {
+        enumerable: true,
+        get() {
+            if(!_drivers){
+                _drivers = localStorage.getItem("Drivers");
+                _drivers = _drivers ? JSON.parse(_drivers) : []
+            }
+            return _drivers;
+        }, 
+        set(users){
+            _drivers = users;
+            localStorage.setItem("Drivers", JSON.stringify(users))
+        },
+    },
     'SystemDate' : {
         enumerable: true,
         get() {
@@ -250,8 +315,48 @@ Object.defineProperties(GLOBAL, {
             _sysDate = date;
             localStorage.setItem("SystemDate", date)
         }
+    },
+    'SelectedStoresToLoad':{
+        enumerable: true,
+        get() {
+            if(!_selectedStores){
+                _selectedStores = JSON.parse(localStorage.getItem("SelectedStoresToLoad"));
+            }
+            return _selectedStores;
+        }, 
+        set(stores){
+            _selectedStores = stores;
+            localStorage.setItem("SelectedStoresToLoad", JSON.stringify(stores))
+        },
+
+    },
+    'CurrentLoadingStore':{
+        enumerable: true,
+        get() {
+            if(!_currentStoreNo){
+                _currentStoreNo = localStorage.getItem("CurrentLoadingStore");
+            }
+            return _currentStoreNo;
+        }, 
+        set(storeno){
+            _currentStoreNo = storeno;
+            localStorage.setItem("CurrentLoadingStore", storeno)
+        },
     }
 });
+
+const CLEAR_PAGE_DATA = function(page){
+    switch (page){
+        case PAGE.Train2: 
+            _trainloadno = null;
+            _selectedStores = null;
+            _currentStoreNo = null;
+            localStorage.removeItem("TrainLoadNo");
+            localStorage.removeItem("SelectedStoresToLoad");
+            localStorage.removeItem("CurrentLoadingStore");
+            break;
+    }
+}
 
 var WEB_TO_NATIVE = {
     QUIT_PO_TRAIN : function(){

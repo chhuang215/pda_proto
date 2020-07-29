@@ -48,10 +48,19 @@ var vueApp = new Vue({
       return  ""
     }
   },
-  watch:{},
+  watch:{
+    selectedCarLicense : function(carlicense){
+      GLOBAL.CarLicenseNo = carlicense;
+    },
+    selectedLoadUsers: function(users){
+      GLOBAL.LoadOutUsers = users;
+    },
+    selectedDrivers: function(drivers){
+      GLOBAL.Drivers = drivers
+    }
+  },
   methods: {
     fetchSettingData: function(){
-      
       var vueThis = this;
 
       let returnList = mockData.ReturnList; 
@@ -64,6 +73,7 @@ var vueApp = new Vue({
       GLOBAL.LogSymbol = returnList.LogSymbol;
       GLOBAL.CarLicenseNoList = vueThis.carLicenseList;
       GLOBAL.SystemDate =   vueThis.sysDate;
+      GLOBAL.LogUsers =  vueThis.logUsers;
       console.log(returnList)
       
       // axios.get(`TrainSettingInfo/${pdaToken}/${shpNo}`).then(function(response){
@@ -199,6 +209,7 @@ var vueApp = new Vue({
         //--ONLY FOR TEST--
         GLOBAL.CarLicenseNo = reqParam.Data.CarLicenseNo
         GLOBAL.TrainLoadNo = "CAR202007273615510"
+        location.href = "train2.html";
         //-----------------
 
       });
@@ -216,7 +227,22 @@ var vueApp = new Vue({
     authToken = GLOBAL.AuthToken;
     pdaToken = GLOBAL.PDAToken;
     shpNo = GLOBAL.ShpNo;
-    this.fetchSettingData();
+
+    
+
+    if(!GLOBAL.LogSymbol ||　!GLOBAL.SystemDate || !GLOBAL.CarLicenseNoList || !GLOBAL.LogUsers){
+      this.fetchSettingData();
+    }
+    else{
+      this.sysDate = GLOBAL.SystemDate;
+      this.carLicenseList = GLOBAL.CarLicenseNoList;
+      this.logUsers = GLOBAL.LogUsers;
+      this.selectedCarLicense = GLOBAL.CarLicenseNo;
+      this.selectedLoadUsers = GLOBAL.LoadOutUsers;
+      this.selectedDrivers = GLOBAL.Drivers;
+    }
+
+    
     if (!authToken || !pdaToken || !shpNo){
       console.log("No required Tokens and ShpNo")
       //this.exit();
