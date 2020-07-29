@@ -31,7 +31,7 @@ var vueApp = new Vue({
   },
   computed: {
     numOfLoadUsers: function(){
-      return Math.max(this.selectedLoadUsers.length + 1, 2);
+      return Math.max(this.selectedLoadUsers.filter(function(u) {if(u) return u}).length + 1, 2);
     },
     numOfDrivers: function(){
       // return  Math.max(this.selectedDrivers.length+1,2);
@@ -102,12 +102,13 @@ var vueApp = new Vue({
         return;
       }
       if(userAccount){
-        if (index >= this.selectedLoadUsers.length){
-          this.selectedLoadUsers.push(userAccount);
-          e.target.value = ""
-        }else{
-          this.$set(this.selectedLoadUsers, index, userAccount) // for reactive
-        }
+        this.$set(this.selectedLoadUsers, index, userAccount)
+        // if (index >= this.selectedLoadUsers.length){
+        //   this.selectedLoadUsers.push(userAccount);
+        //   e.target.value = ""
+        // }else{
+        //   this.$set(this.selectedLoadUsers, index, userAccount) // for reactive
+        // }
       }
       else{
         this.selectedLoadUsers.splice(index, 1);
@@ -173,9 +174,9 @@ var vueApp = new Vue({
         Data: {
           LogSymbol: GLOBAL.LogSymbol,
           CarLicenseNo: this.selectedCarLicense,
-          SecondUser: this.selectedLoadUsers[1] ? this.selectedLoadUsers[1] : "",
-          LoadOutUsers: this.selectedLoadUsers,
-          Drivers: this.selectedDrivers
+          SecondUser: "",
+          LoadOutUsers: this.selectedLoadUsers.filter(function(u) {if(u) return u}),
+          Drivers: this.selectedDrivers.filter(function(u) {if(u) return u})
         }
       }
       console.table(reqParam);
