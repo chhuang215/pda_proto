@@ -3,7 +3,7 @@
  * Page 3 Of 3
  * @author Chih-Hsuan Huang
  */
-
+var mockData={Result:"1",Message:"成功",ReturnList:{StoreNo:"219",Boxs:[{BoxNo:"B426015300082",StayDays:1},{BoxNo:"B168015300128",StayDays:2},{BoxNo:"B168015300135",StayDays:0},{BoxNo:"A921015110416",StayDays:0},{BoxNo:"A921015110417",StayDays:0},{BoxNo:"A921015110419",StayDays:5},{BoxNo:"A931015110500",StayDays:3},{BoxNo:"A921015110422",StayDays:3}]}};
 // -- axios CancelToken
 const CancelToken = axios.CancelToken;
 var ctSource;
@@ -13,9 +13,9 @@ var vueApp = new Vue({
   el: '#train3',
   data: {
     boxes: [],
-    boxesN: [],
-    boxesY: [],
-    boxesE: [],
+    // boxesN: [],
+    // boxesY: [],
+    // boxesE: [],
     chk_active: 'N',
     processingBoxes: [],
     fetchingData: false,
@@ -69,50 +69,67 @@ var vueApp = new Vue({
       ctSource = CancelToken.source();
       this.errorMessage = "";
 
-      if (!GLOBAL.CurrentLoadingStore){
-        GLOBAL.CurrentLoadingStore = "219";
-      }    
+      // if (!GLOBAL.CurrentLoadingStore){
+      //   GLOBAL.CurrentLoadingStore = "219";
+      // }    
 
       let boxNos = localStorage.getItem("boxNoIndex");
 
-      if (!GLOBAL.MacNo || !GLOBAL.CarLicenseNo || !boxNos || !JSON.parse(boxNos)) {
+      if (!boxNos || !JSON.parse(boxNos)) {
         if (this.fetchingData) return;
         this.fetchingData = true;
-        var vueThis = this;
+        var vueThis  = this;
         /* axios GET request*/
-        axios.get(`TrainBoxList/${GLOBAL.CurrentLoadingStore}`, {
-          cancelToken: ctSource.token
-        }).then(function(response) {
-          console.log(response);
-          let data = response.data;
-          if (data.Result != 1) {
-            throw data.Result + " " + data.Message
-          };
+        // axios.get(`TrainBoxList/${GLOBAL.CurrentLoadingStore}`, {
+        //   cancelToken: ctSource.token
+        // }).then(function(response) {
+        //   console.log(response);
+        //   let data = response.data;
+        //   if (data.Result != 1) {
+        //     throw data.Result + " " + data.Message
+        //   };
       
-          let boxInfo = data.ReturnList;
-          //let storeNo = boxInfo.StoreNo;
-          vueThis.boxes = boxInfo.Boxs.map(function(box) {box['LoadStatus'] = 'N'; return box;});
+        //   let boxInfo = data.ReturnList;
+        //   //let storeNo = boxInfo.StoreNo;
+        //   vueThis.boxes = boxInfo.Boxs.map(function(box) {box['LoadStatus'] = 'N'; return box;});
 
-          localStorage.setItem("boxNoIndex", JSON.stringify(boxes.map(function(box) {
-            localStorage.setItem(box.BoxNo, JSON.stringify(box));
-            return box.BoxNo
-          })));
-          vueThis.chk_active = 'N';
-        })
-        .catch(function(error) {
-          if (axios.isCancel(error)) {
-            vueThis.errorMessage = "讀取中斷";
-          }
-          else {
-            vueThis.errorMessage = "無法讀取資料: " + error;
-            vueThis.modalMessage += "無法讀取資料\n" + error + "\n"
-          }
-          console.log("errMessage: " + error);
-        })
-        .then(function() {
-          vueThis.fetchingData = false;
-        });
+        //   localStorage.setItem("boxNoIndex", JSON.stringify(boxes.map(function(box) {
+        //     localStorage.setItem(box.BoxNo, JSON.stringify(box));
+        //     return box.BoxNo
+        //   })));
+        //   vueThis.chk_active = 'N';
+        // })
+        // .catch(function(error) {
+        //   if (axios.isCancel(error)) {
+        //     vueThis.errorMessage = "讀取中斷";
+        //   }
+        //   else {
+        //     vueThis.errorMessage = "無法讀取資料: " + error;
+        //     vueThis.modalMessage += "無法讀取資料\n" + error + "\n"
+        //   }
+        //   console.log("errMessage: " + error);
+        // })
+        // .then(function() {
+        //   vueThis.fetchingData = false;
+        // });
         /*axios GET request end*/
+
+        // TEST: MOCK
+        let data = mockData;
+        if (data.Result != 1) {
+          throw data.Result + " " + data.Message
+        };
+    
+        let boxInfo = data.ReturnList;
+        //let storeNo = boxInfo.StoreNo;
+        vueThis.boxes = boxInfo.Boxs.map(function(box) {box['LoadStatus'] = 'N'; return box;});
+
+        localStorage.setItem("boxNoIndex", JSON.stringify(vueThis.boxes.map(function(box) {
+          localStorage.setItem(box.BoxNo, JSON.stringify(box));
+          return box.BoxNo
+        })));
+        vueThis.chk_active = 'N';
+        vueThis.fetchingData = false;
       }
       else {
         let boxNoIndex = JSON.parse(localStorage.getItem("boxNoIndex"));
@@ -260,6 +277,9 @@ var vueApp = new Vue({
     refetch: function () {
       this.clearData();
       this.fetchData();
+    },
+    nextBatch: function(){
+      
     },
     clearData: function () {
       this.boxes = [];

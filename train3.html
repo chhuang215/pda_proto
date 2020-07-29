@@ -53,13 +53,13 @@
         </div>
         <table class="tableData" v-show="boxes.length > 0">
           <thead>
-            <tr> <th></th> <th>箱號</th> <th>門市</th> </tr>
+            <tr> <th></th> <th>箱號</th> <!-- <th>門市</th> --> </tr>  
           </thead>
           <tbody v-for="{bdata, chkCode} in [{bdata: boxesN, chkCode: 'N'},{bdata: boxesY, chkCode: 'Y'},{bdata: boxesE, chkCode: 'E'}]" v-show="chk_active == chkCode">
-            <tr v-for="(boxListResult, index) in bdata">
+            <tr v-for="(aBox, index) in bdata">
               <td>{{index+1}}</td>
-              <td>{{boxListResult.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(boxListResult.BoxNo) != -1">處理中...</span></td>
-              <td>{{boxListResult.StoreNo}}</td>
+              <td>{{aBox.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(aBox.BoxNo) != -1">處理中...</span></td>
+              <!-- <td></td> -->
             </tr>
           </tbody>
         </table>
@@ -68,7 +68,7 @@
         <div><button id="btnExit" @click="exit" class="btn" tabindex="-1" :disabled="fetchingReport">結束</button></div>
         <div><button id="btnBack" @click="goBack" class="btn" tabindex="-1" :disabled="fetchingReport">上一步</button></div>
         <div><button id="btnFetch" @click="refetch" class="btn" tabindex="-1" :disabled="fetchingData">重讀</button></div>
-        <div><button id="btnNextBatch" class="btn" tabindex="-1">下一批</button></div>
+        <div><button id="btnNextBatch" @click="nextBatch" class="btn" tabindex="-1">下一批</button></div>
       </div>
       <modal @modal-close="confirmModalClose" :canclose="!axiosFetching" :openmodal="modalMessage">
         <div slot="body">{{modalMessage}}</div>
@@ -80,7 +80,7 @@
   </div>
   <script src="es6-promise.auto.min.js"></script>
   <script src="axios.min.js"></script>
-  <script src="vue.min.js"></script>
+  <script src="vue.js"></script>
   <script src="script.js"></script>
   <script src="modal.component.js"></script>
   <script src="train3.js"></script>
