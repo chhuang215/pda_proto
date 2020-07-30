@@ -37,6 +37,27 @@
     font-size: 15px;
 }
 
+.boxDetailBody{
+    margin: 0 -13px; 
+    overflow: auto; 
+    max-height: 66vh;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+}
+.boxDetailBody table{
+    border-collapse: collapse;
+}
+
+.boxDetailBody table tbody{
+
+    border-bottom: 1px solid #cccccc;
+
+}
+.boxDetailBody table tbody td{
+    padding: 7px;
+}
+
+
 .tableWrapper {
     position: absolute;
     top: 78px;
@@ -49,12 +70,16 @@
     table-layout: fixed;
 }
 .tableData tbody td:nth-child(2), .tableData th:nth-child(2) {
-    width: 66%;
+    width: 72%;
 }
 
 .tableData tbody td:nth-child(1), .tableData tbody td:nth-child(3),
 .tableData th:nth-child(1), .tableData th:nth-child(3) {
-    width: 16%;
+    width: 10%;
+}
+
+.tableWrapper table tbody tr:active, .tableWrapper table tbody td:active{
+    background: yellow ;
 }
 
 @media all and (max-height: 350px) { 

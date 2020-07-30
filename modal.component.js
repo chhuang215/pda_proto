@@ -16,8 +16,8 @@ Vue.component("modal", {
     }
   },
   watch: { 
-    openmodal: function(open) {
-      if (!open){
+    openmodal: function(isOpen) {
+      if (!isOpen){
         this.$emit("modal-close");
       }
     }
@@ -28,6 +28,9 @@ Vue.component("modal", {
     <div class="modal-mask" v-if="openmodal">
       <div class="modal-wrapper" >
         <div class="modal-container">
+          <div>
+            <slot name="header"></slot>
+          </div>
           <div class="modal-body">
             <slot name="body"></slot>
           </div>

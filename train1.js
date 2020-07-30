@@ -242,7 +242,6 @@ var vueApp = new Vue({
       this.selectedDrivers = GLOBAL.Drivers;
     }
 
-    
     if (!authToken || !pdaToken || !shpNo){
       console.log("No required Tokens and ShpNo")
       //this.exit();

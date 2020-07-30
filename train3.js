@@ -4,6 +4,7 @@
  * @author Chih-Hsuan Huang
  */
 var mockData={Result:"1",Message:"成功",ReturnList:{StoreNo:"219",Boxs:[{BoxNo:"B426015300082",StayDays:1},{BoxNo:"B168015300128",StayDays:2},{BoxNo:"B168015300135",StayDays:0},{BoxNo:"A921015110416",StayDays:0},{BoxNo:"A921015110417",StayDays:0},{BoxNo:"A921015110419",StayDays:5},{BoxNo:"A931015110500",StayDays:3},{BoxNo:"A921015110422",StayDays:3}]}};
+var mockBoxDetail={Result:"1",Message:"成功",ReturnList:{StoreNo:"219",BoxNo:"A921015110417",BoxItems:[{ItemNo:"178573",ItemName:"遠傳一卡通 SIM卡(3G+4G)",Qty:2},{ItemNo:"119904",ItemName:"R-driver D-sub(母) 對 DVI-I轉換器",Qty:1},{ItemNo:"198188",ItemName:"KINYO 1切6座3孔2.7M延長線",Qty:1},{ItemNo:"199569",ItemName:"DIKE Handy享樂無限藍牙接收器",Qty:3},{ItemNo:"206672",ItemName:"iPad Pro 12.9 Wi-Fi+LTE 128GB 銀色",Qty:1},{ItemNo:"207771",ItemName:"13.3 MBPwTB 1.4G(4核)/8G/512G/IIPG645/灰",Qty:3},{ItemNo:"122032",ItemName:"R-driver CAT6E 網路線-7M(灰)",Qty:2},{ItemNo:"207770",ItemName:"13.3 MBPwTB 1.4G(4核)/8G/256G/IIPG645/銀",Qty:4}]}};
 // -- axios CancelToken
 const CancelToken = axios.CancelToken;
 var ctSource;
@@ -13,9 +14,6 @@ var vueApp = new Vue({
   el: '#train3',
   data: {
     boxes: [],
-    // boxesN: [],
-    // boxesY: [],
-    // boxesE: [],
     chk_active: 'N',
     processingBoxes: [],
     fetchingData: false,
@@ -24,6 +22,7 @@ var vueApp = new Vue({
     modalMessage: "",
     modalCloseAction: null,
     manualInput: false,
+    boxDetail: null,
   },
   computed: {
     boxesN: function(){
@@ -43,6 +42,18 @@ var vueApp = new Vue({
     },
     countE: function () {
       return this.boxesE.length
+    },
+    boxDetailBoxNo: function(){
+      if (this.boxDetail){
+        return this.boxDetail.BoxNo
+      }
+      return null;
+    },
+    boxDetailItems: function(){
+      if (this.boxDetail){
+        return this.boxDetail.BoxItems
+      }
+      return null;
     },
     noDataMessage: function(){
       if (this.fetchingData){
@@ -143,7 +154,7 @@ var vueApp = new Vue({
       this.inputFocus();
     },
     inputFocus: function(e){
-      if (this.axiosFetching) return;
+      if (this.axiosFetching || !!this.boxDetail) return;
       let input = this.$refs.txtBoxNo
       if (!this.manualInput){
         input.readOnly = true;
@@ -157,7 +168,7 @@ var vueApp = new Vue({
         else {input.focus();console.log("showkeyboard")}
       }
     },
-    updateChk: function () {
+    updateBoxLoadStatus: function () {
       let boxno = this.$refs.txtBoxNo.value.trim();
       this.$refs.txtBoxNo.value = "";
       if (!boxno || this.processingBoxes.includes(boxno)) {
@@ -178,7 +189,7 @@ var vueApp = new Vue({
             StoreNo: GLOBAL.CurrentLoadingStore,
             BoxNo: boxno,
           }
-          console.log("updateChk " + boxno + " " + flag)
+          console.log("updateBoxLoadStatus " + boxno + " " + flag)
 
           let vueThis = this;
           axios.post((flag == 'Y') ? "BoxLoadCheck" : "BoxUnLoadCheck", {
@@ -215,6 +226,10 @@ var vueApp = new Vue({
         localStorage.setItem(boxno, JSON.stringify(newData));
         this.processingBoxes.splice(this.processingBoxes.indexOf(boxno), 1)
       }
+    },
+    openBoxDetail(boxno){
+      this.boxDetail = mockBoxDetail.ReturnList
+      document.activeElement.blur();
     },
     outReport: function () {
       if (this.fetchingReport) return;
