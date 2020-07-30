@@ -62,12 +62,10 @@ body {
     }
 }
 
-
 .tableWrapper {
     overflow: auto;
     border: 1px solid #cccccc;
     border-radius: 6px;
-    /* margin-bottom: 45px; */
 }
 
 .tableWrapper table {

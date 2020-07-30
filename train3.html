@@ -76,28 +76,8 @@
           <button class="modal-default-button" @click="confirmModalClose" v-show="!axiosFetching">完成</button>
         </div>
       </modal>
-      <modal :openmodal="!!boxDetail" :canclose="true">
-        <div slot="header" style="font-weight: bold;">箱號 : {{boxDetailBoxNo}}</div>
-        <div slot="body" class="boxDetailBody"> 
-          <table>
-            <tbody v-for="{ItemNo, ItemName, Qty} in boxDetailItems" :key="ItemNo">
-              <tr><td>貨號: {{ItemNo}}</td><td>數量: {{Qty}}</td></tr>
-              <tr><td colspan="2"><span style="font-size:15px">{{ItemName}}</span></td></tr>
-            </tbody>
-          </table>
-          <!-- <div v-for="{ItemNo, ItemName, Qty} in boxDetailItems" :key="ItemNo">
-            <div><span>{{ItemNo}}</span> <span>{{Qty}}</span></div>
-            <div>{{ItemName}}</div>
-          </div>
-          <div v-for="{ItemNo, ItemName, Qty} in boxDetailItems" :key="ItemNo + '2'">
-            <div><span>{{ItemNo}}</span> <span>{{Qty}}</span></div>
-            <div>{{ItemName}}</div>
-          </div> -->
-        </div>
-        <div slot="footer">
-          <button class="modal-default-button" @click="boxDetail=null; inputFocus()">關閉</button>
-        </div>
-      </modal>
+
+      <modal-box-detail :box-no="boxNoToShowDetail" @modal-close="boxNoToShowDetail=null; inputFocus()"></modal-box-detail>
 
     </div>
   </div>

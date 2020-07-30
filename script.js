@@ -23,8 +23,8 @@
 const PAGE = {
     Train1 : 1,
     Train2 : 2,
-    Train3 : 3,
-    ALL: -1
+    Train3 : 4,
+    ALL: 7
 }
 
 let _userAccount = null;
@@ -346,15 +346,28 @@ Object.defineProperties(GLOBAL, {
 });
 
 const CLEAR_PAGE_DATA = function(page){
-    switch (page){
-        case PAGE.Train2: 
-            _trainloadno = null;
-            _selectedStores = null;
-            _currentStoreNo = null;
-            localStorage.removeItem("TrainLoadNo");
-            localStorage.removeItem("SelectedStoresToLoad");
-            localStorage.removeItem("CurrentLoadingStore");
-            break;
+
+    if (page & PAGE.Train1){
+
+    }
+    if (page & PAGE.Train2){
+        _trainloadno = null;
+        _selectedStores = null;
+        _currentStoreNo = null;
+        localStorage.removeItem("TrainLoadNo");
+        localStorage.removeItem("SelectedStoresToLoad");
+        localStorage.removeItem("CurrentLoadingStore");
+    }
+    if (page & PAGE.Train3){
+        _currentStoreNo = null;
+        localStorage.removeItem("CurrentLoadingStore");
+        let bIndex = JSON.parse(localStorage.getItem("boxNoIndex"))
+        if (bIndex){
+            for (let bno of bIndex){
+            localStorage.removeItem(bno);
+            }
+        }
+        localStorage.removeItem("boxNoIndex");
     }
 }
 

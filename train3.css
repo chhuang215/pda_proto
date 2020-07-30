@@ -87,3 +87,11 @@
         bottom: 30px;
     }
 }
+
+.height-trans-enter, .height-trans-out-leave-to {
+    opacity: 0;
+    max-height:0;
+}
+.height-trans-enter-active, .height-trans-leave-active {
+    transition: all .3s;
+}

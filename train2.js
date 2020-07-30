@@ -48,26 +48,11 @@ var vueApp = new Vue({
         let storeInfo = this.storeList[this.storeNoList.indexOf(storeNo)];
         this.selectedStoreList.push(storeInfo)
 
-        let vueThis = this;
+        this.fetchStoreInfoCheck(storeNo);
 
-        // axios.post('StoreInfoCheck',{
-        //   Data:{
-        //     LogSymbol:GLOBAL.LogSymbol,
-        //     CarLicenseNo: GLOBAL.CarLicenseNo,
-        //     UserAccount: GLOBAL.UserAccount,
-        //     StoreNo: storeNo,
-        //     ShpNo: GLOBAL.ShpNo,
-        //   }
-        // }).then(function (resp) { 
-        //   console.log(resp) 
-        //   let storeCheckInfo = resp.ReturnList;
-        //storeInfo = storeCheckInfo;
-        // }).catch(function (err) { 
-        //   console.log(err)
-        //  }).then(function(){
-        //   GLOBAL.SelectedStoresToLoad = this.selectedStoreList
-        // });
-        storeInfo.BoxCount = 2;
+        
+       
+     
       }
       else{
         this.selectedStoreList.splice(index, 1)
@@ -89,6 +74,40 @@ var vueApp = new Vue({
       // }).catch(function (err) { 
       //   console.log(err) 
       // }).then(function(){});
+    },
+    fetchStoreInfoCheck: function(storeNo){
+       // axios.post('StoreInfoCheck',{
+        //   Data:{
+        //     LogSymbol:GLOBAL.LogSymbol,
+        //     CarLicenseNo: GLOBAL.CarLicenseNo,
+        //     UserAccount: GLOBAL.UserAccount,
+        //     StoreNo: storeNo,
+        //     ShpNo: GLOBAL.ShpNo,
+        //   }
+        // }).then(function (resp) { 
+        //   console.log(resp) 
+        //   let storeCheckInfo = resp.ReturnList;
+        //storeInfo = storeCheckInfo;
+        // }).catch(function (err) { 
+        //   console.log(err)
+        //  }).then(function(){
+        //   GLOBAL.SelectedStoresToLoad = this.selectedStoreList
+        // });
+        let vueThis = this;
+        // var storeInfo = vueThis.selectedStoreList[vueThis.selectedStoreNoList.indexOf(storeNo)];
+        // storeInfo.BoxCount = Math.floor(Math.random()*100, storeNo);
+        // vueThis.$set(vueThis.selectedStoreList, vueThis.selectedStoreNoList.indexOf(storeNo), storeInfo)
+        var setBoxCount = function(storeNo){
+          let index = vueThis.selectedStoreNoList.indexOf(storeNo)
+          var storeInfo = vueThis.selectedStoreList[index];
+          storeInfo.BoxCount = Math.floor(Math.random()*100, storeNo);
+          vueThis.$set(vueThis.selectedStoreList, index, storeInfo)
+        //  console.log(storeInfo)
+        }
+        
+        // Mock loading behavoiur
+        setTimeout(setBoxCount, Math.random()*300 + 200, storeNo)
+        
     },
     addNewStore: function(e){
       let sid = e.target.value
@@ -117,12 +136,10 @@ var vueApp = new Vue({
       // }).error(function(err){
       //   console.log(err)
       // }).then(function(){})
-
-      GLOBAL.CurrentLoadingStore =  this.selectedStoreNoList[0];
       location.href = "train3.html";
     },
     goBack: function (e) {
-      CLEAR_PAGE_DATA(PAGE.Train2)
+      CLEAR_PAGE_DATA(PAGE.Train2 | PAGE.Train3)
       location.href = "train1.html";
     },
     exit: function(e){
@@ -138,6 +155,8 @@ var vueApp = new Vue({
 
     if (GLOBAL.SelectedStoresToLoad){
       this.selectedStoreList = GLOBAL.SelectedStoresToLoad
+      let vueThis = this;
+      this.selectedStoreNoList.forEach(function(storeNo) {vueThis.fetchStoreInfoCheck(storeNo)})
     }
     
   },

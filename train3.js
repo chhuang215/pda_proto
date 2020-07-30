@@ -10,6 +10,77 @@ const CancelToken = axios.CancelToken;
 var ctSource;
 // --
 
+Vue.component("modal-box-detail", {
+  props:{
+    boxNo:{
+      type:String
+    }
+  },
+  data: function(){
+    return{
+      boxDetailItems: null,
+      openmodal: false,
+      fetching: false
+    }
+  },
+  watch:{
+    boxNo: function(bno){
+      this.openmodal=!!bno;
+      if (bno){
+        this.fetching = true;
+        setTimeout(this.fetchBoxDetail,1000)
+        ;
+      }
+      else{
+        this.boxDetailItems = null;
+      }
+    }
+  },
+  methods:{
+    fetchBoxDetail: function(){
+      if (this.boxNo){
+        this.boxDetailItems = mockBoxDetail.ReturnList.BoxItems
+      }
+      this.fetching = false;
+    }
+  },
+  template:`
+    <transition name="modal" :duration="200">
+      <div class="modal-mask" v-if="openmodal">
+        <div class="modal-wrapper" >
+          <div class="modal-container">
+            <div>箱號 : {{boxNo}}</div>
+            <div class="modal-body">
+              <div v-show="fetching">Reading...</div>
+              <transition name="height-trans">
+                <div class="boxDetailBody" v-if="boxDetailItems"> 
+                  <table>
+                    <tbody v-for="{ItemNo, ItemName, Qty} in boxDetailItems" :key="ItemNo">
+                      <tr><td>貨號: {{ItemNo}}</td><td>數量: {{Qty}}</td></tr>
+                      <tr><td colspan="2"><span style="font-size:15px">{{ItemName}}</span></td></tr>
+                    </tbody>
+                  </table>
+                  <!-- <div v-for="{ItemNo, ItemName, Qty} in boxDetailItems" :key="ItemNo">
+                    <div><span>{{ItemNo}}</span> <span>{{Qty}}</span></div>
+                    <div>{{ItemName}}</div>
+                  </div>
+                  <div v-for="{ItemNo, ItemName, Qty} in boxDetailItems" :key="ItemNo + '2'">
+                    <div><span>{{ItemNo}}</span> <span>{{Qty}}</span></div>
+                    <div>{{ItemName}}</div>
+                  </div> -->
+                </div>
+              </transition>
+              <div v-if="!fetching && !boxDetailItems">
+                此箱無資料
+              </div>
+            </div>
+            <div class="modal-footer"><button class="modal-default-button" @click="$emit('modal-close')">關閉</button></div>
+          </div>
+        </div>
+      </div>
+    </transition>`
+});
+
 var vueApp = new Vue({
   el: '#train3',
   data: {
@@ -22,7 +93,7 @@ var vueApp = new Vue({
     modalMessage: "",
     modalCloseAction: null,
     manualInput: false,
-    boxDetail: null,
+    boxNoToShowDetail: null,
   },
   computed: {
     boxesN: function(){
@@ -42,18 +113,6 @@ var vueApp = new Vue({
     },
     countE: function () {
       return this.boxesE.length
-    },
-    boxDetailBoxNo: function(){
-      if (this.boxDetail){
-        return this.boxDetail.BoxNo
-      }
-      return null;
-    },
-    boxDetailItems: function(){
-      if (this.boxDetail){
-        return this.boxDetail.BoxItems
-      }
-      return null;
     },
     noDataMessage: function(){
       if (this.fetchingData){
@@ -83,7 +142,7 @@ var vueApp = new Vue({
       // if (!GLOBAL.CurrentLoadingStore){
       //   GLOBAL.CurrentLoadingStore = "219";
       // }    
-
+      GLOBAL.CurrentLoadingStore =  GLOBAL.SelectedStoresToLoad[0].StoreNo;
       let boxNos = localStorage.getItem("boxNoIndex");
 
       if (!boxNos || !JSON.parse(boxNos)) {
@@ -154,7 +213,7 @@ var vueApp = new Vue({
       this.inputFocus();
     },
     inputFocus: function(e){
-      if (this.axiosFetching || !!this.boxDetail) return;
+      if (this.axiosFetching || !!this.boxNoToShowDetail) return;
       let input = this.$refs.txtBoxNo
       if (!this.manualInput){
         input.readOnly = true;
@@ -228,8 +287,11 @@ var vueApp = new Vue({
       }
     },
     openBoxDetail(boxno){
-      this.boxDetail = mockBoxDetail.ReturnList
+      //this.boxDetail = mockBoxDetail.ReturnList
+      this.boxNoToShowDetail = boxno;
       document.activeElement.blur();
+      let vueThis = this;
+
     },
     outReport: function () {
       if (this.fetchingReport) return;
@@ -283,6 +345,15 @@ var vueApp = new Vue({
       }
     },
     goBack: function(e){
+      if (this.boxNoToShowDetail){
+        this.boxNoToShowDetail = "";
+        return;
+      }
+
+      if (this.modalMessage){
+        return;
+      }
+      
       this.outReport();
       this.modalCloseAction = function(){
         location.href = "train2.html";
@@ -298,13 +369,7 @@ var vueApp = new Vue({
     },
     clearData: function () {
       this.boxes = [];
-      let bIndex = JSON.parse(localStorage.getItem("boxNoIndex"))
-      if (bIndex){
-        for (let bno of bIndex){
-          localStorage.removeItem(bno);
-        }
-      }
-      localStorage.removeItem("boxNoIndex");
+      CLEAR_PAGE_DATA(PAGE.Train3);
     }
   },
   mounted: function () {
@@ -316,8 +381,9 @@ var vueApp = new Vue({
 
     window.addEventListener("visibilitychange", function(e){
       if (!document.hidden) {window.focus()}
-    });
-
+    });      
+    
+    
     // if (!localStorage.getItem('StoreNo')){
       //this.goBack();
     // }    
