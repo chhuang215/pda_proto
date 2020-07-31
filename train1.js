@@ -65,34 +65,40 @@ var vueApp = new Vue({
     fetchSettingData: function(){
       var vueThis = this;
 
-      let returnList = mockData.ReturnList; 
-      vueThis.sysDate = returnList.SystemDate;
-      let licenseList = returnList.Cars.map(function(car) {return car.CarLicenseNo});
-      vueThis.selectedCarLicense = licenseList[0];
-      vueThis.carLicenseList = licenseList;
-      vueThis.logUsers = vueThis.logUsers.concat(returnList.LogUsers);
+      // let returnList = mockData.ReturnList; 
+      // vueThis.sysDate = returnList.SystemDate;
+      // let licenseList = returnList.Cars.map(function(car) {return car.CarLicenseNo});
+      // vueThis.selectedCarLicense = licenseList[0];
+      // vueThis.carLicenseList = licenseList;
+      // vueThis.logUsers = vueThis.logUsers.concat(returnList.LogUsers);
       
-      GLOBAL.LogSymbol = returnList.LogSymbol;
-      GLOBAL.CarLicenseNoList = vueThis.carLicenseList;
-      GLOBAL.SystemDate =   vueThis.sysDate;
-      GLOBAL.LogUsers =  vueThis.logUsers;
-      console.log(returnList)
+      // GLOBAL.LogSymbol = returnList.LogSymbol;
+      // GLOBAL.CarLicenseNoList = vueThis.carLicenseList;
+      // GLOBAL.SystemDate =   vueThis.sysDate;
+      // GLOBAL.LogUsers =  vueThis.logUsers;
+      // console.log(returnList)
       
-      // axios.get(`TrainSettingInfo/${pdaToken}/${shpNo}`).then(function(response){
-      //   let resp = response.data;
-      //   console.log(resp);
-      //   if (resp.Result != "1") {
-      //     throw resp.Result + " " + resp.Message
-      //   };
-      //   let returnList = resp.ReturnList; 
-      //   vueThis.sysDate = returnList.SystemDate;
-      //   vueThis.carLicenseList = returnList.Cars.map(function(car) {return car.CarLicenseNo});
-      //   vueThis.logUsers = returnList.LogUsers;
+      axios.get(`TrainSettingInfo/${GLOBAL.PDAToken}/${GLOBAL.ShpNo}`).then(function(response){
+        let resp = response.data;
+        console.log(resp);
+        if (resp.Result != "1") {
+          throw resp.Result + " " + resp.Message
+        };
+        let returnList = resp.ReturnList; 
+        vueThis.sysDate = returnList.SystemDate;
+        vueThis.carLicenseList = returnList.Cars.map(function(car) {return car.CarLicenseNo});
+        vueThis.logUsers = returnList.LogUsers;
 
-      //   GLOBAL.LogSymbol.set(returnList.LogSymbol);
-      //   GLOBAL.CarLicenseNoList.set(vueThis.carLicenseList);
+        let licenseList = returnList.Cars.map(function(car) {return car.CarLicenseNo});
+        vueThis.selectedCarLicense = licenseList[0];
+        vueThis.carLicenseList = licenseList;
 
-      // }).catch(function(err){ console.log(err)});
+        GLOBAL.LogSymbol = returnList.LogSymbol;
+        GLOBAL.CarLicenseNoList = vueThis.carLicenseList;
+        GLOBAL.SystemDate =   vueThis.sysDate;
+        GLOBAL.LogUsers =  vueThis.logUsers;
+
+      }).catch(function(err){ console.log(err)});
     },
     onSelectCarLicense: function(e){
       let licenseNo = e.target.value;
@@ -235,7 +241,7 @@ var vueApp = new Vue({
       this.selectedDrivers = GLOBAL.Drivers;
     }
 
-    if (!GLOBAL.UserAccount || !GLOBAL.AuthToken || !GLOBAL.PDAToken || !GLOBAL.ShpNo){
+    if (!GLOBAL.UserAccount || !GLOBAL.PDAToken || !GLOBAL.ShpNo){
       
       console.log("No required Tokens and ShpNo");
       this.modalMessage = "No required Tokens and ShpNo"

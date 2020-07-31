@@ -439,11 +439,39 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // axios defaults
     let apiVer = "v2"
     axios.defaults.baseURL = "http://10.254.247.103:18718/api/Shipping/" + apiVer + "/"
+
+
+    
+
     //(v1)// axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
-    axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.AuthToken; //v2
+    // axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.AuthToken; //v2
+    axios.defaults.headers.common['Authorization'] = "Bearer G1xFuHrZosAweAVP9MT88OGtsFXUcKhF5ZxGSCMRy9clA4QImT_XpJgbbD-ljVozRBFRMZBdaAnnl9p0o7huhcyHzM5B3nKmdJM7OFUHFO0P3kfU09B46z0lEzJLbUn9YSWDxId8QHQyuO3v1yZDJTe2RoYPwzl39s7af-fC1vzC_yPKQUw_s6QoKCgUgWQuqjbguWQGdmo8Cios-SDr6QGlwxC0UbUZBOHWCBVJ-H3yR4b6l5XTWWoKXe2HYbcQTWOqwAZhfvjADkWqQSPdjSz7Lz9J4seWe163StxVik39NsoULZAlaUT0bzZI34IJtCUzlBuTx2S5UuMQ9Gec-H2-0MU1-86Cl9MQrLGsnR6dZkeRkxaHb_b0sSgGsF6r"
     axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*',
     axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE'
     //axios.defaults.timeout = 45000; NO TIMEOUT REQUEST
+    let loginData = {
+        "Data":{
+            "Account":"29440911",
+            "Password":"29440911",
+            "LoginIP":"10.1.62.250",
+            "MachineID":"00 00 00 00 00 02",
+            "VersionNo":"50",
+            "DataVersionNo":"20200722183033"
+        }
+    }
+
+    axios.post('LogPDALogin', loginData).then(function(resp){
+        let response = resp.data.ReturnList;
+        GLOBAL.PDAToken = response.PDAToken;
+        GLOBAL.ShpNo =  response.ShpNo;
+        GLOBAL.UserAccount = response.Account;
+    }).catch(function(err){
+        console.log(err);
+    }).then(function(){
+        console.log("global script LOADED")
+        console.log("TEST display GLOBAL data: ")
+        console.table({...GLOBAL})
+    })
 
     //DEBUG PURPOSE
     document.addEventListener("keyup", function(e){      
@@ -462,7 +490,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }, false);
     }, false);
     history.pushState(null, null, location.href)
-    console.log("global script LOADED")
-    console.log("TEST display GLOBAL data: ")
-    console.table({...GLOBAL})
+    
 });
