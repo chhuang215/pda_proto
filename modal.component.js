@@ -13,12 +13,18 @@ Vue.component("modal", {
     },
     openmodal: {
       default: false
-    }
+    },
+    onCloseAction:{
+      type:Function
+    },
   },
   watch: { 
     openmodal: function(isOpen) {
       if (!isOpen){
         this.$emit("modal-close");
+        if (this.onCloseAction){
+          this.onCloseAction();
+        }
       }
     }
   },

@@ -70,12 +70,12 @@
     table-layout: fixed;
 }
 .tableData tbody td:nth-child(2), .tableData th:nth-child(2) {
-    width: 72%;
+    width: 70%;
 }
 
 .tableData tbody td:nth-child(1), .tableData tbody td:nth-child(3),
 .tableData th:nth-child(1), .tableData th:nth-child(3) {
-    width: 10%;
+    width: 15%;
 }
 
 .tableWrapper table tbody tr:active, .tableWrapper table tbody td:active{

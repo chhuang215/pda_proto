@@ -53,13 +53,13 @@
         </div>
         <table class="tableData" v-show="boxes.length > 0">
           <thead>
-            <tr> <th></th> <th>箱號</th> <!-- <th>門市</th> --> </tr>  
+            <tr> <th></th> <th>箱號</th> <th>天數</th></tr>  
           </thead>
           <tbody v-for="{bdata, chkCode} in [{bdata: boxesN, chkCode: 'N'},{bdata: boxesY, chkCode: 'Y'},{bdata: boxesE, chkCode: 'E'}]" v-show="chk_active == chkCode">
-            <tr v-for="(aBox, index) in bdata" :key="aBox.BoxNo" @click="openBoxDetail(aBox.BoxNo)">
+            <tr v-for="({BoxNo, StayDays}, index) in bdata" :key="BoxNo" @click="openBoxDetail(BoxNo)">
               <td>{{index+1}}</td>
-              <td>{{aBox.BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(aBox.BoxNo) != -1">處理中...</span></td>
-              <!-- <td></td> -->
+              <td>{{BoxNo}} <span class="processing" v-show="processingBoxes.indexOf(BoxNo) != -1">處理中...</span></td>
+              <td>{{StayDays}}</td>
             </tr>
           </tbody>
         </table>
@@ -68,12 +68,12 @@
         <div><button id="btnExit" @click="exit" class="btn" tabindex="-1" :disabled="fetchingReport">結束</button></div>
         <div><button id="btnBack" @click="goBack" class="btn" tabindex="-1" :disabled="fetchingReport">上一步</button></div>
         <div><button id="btnFetch" @click="refetch" class="btn" tabindex="-1" :disabled="fetchingData">重讀</button></div>
-        <div><button id="btnNextBatch" @click="nextBatch" class="btn" tabindex="-1">下一批</button></div>
+        <div><button id="btnNextBatch" @click="nextBatch" class="btn" tabindex="-1" :disabled="axiosFetching">下一批</button></div>
       </div>
-      <modal @modal-close="confirmModalClose" :canclose="!axiosFetching" :openmodal="!!modalMessage">
+      <modal :canclose="!axiosFetching" :openmodal="!!modalMessage" :on-close-action="modalCloseAction">
         <div slot="body">{{modalMessage}}</div>
         <div slot="footer">
-          <button class="modal-default-button" @click="confirmModalClose" v-show="!axiosFetching">完成</button>
+          <button class="modal-default-button" @click="modalMessage=''" v-show="!axiosFetching">完成</button>
         </div>
       </modal>
 

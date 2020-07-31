@@ -10,6 +10,7 @@
   <!-- CSS: implied media=all -->
   <link rel="stylesheet" href="datepicker/datepicker.min.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="model.component.css">
   <link rel="stylesheet" href="train1.css">
   <!-- end CSS-->
 </head>
@@ -93,6 +94,12 @@
         </div>
       </div>
 
+      <modal :openmodal="!!modalMessage" :on-close-action="exit">
+        <div slot="body">{{modalMessage}}</div>
+        <div slot="footer">
+          <button class="modal-default-button" @click="modalMessage=''">關閉</button>
+        </div>
+      </modal>
   </div>
 
   <script src="es6-promise.auto.min.js"></script>
@@ -101,6 +108,7 @@
   <script src="axios.min.js"></script>
   <script src="vue.js"></script>
   <script src="script.js"></script>
+  <script src="modal.component.js"></script>
   <script src="train1.js"></script>
 </body>
 

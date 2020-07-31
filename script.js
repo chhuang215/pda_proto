@@ -347,8 +347,20 @@ Object.defineProperties(GLOBAL, {
 
 const CLEAR_PAGE_DATA = function(page){
 
-    if (page & PAGE.Train1){
-
+    if (page & PAGE.Train1){    
+        _logsymbol = null;
+        _logUsers = null;
+        _carNo = null;
+        _carList = null;
+        _drivers = null;
+        _loadUsers = null;
+        _sysDate = null;
+        localStorage.removeItem("LogSymbol");
+        localStorage.removeItem("CarLicenseNoList");
+        localStorage.removeItem("SystemDate");
+        localStorage.removeItem("LogUsers");
+        localStorage.removeItem("LoadOutUsers");
+        localStorage.removeItem("Drivers");
     }
     if (page & PAGE.Train2){
         _trainloadno = null;
@@ -413,8 +425,12 @@ var NATIVE_TO_WEB = {
     setMachineID: function(macno){
         GLOBAL.MacNo = macno;
     },
+    setUserAccount: function(account){
+        GLOBAL.UserAccount = account
+    },
     startPOTrain: function(){
-      location.href = "train1.html"  
+        CLEAR_PAGE_DATA(PAGE.Train1 | PAGE.Train2 | PAGE.Train3);
+        location.href = "train1.html"  
     }
 }
 

@@ -28,6 +28,8 @@ var vueApp = new Vue({
     selectedCarLicense: "",
     selectedLoadUsers: [],
     selectedDrivers:[],
+
+    modalMessage : "",
   },
   computed: {
     numOfLoadUsers: function(){
@@ -113,12 +115,6 @@ var vueApp = new Vue({
       }
       if(userAccount){
         this.$set(this.selectedLoadUsers, index, userAccount)
-        // if (index >= this.selectedLoadUsers.length){
-        //   this.selectedLoadUsers.push(userAccount);
-        //   e.target.value = ""
-        // }else{
-        //   this.$set(this.selectedLoadUsers, index, userAccount) // for reactive
-        // }
       }
       else{
         this.selectedLoadUsers.splice(index, 1);
@@ -197,8 +193,7 @@ var vueApp = new Vue({
         if (resp.Result != "1") {
           throw resp.Result + " " + resp.Message
         };
-        let trainLoadNo = resp.ReturnList; //上車憑證
-        GLOBAL.TrainLoadNo = trainLoadNo;
+        GLOBAL.TrainLoadNo = resp.ReturnList; //上車憑證
         location.href = "train2.html";
       })
       .catch(function(err) {
@@ -228,8 +223,6 @@ var vueApp = new Vue({
     pdaToken = GLOBAL.PDAToken;
     shpNo = GLOBAL.ShpNo;
 
-    
-
     if(!GLOBAL.LogSymbol ||　!GLOBAL.SystemDate || !GLOBAL.CarLicenseNoList || !GLOBAL.LogUsers){
       this.fetchSettingData();
     }
@@ -242,8 +235,10 @@ var vueApp = new Vue({
       this.selectedDrivers = GLOBAL.Drivers;
     }
 
-    if (!authToken || !pdaToken || !shpNo){
-      console.log("No required Tokens and ShpNo")
+    if (!GLOBAL.UserAccount || !GLOBAL.AuthToken || !GLOBAL.PDAToken || !GLOBAL.ShpNo){
+      
+      console.log("No required Tokens and ShpNo");
+      this.modalMessage = "No required Tokens and ShpNo"
       //this.exit();
       return;
     }

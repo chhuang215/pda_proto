@@ -20,7 +20,8 @@ Vue.component("modal-box-detail", {
     return{
       boxDetailItems: null,
       openmodal: false,
-      fetching: false
+      fetching: false,
+      t : null
     }
   },
   watch:{
@@ -28,10 +29,11 @@ Vue.component("modal-box-detail", {
       this.openmodal=!!bno;
       if (bno){
         this.fetching = true;
-        setTimeout(this.fetchBoxDetail,1000)
+        this.t = setTimeout(this.fetchBoxDetail,1000)
         ;
       }
       else{
+        if (this.t) clearTimeout(this.t);
         this.boxDetailItems = null;
       }
     }
@@ -51,7 +53,7 @@ Vue.component("modal-box-detail", {
           <div class="modal-container">
             <div>箱號 : {{boxNo}}</div>
             <div class="modal-body">
-              <div v-show="fetching">Reading...</div>
+              <div v-show="fetching">Loading...</div>
               <transition name="height-trans">
                 <div class="boxDetailBody" v-if="boxDetailItems"> 
                   <table>
@@ -299,7 +301,7 @@ var vueApp = new Vue({
       if (ctSource){
         ctSource.cancel();
       }
-      //let outDate = new Date();
+
       let outReportParam = {
         TrainLoadNo: GLOBAL.TrainLoadNo,
         MacNo: GLOBAL.MacNo,
@@ -322,7 +324,7 @@ var vueApp = new Vue({
       })
       .catch(function(error) {
         vueThis.modalMessage = error;
-        vueThis.modalCloseAction = null;
+        if (vueThis.modalCloseAction) vueThis.modalCloseAction = null;
         console.log(error);
       })
       .then(function() {
@@ -330,18 +332,12 @@ var vueApp = new Vue({
         vueThis.fetchingReport = false;
       });
     },
-    confirmModalClose : function(){
-      this.modalMessage = "";
-      if (this.modalCloseAction){
-        this.modalCloseAction();
-      }
-    }
-    ,
     exit: function(e){
       this.outReport();
+      let vueThis = this;
       this.modalCloseAction = function(){
         WEB_TO_NATIVE.QUIT_PO_TRAIN(); 
-        this.modalCloseAction = null;
+        vueThis.modalCloseAction = null;
       }
     },
     goBack: function(e){
@@ -355,9 +351,10 @@ var vueApp = new Vue({
       }
       
       this.outReport();
+      let vueThis = this;
       this.modalCloseAction = function(){
         location.href = "train2.html";
-        this.modalCloseAction = null;
+        vueThis.modalCloseAction = null;
       }
     },
     refetch: function () {
@@ -365,7 +362,11 @@ var vueApp = new Vue({
       this.fetchData();
     },
     nextBatch: function(){
-      
+      if(GLOBAL.SelectedStoresToLoad.length <= 1){
+        this.modalMessage = "last";
+      }else{
+
+      }
     },
     clearData: function () {
       this.boxes = [];
