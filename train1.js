@@ -63,49 +63,54 @@ var vueApp = new Vue({
   },
   methods: {
     fetchSettingData: function(){
-      var vueThis = this;
+      var v_this = this;
 
       // let returnList = mockData.ReturnList; 
-      // vueThis.sysDate = returnList.SystemDate;
+      // v_this.sysDate = returnList.SystemDate;
       // let licenseList = returnList.Cars.map(function(car) {return car.CarLicenseNo});
-      // vueThis.selectedCarLicense = licenseList[0];
-      // vueThis.carLicenseList = licenseList;
-      // vueThis.logUsers = vueThis.logUsers.concat(returnList.LogUsers);
+      // v_this.selectedCarLicense = licenseList[0];
+      // v_this.carLicenseList = licenseList;
+      // v_this.logUsers = v_this.logUsers.concat(returnList.LogUsers);
       
       // GLOBAL.LogSymbol = returnList.LogSymbol;
-      // GLOBAL.CarLicenseNoList = vueThis.carLicenseList;
-      // GLOBAL.SystemDate =   vueThis.sysDate;
-      // GLOBAL.LogUsers =  vueThis.logUsers;
+      // GLOBAL.CarLicenseNoList = v_this.carLicenseList;
+      // GLOBAL.SystemDate =   v_this.sysDate;
+      // GLOBAL.LogUsers =  v_this.logUsers;
       // console.log(returnList)
       
       axios.get(`TrainSettingInfo/${GLOBAL.PDAToken}/${GLOBAL.ShpNo}`).then(function(response){
         let resp = response.data;
-        console.log(resp);
+        console.log(response);
         if (resp.Result != "1") {
           throw resp.Result + " " + resp.Message
         };
+        
         let returnList = resp.ReturnList; 
-        vueThis.sysDate = returnList.SystemDate;
-        vueThis.carLicenseList = returnList.Cars.map(function(car) {return car.CarLicenseNo});
-        vueThis.logUsers = returnList.LogUsers;
+        v_this.sysDate = returnList.SystemDate;
+
+        v_this.logUsers = returnList.LogUsers;
+        v_this.$set(v_this.selectedLoadUsers, 0, GLOBAL.UserAccount)
 
         let licenseList = returnList.Cars.map(function(car) {return car.CarLicenseNo});
-        vueThis.selectedCarLicense = licenseList[0];
-        vueThis.carLicenseList = licenseList;
+        v_this.selectedCarLicense = licenseList[0];
+        v_this.carLicenseList = licenseList;
 
         GLOBAL.LogSymbol = returnList.LogSymbol;
-        GLOBAL.CarLicenseNoList = vueThis.carLicenseList;
-        GLOBAL.SystemDate =   vueThis.sysDate;
-        GLOBAL.LogUsers =  vueThis.logUsers;
+        GLOBAL.CarLicenseNoList = v_this.carLicenseList;
+        GLOBAL.SystemDate =  v_this.sysDate;
+        GLOBAL.LogUsers = v_this.logUsers;
 
-      }).catch(function(err){ console.log(err)});
+      }).catch(function(err){ 
+        console.log(err);
+        v_this.modalMessage=err
+      });
     },
     onSelectCarLicense: function(e){
       let licenseNo = e.target.value;
       if(licenseNo == "InsertNewCarlicense"){
         this.manualAddCarLicense = true;
-        let vueThis = this;
-        setTimeout(function(){vueThis.$refs.txtInputCarLicense.focus();}, 50);
+        let v_this = this;
+        setTimeout(function(){v_this.$refs.txtInputCarLicense.focus();}, 50);
         return;
       }
       this.selectedCarLicense = licenseNo;
@@ -115,8 +120,8 @@ var vueApp = new Vue({
       // If manually Add User
       if(userAccount == "InsertNewLoadUser"){
         this.manualAddLoadUser = index
-        let vueThis = this;
-        setTimeout(function(){vueThis.$refs.txtInputLoadUser[0].focus();}, 50);
+        let v_this = this;
+        setTimeout(function(){v_this.$refs.txtInputLoadUser[0].focus();}, 50);
         return;
       }
       if(userAccount){
@@ -130,8 +135,8 @@ var vueApp = new Vue({
       let userAccount = e.target.value;
       if(userAccount == "InsertNewDriver"){
         this.manualAddDriver = index
-        let vueThis = this;
-        setTimeout(function(){vueThis.$refs.txtInputDriver[0].focus();}, 50);
+        let v_this = this;
+        setTimeout(function(){v_this.$refs.txtInputDriver[0].focus();}, 50);
         return;
       }
       if(userAccount){
@@ -193,24 +198,30 @@ var vueApp = new Vue({
       }
       console.table(reqParam);
 
+
+      let v_this = this;
+
       axios.post("TrainLoadOutData", reqParam).then(function(response) {
+        console.log(response)
         let resp = response.data;
         console.log(resp);
         if (resp.Result != "1") {
           throw resp.Result + " " + resp.Message
         };
+        GLOBAL.CarLicenseNo = reqParam.Data.CarLicenseNo
         GLOBAL.TrainLoadNo = resp.ReturnList; //上車憑證
         location.href = "train2.html";
       })
       .catch(function(err) {
 
         console.log(JSON.stringify(err));
+        v_this.modalMessage = err;
       })
       .then(function() {
         //--ONLY FOR TEST--
-        GLOBAL.CarLicenseNo = reqParam.Data.CarLicenseNo
-        GLOBAL.TrainLoadNo = "CAR202007273615510"
-        location.href = "train2.html";
+        // GLOBAL.CarLicenseNo = reqParam.Data.CarLicenseNo
+        // GLOBAL.TrainLoadNo = "CAR202007273615510"
+        // location.href = "train2.html";
         //-----------------
 
       });

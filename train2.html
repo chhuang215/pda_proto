@@ -41,21 +41,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(s, index) in selectedStoreList">
-              <td>{{s.StoreNo}}</td>
-              <td>{{s.StoreName}}</td>
-              <td>{{s.BoxCount}}</td>
+            <tr v-for="({StoreNo, StoreName, BoxCount}, index) in selectedStoreList">
+              <td>{{StoreNo}}</td>
+              <td>{{StoreName}}</td>
+              <td>{{BoxCount}}</td>
               <td>{{index+1}}</td>
-              <!-- <td>{{branchName}}</td>
-              <td>{{boxCnt}}</td> -->
             </tr>
             <tr v-show="focusTxtInputStore">
-              <td> <input tabindex="-1" type="text" ref="txtNewStoreId" v-on:keyup.enter.prevent="addNewStore" @blur="clearInput"> </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <!-- <td>{{branchName}}</td>
-              <td>{{boxCnt}}</td> -->
+              <td> <input tabindex="-1" type="text" ref="txtNewStoreId" size="6" v-on:keyup.enter.prevent="addNewStore" @blur="clearInput"> </td>
+              <td colspan='3'></td>
             </tr>
           </tbody>
         </table>

@@ -101,6 +101,7 @@ body {
 }
 
 input[type="text"]{
+    box-sizing: border-box;
     padding: 2px;
     border-width: 1px;
     border-color: #000000;

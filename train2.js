@@ -21,7 +21,7 @@ var vueApp = new Vue({
   },
   computed: {
     storeNoList : function(){
-      return this.storeList.map(function(s) {return s.StoreNo});
+      return this.storeList.map(function(s) {return s.StoreNo.trim()});
     },
     selectedStoreNoList: function(){
       
@@ -31,8 +31,8 @@ var vueApp = new Vue({
   watch: {
     selectedStore: function(storeNo){  
       //storeNo = parseInt(storeNo);
+      if(!storeNo || !storeNo.trim()){return};   
       storeNo = storeNo.trim();
-      if(!storeNo){return};   
       if(storeNo == -1){
         this.focusTxtInputStore=true;
         let input = this.$refs.txtNewStoreId; 
@@ -46,12 +46,11 @@ var vueApp = new Vue({
       let index = this.selectedStoreNoList.indexOf(storeNo);
       if (index == -1){
         let storeInfo = this.storeList[this.storeNoList.indexOf(storeNo)];
+        storeInfo['StoreNo'] = storeInfo['StoreNo'].trim();
+        console.log(storeInfo);
         this.selectedStoreList.push(storeInfo)
 
         this.fetchStoreInfoCheck(storeNo);
-
-        
-       
      
       }
       else{
@@ -65,48 +64,56 @@ var vueApp = new Vue({
   methods: {
     fetchStoreList: function(){
       
-      this.storeList = mockData.ReturnList
+      // this.storeList = mockData.ReturnList
 
-      let vueThis = this;
-      // axios.get(`StoreList/${GLOBAL.ShpNo}`).then(function (resp) { 
-      //   console.log(resp) 
-      //   vueThis.storeList = resp.ReturnList;
-      // }).catch(function (err) { 
-      //   console.log(err) 
-      // }).then(function(){});
+      let v_this = this;
+      axios.get(`StoreList/${GLOBAL.ShpNo}`).then(function (resp) { 
+        console.log(resp) 
+        v_this.storeList = resp.data.ReturnList;
+      }).catch(function (err) { 
+        console.log(err) 
+      }).then(function(){});
     },
     fetchStoreInfoCheck: function(storeNo){
-       // axios.post('StoreInfoCheck',{
-        //   Data:{
-        //     LogSymbol:GLOBAL.LogSymbol,
-        //     CarLicenseNo: GLOBAL.CarLicenseNo,
-        //     UserAccount: GLOBAL.UserAccount,
-        //     StoreNo: storeNo,
-        //     ShpNo: GLOBAL.ShpNo,
-        //   }
-        // }).then(function (resp) { 
-        //   console.log(resp) 
-        //   let storeCheckInfo = resp.ReturnList;
-        //storeInfo = storeCheckInfo;
-        // }).catch(function (err) { 
-        //   console.log(err)
-        //  }).then(function(){
-        //   GLOBAL.SelectedStoresToLoad = this.selectedStoreList
-        // });
-        let vueThis = this;
-        // var storeInfo = vueThis.selectedStoreList[vueThis.selectedStoreNoList.indexOf(storeNo)];
-        // storeInfo.BoxCount = Math.floor(Math.random()*100, storeNo);
-        // vueThis.$set(vueThis.selectedStoreList, vueThis.selectedStoreNoList.indexOf(storeNo), storeInfo)
-        var setBoxCount = function(storeNo){
-          let index = vueThis.selectedStoreNoList.indexOf(storeNo)
-          var storeInfo = vueThis.selectedStoreList[index];
-          storeInfo.BoxCount = Math.floor(Math.random()*100, storeNo);
-          vueThis.$set(vueThis.selectedStoreList, index, storeInfo)
-        //  console.log(storeInfo)
+
+      let v_this = this;
+
+      axios.post('StoreInfoCheck',{
+        Data:{
+          LogSymbol:GLOBAL.LogSymbol,
+          CarLicenseNo: GLOBAL.CarLicenseNo,
+          UserAccount: GLOBAL.UserAccount,
+          StoreNo: storeNo,
+          ShpNo: GLOBAL.ShpNo,
         }
+      }).then(function (response) { 
+        console.log(response) 
+        let resp = response.data;
+        if (resp.Result != 1){
+          throw resp.Result + " " + resp.Message;
+        }
+        let storeInfo = resp.ReturnList;
+        v_this.$set(v_this.selectedStoreList, v_this.selectedStoreNoList.indexOf(storeNo), storeInfo)
+      }).catch(function (err) { 
+        console.error(err);
+        v_this.selectedStoreList.splice(v_this.selectedStoreNoList.indexOf(storeNo), 1)
+      }).then(function(){
+        GLOBAL.SelectedStoresToLoad = v_this.selectedStoreList
+      });
+        
+        // var storeInfo = v_this.selectedStoreList[v_this.selectedStoreNoList.indexOf(storeNo)];
+        // storeInfo.BoxCount = Math.floor(Math.random()*100, storeNo);
+        // v_this.$set(v_this.selectedStoreList, v_this.selectedStoreNoList.indexOf(storeNo), storeInfo)
+        // var setBoxCount = function(storeNo){
+        //   let index = v_this.selectedStoreNoList.indexOf(storeNo)
+        //   var storeInfo = v_this.selectedStoreList[index];
+        //   storeInfo.BoxCount = Math.floor(Math.random()*100, storeNo);
+        //   v_this.$set(v_this.selectedStoreList, index, storeInfo)
+        //  console.log(storeInfo)
+        // }
         
         // Mock loading behavoiur
-        setTimeout(setBoxCount, Math.random()*300 + 200, storeNo)
+        // setTimeout(setBoxCount, Math.random()*300 + 200, storeNo)
         
     },
     addNewStore: function(e){
@@ -121,22 +128,25 @@ var vueApp = new Vue({
       this.focusTxtInputStore = false;
     },
     next: function (e) {
-      let vueThis = this;
-      // axios.post('SetProcessStore', {
-      //     Data:{
-      //       LogSymbol: GLOBAL.LogSymbol,
-      //       CarLicenseNo: GLOBAL.CarLicenseNo,
-      //       ShpNo: GLOBAL.ShpNo,
-      //       Stores: vueThis.selectedStoreNoList
-      //     }
-      // }).then(function(resp){
-      //   console.log(resp)
-      //   GLOBAL.CurrentLoadingStore =  this.selectedStoreNoList[0];
-      //   location.href = "train3.html";  
-      // }).error(function(err){
-      //   console.log(err)
-      // }).then(function(){})
-      location.href = "train3.html";
+      let v_this = this;
+      axios.post('SetProcessStore', {
+          Data:{
+            LogSymbol: GLOBAL.LogSymbol,
+            CarLicenseNo: GLOBAL.CarLicenseNo,
+            ShpNo: GLOBAL.ShpNo,
+            Stores: v_this.selectedStoreNoList
+          }
+      }).then(function(resp){
+        console.log(resp)
+        if (resp.data.Result != 1 ){
+          throw resp.data.Result + " " + resp.data.Message
+        }
+        // GLOBAL.CurrentLoadingStore =  this.selectedStoreNoList[0];
+        location.href = "train3.html";  
+      }).error(function(err){
+        console.log(err)
+      }).then(function(){})
+      // location.href = "train3.html";
     },
     goBack: function (e) {
       CLEAR_PAGE_DATA(PAGE.Train2 | PAGE.Train3)
@@ -155,8 +165,8 @@ var vueApp = new Vue({
 
     if (GLOBAL.SelectedStoresToLoad){
       this.selectedStoreList = GLOBAL.SelectedStoresToLoad
-      let vueThis = this;
-      this.selectedStoreNoList.forEach(function(storeNo) {vueThis.fetchStoreInfoCheck(storeNo)})
+      let v_this = this;
+      this.selectedStoreNoList.forEach(function(storeNo) {v_this.fetchStoreInfoCheck(storeNo)})
     }
     
   },

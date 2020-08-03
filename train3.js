@@ -21,7 +21,7 @@ Vue.component("modal-box-detail", {
       boxDetailItems: null,
       openmodal: false,
       fetching: false,
-      t : null
+      // t : null
     }
   },
   watch:{
@@ -29,21 +29,41 @@ Vue.component("modal-box-detail", {
       this.openmodal=!!bno;
       if (bno){
         this.fetching = true;
-        this.t = setTimeout(this.fetchBoxDetail,1000)
+        this.fetchBoxDetail();
+        // this.t = setTimeout(this.fetchBoxDetail,1000)
         ;
       }
       else{
-        if (this.t) clearTimeout(this.t);
+        // if (this.t) clearTimeout(this.t);
         this.boxDetailItems = null;
       }
     }
   },
   methods:{
     fetchBoxDetail: function(){
-      if (this.boxNo){
-        this.boxDetailItems = mockBoxDetail.ReturnList.BoxItems
-      }
-      this.fetching = false;
+      let v_this = this;
+      axios.post("BoxItem", {
+        Data: {
+          ShpNo: GLOBAL.ShpNo,
+          BoxNo: v_this.boxNo
+        }
+      }).then(function(response) {
+        console.log(response);
+        if (response.data.Result != 1) {
+          throw response.data.Result + " " + response.data.Message
+        };
+        v_this.boxDetailItems = response.data.ReturnList.BoxItems;
+      })
+      .catch(function(error) {
+        console.log(error);
+      })
+      .then(function() {
+        v_this.fetching = false;
+      });
+      // if (this.boxNo){
+      //   this.boxDetailItems = mockBoxDetail.ReturnList.BoxItems
+      // }
+      // this.fetching = false;
     }
   },
   template:`
@@ -144,64 +164,62 @@ var vueApp = new Vue({
       // if (!GLOBAL.CurrentLoadingStore){
       //   GLOBAL.CurrentLoadingStore = "219";
       // }    
-      GLOBAL.CurrentLoadingStore =  GLOBAL.SelectedStoresToLoad[0].StoreNo;
+      GLOBAL.CurrentLoadingStore = GLOBAL.SelectedStoresToLoad[0].StoreNo;
       let boxNos = localStorage.getItem("boxNoIndex");
 
       if (!boxNos || !JSON.parse(boxNos)) {
         if (this.fetchingData) return;
         this.fetchingData = true;
-        var vueThis  = this;
+        var v_this  = this;
         /* axios GET request*/
-        // axios.get(`TrainBoxList/${GLOBAL.CurrentLoadingStore}`, {
-        //   cancelToken: ctSource.token
-        // }).then(function(response) {
-        //   console.log(response);
-        //   let data = response.data;
-        //   if (data.Result != 1) {
-        //     throw data.Result + " " + data.Message
-        //   };
+        axios.get(`TrainBoxList/${GLOBAL.CurrentLoadingStore}`, {
+          cancelToken: ctSource.token
+        }).then(function(response) {
+          console.log(response);
+          let data = response.data;
+          if (data.Result != 1) {
+            throw data.Result + " " + data.Message
+          };
       
-        //   let boxInfo = data.ReturnList;
-        //   //let storeNo = boxInfo.StoreNo;
-        //   vueThis.boxes = boxInfo.Boxs.map(function(box) {box['LoadStatus'] = 'N'; return box;});
+          let boxInfo = data.ReturnList;
+          let storeNo = boxInfo.StoreNo;
+          v_this.boxes = boxInfo.Boxs.map(function(box) {box['LoadStatus'] = 'N'; return box;});
 
-        //   localStorage.setItem("boxNoIndex", JSON.stringify(boxes.map(function(box) {
-        //     localStorage.setItem(box.BoxNo, JSON.stringify(box));
-        //     return box.BoxNo
-        //   })));
-        //   vueThis.chk_active = 'N';
-        // })
-        // .catch(function(error) {
-        //   if (axios.isCancel(error)) {
-        //     vueThis.errorMessage = "讀取中斷";
-        //   }
-        //   else {
-        //     vueThis.errorMessage = "無法讀取資料: " + error;
-        //     vueThis.modalMessage += "無法讀取資料\n" + error + "\n"
-        //   }
-        //   console.log("errMessage: " + error);
-        // })
-        // .then(function() {
-        //   vueThis.fetchingData = false;
-        // });
+          localStorage.setItem("boxNoIndex", JSON.stringify(v_this.boxes.map(function(box) {
+            localStorage.setItem(box.BoxNo, JSON.stringify(box));
+            return box.BoxNo
+          })));
+          v_this.chk_active = 'N';
+        }).catch(function(error) {
+          if (axios.isCancel(error)) {
+            v_this.errorMessage = "讀取中斷";
+          }
+          else {
+            v_this.errorMessage = "無法讀取資料: " + error;
+            v_this.modalMessage += "無法讀取資料\n" + error + "\n"
+          }
+          console.log("errMessage: " + error);
+        }).then(function() {
+          v_this.fetchingData = false;
+        });
         /*axios GET request end*/
 
         // TEST: MOCK
-        let data = mockData;
-        if (data.Result != 1) {
-          throw data.Result + " " + data.Message
-        };
+        // let data = mockData;
+        // if (data.Result != 1) {
+        //   throw data.Result + " " + data.Message
+        // };
     
-        let boxInfo = data.ReturnList;
-        //let storeNo = boxInfo.StoreNo;
-        vueThis.boxes = boxInfo.Boxs.map(function(box) {box['LoadStatus'] = 'N'; return box;});
+        // let boxInfo = data.ReturnList;
+        // //let storeNo = boxInfo.StoreNo;
+        // v_this.boxes = boxInfo.Boxs.map(function(box) {box['LoadStatus'] = 'N'; return box;});
 
-        localStorage.setItem("boxNoIndex", JSON.stringify(vueThis.boxes.map(function(box) {
-          localStorage.setItem(box.BoxNo, JSON.stringify(box));
-          return box.BoxNo
-        })));
-        vueThis.chk_active = 'N';
-        vueThis.fetchingData = false;
+        // localStorage.setItem("boxNoIndex", JSON.stringify(v_this.boxes.map(function(box) {
+        //   localStorage.setItem(box.BoxNo, JSON.stringify(box));
+        //   return box.BoxNo
+        // })));
+        // v_this.chk_active = 'N';
+        // v_this.fetchingData = false;
       }
       else {
         let boxNoIndex = JSON.parse(localStorage.getItem("boxNoIndex"));
@@ -252,7 +270,7 @@ var vueApp = new Vue({
           }
           console.log("updateBoxLoadStatus " + boxno + " " + flag)
 
-          let vueThis = this;
+          let v_this = this;
           axios.post((flag == 'Y') ? "BoxLoadCheck" : "BoxUnLoadCheck", {
                 Data: boxLoadInfo
           }, {
@@ -268,7 +286,7 @@ var vueApp = new Vue({
           }).catch(function(err){
               console.log(err);
           }).then(function(){
-              vueThis.processingBoxes.splice(vueThis.processingBoxes.indexOf(boxno), 1)
+              v_this.processingBoxes.splice(v_this.processingBoxes.indexOf(boxno), 1)
           })
         }
         else {
@@ -292,7 +310,7 @@ var vueApp = new Vue({
       //this.boxDetail = mockBoxDetail.ReturnList
       this.boxNoToShowDetail = boxno;
       document.activeElement.blur();
-      let vueThis = this;
+      let v_this = this;
 
     },
     outReport: function () {
@@ -310,8 +328,8 @@ var vueApp = new Vue({
         OutDate: GLOBAL.SystemDate
       }
       console.table(outReportParam);
-      let vueThis = this;
-      vueThis.modalMessage = "結束中.."
+      let v_this = this;
+      v_this.modalMessage = "結束中.."
       axios.post("OutReport", {
         Data: outReportParam
       }).then(function(response) {
@@ -319,25 +337,25 @@ var vueApp = new Vue({
         if (response.data.Result != 1) {
           throw response.data.Result + " " + response.data.Message
         };
-        // vueThis.modalMessage = (response.data.ReturnList ? (" 單號: " + response.data.ReturnList) : "");
-        vueThis.clearData();
+        // v_this.modalMessage = (response.data.ReturnList ? (" 單號: " + response.data.ReturnList) : "");
+        v_this.clearData();
       })
       .catch(function(error) {
-        vueThis.modalMessage = error;
-        if (vueThis.modalCloseAction) vueThis.modalCloseAction = null;
+        v_this.modalMessage = error;
+        if (v_this.modalCloseAction) v_this.modalCloseAction = null;
         console.log(error);
       })
       .then(function() {
         console.log("done:OutReport");
-        vueThis.fetchingReport = false;
+        v_this.fetchingReport = false;
       });
     },
     exit: function(e){
       this.outReport();
-      let vueThis = this;
+      let v_this = this;
       this.modalCloseAction = function(){
         WEB_TO_NATIVE.QUIT_PO_TRAIN(); 
-        vueThis.modalCloseAction = null;
+        v_this.modalCloseAction = null;
       }
     },
     goBack: function(e){
@@ -351,10 +369,10 @@ var vueApp = new Vue({
       }
       
       this.outReport();
-      let vueThis = this;
+      let v_this = this;
       this.modalCloseAction = function(){
         location.href = "train2.html";
-        vueThis.modalCloseAction = null;
+        v_this.modalCloseAction = null;
       }
     },
     refetch: function () {
@@ -375,9 +393,9 @@ var vueApp = new Vue({
   },
   mounted: function () {
 
-    let vueThis = this;
+    let v_this = this;
     document.addEventListener("focus", function(e){
-      vueThis.inputFocus();
+      v_this.inputFocus();
     });
 
     window.addEventListener("visibilitychange", function(e){

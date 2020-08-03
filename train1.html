@@ -93,8 +93,8 @@
           <button @click="next" class="btn" :disabled="!requiredFilled">下一步</button>
         </div>
       </div>
-
-      <modal :openmodal="!!modalMessage" :on-close-action="exit">
+      
+      <modal :openmodal="!!modalMessage" > <!-- :on-close-action="exit" -->
         <div slot="body">{{modalMessage}}</div>
         <div slot="footer">
           <button class="modal-default-button" @click="modalMessage=''">關閉</button>

@@ -21,12 +21,38 @@
     <script src="script.js"></script>
     <script>
       //MOCK DATA
-      // GLOBAL.AuthToken = "123";
+      GLOBAL.AuthToken = "OmcKbaPOGUFkAcw_1PubYII0RGy_ETti1x3UIq3U8TsviI_W6qcvPBBjSHE3RqNV_BWVZEb5nW7q76BL5mmNkjH-_T1OMXdMzGo3G2COr82SUnmQYYNB45Sxl_UgFpUYnvKiKl8nSZzjkATCFH7pRs_jP1HZsGuhHH1UgPuH7zFhERyrdCE4oACQ5F6nByAqi1YnY2_IrhHYbhCO4OacVeFQuaeaJ6HSxAGQG6M7fsS6gNkwBvk4h1MJqISXEFwEVevulJGNVlGCkXAPbm8hrihrJ6TWkft-HzLEy1o4OQW_NM--v3OGcvHO9Nu7bRI-i6UwVdK8s7DJqmS9GvtH25ud2GOwCx8juey6MC1F7OM";
+      GLOBAL.UserAccount = "28147911";
+      GLOBAL.MacNo = "00 00 00 00 00 02";
       // GLOBAL.PDAToken = "911Kh@HU";
       // GLOBAL.LogSymbol = "LOG200509210000013";
       // GLOBAL.ShpNo = "911";
       // GLOBAL.MacNo = "4963105880400171";
-      // GLOBAL.UserAccount = "aaaaaaaaa";
+      
+
+      let loginData = {
+          "Data":{
+              "Account":"28147911",
+              "Password":"28147911",
+              "LoginIP":"10.1.62.250",
+              "MachineID":"00 00 00 00 00 02",
+              "VersionNo":"50",
+              "DataVersionNo":"20200722183033"
+          }
+      }
+
+      axios.post('LogPDALogin', loginData).then(function(resp){
+          let response = resp.data.ReturnList;
+          GLOBAL.PDAToken = response.PDAToken;
+          GLOBAL.ShpNo =  response.ShpNo;
+          GLOBAL.UserAccount = response.Account;
+      }).catch(function(err){
+          console.log(err);
+      }).then(function(){
+          console.log("global script LOADED")
+          console.log("TEST display GLOBAL data: ")
+          console.table({...GLOBAL})
+      })
 
     </script>
 </body>
