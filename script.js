@@ -456,14 +456,15 @@ var NATIVE_TO_WEB = {
  // axios defaults
  let apiVer = "v2"
  axios.defaults.baseURL = "http://10.254.247.103:18718/api/Shipping/" + apiVer + "/"
- axios.defaults.headers.common['Authorization'] = `Bearer ${GLOBAL.AuthToken}`
+//  axios.defaults.headers.common['Authorization'] = `Bearer ${GLOBAL.AuthToken}`
+ axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.AuthToken;
  axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*',
  axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE'
 
 
 document.addEventListener('DOMContentLoaded', function(event)  {
     //(v1)// axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
-    // axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.AuthToken; //v2
+    // axios.defaults.headers.common['X-Powered-TK'] = GLOBAL.AuthToken; //v2C92CeIf7qtwc2ScVzQz7/4zmhr85FSwmH9DEz7MK9E0=
     //axios.defaults.timeout = 45000; NO TIMEOUT REQUEST
 
     //DEBUG PURPOSE
