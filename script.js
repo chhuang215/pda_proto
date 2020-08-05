@@ -12,7 +12,8 @@
 
 // axios defaults
 axios.defaults.baseURL = "http://10.254.247.103:18718/"
-axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
+// axios.defaults.headers.common['X-Powered-TK'] = "5kvS2m5rNtltyOoqkMlNpUzWRmrtpemh7f8jDvHdsiA=";
+axios.defaults.headers.common['X-Powered-TK'] = "C92CeIf7qtwc2ScVzQz7/4zmhr85FSwmH9DEz7MK9E0=";
 //axios.defaults.timeout = 30000;
 
 document.addEventListener('DOMContentLoaded', (event) => {
