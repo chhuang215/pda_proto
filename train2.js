@@ -143,7 +143,7 @@ var vueApp = new Vue({
         }
         // GLOBAL.CurrentLoadingStore =  this.selectedStoreNoList[0];
         location.href = "train3.html";  
-      }).error(function(err){
+      }).catch(function(err){
         console.log(err)
       }).then(function(){})
       // location.href = "train3.html";
